@@ -1,0 +1,93 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+
+
+.link_standart_for_div {
+    display: block; /* Ссылка как блочный элемент */
+    text-align: center; /* Выравнивание по центру */
+    height: 100%; /* Высота на весь слой */
+    color: black; /* Цвет ссылки */
+}
+img {
+    width: 100%;
+    height: 100%;
+}
+li {
+    list-style-type: none; /* Убираем маркеры */
+}
+
+ul {
+    margin-left: 0; /* Отступ слева в браузере IE и Opera */
+    padding-left: 0; /* Отступ слева в браузере Firefox, Safari, Chrome */
+}
+
+.text-box {
+    line-height: 30px;
+    height: 30px;
+    font-size: 14pt;
+    width: 100%;
+}
+
+div.for_separation {
+}
+
+
+
+
+
+/*main_header*/
+
+div.main_header {
+    position: absolute;
+    position: fixed;
+    height: 50px;
+    background-color: #4169E1;
+    width: 100%;
+    margin-top: -35px;
+}
+div.main_header_r_l {
+    float: right;
+    width: 300px;
+    display: inline-block;
+    vertical-align: top;
+    height: 100%;
+}
+div.main_header_home {
+    width: 20%;
+    display: inline-block;
+    vertical-align: top;
+    height:100%;
+}
+div.main_header_r_l_but {
+    width: 49%;
+    display: inline-block;
+    vertical-align: top;
+    height:100%;
+}
+div.main_header_r_l_but:hover{
+    cursor:pointer;
+    background-color:aliceblue;
+}
