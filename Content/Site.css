@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background-color: #DCDCDC ;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -66,7 +67,7 @@ div.main_header {
     height: 50px;
     background-color: #4169E1;
     width: 100%;
-    margin-top: -35px;
+    margin-top: -50px;
 }
 div.main_header_r_l {
     float: right;
@@ -90,4 +91,47 @@ div.main_header_r_l_but {
 div.main_header_r_l_but:hover{
     cursor:pointer;
     background-color:aliceblue;
+}
+
+
+/*Layout*/
+div.Layout_left_menu {
+    background-color: aqua;
+    width: 200px;
+    height: 600px;
+    position: fixed;
+    
+}
+div.Layout_body{
+    width:800px;
+    margin-left:230px;
+   
+    height:1000px;
+    
+}
+div.Layout_all_l_b {
+    margin-left: 10%;
+    margin-top: 10px;
+}
+
+/*Personal_record*/
+
+div.Personal_record_main_img_div{
+    width:300px;
+    height:400px;
+}
+div.Personal_record_main_img_lvl_1_div {
+    width: 350px;
+    height: 450px;
+}
+
+div.Personal_record_body_left_block {
+    width: 300px;
+    height: 400px;
+    background-color: blueviolet;
+}
+div.Personal_record_body_right_block {
+    width: 400px;
+    height: 400px;
+    background-color: blueviolet;
 }

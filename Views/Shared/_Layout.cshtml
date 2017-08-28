@@ -21,18 +21,25 @@
                 </div>
                 <div class="main_header_r_l_but">
                     @Html.ActionLink("Войти", "Login", "Account", new { }, new { @class = "link_standart_for_div" })
-                    @{/*@Html.Partial("_LoginPartial")*/ }
+                    @{//@Html.Partial("_LoginPartial")
+                      }
                 </div>
                 </div>
         
     </div>
-    <div >
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>@DateTime.Now</p>
-        </footer>
+    <div class="Layout_all_l_b">
+        <div class="Layout_left_menu">
+            @Html.Action("Left_menu_personal", "Home", new { id = 1 })
+        </div>
+        <div class="Layout_body">
+            @RenderBody()
+
+        </div>
     </div>
+    <hr />
+    <footer>
+        <p>@DateTime.Now</p>
+    </footer>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

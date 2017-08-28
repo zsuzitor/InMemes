@@ -1,0 +1,22 @@
+﻿@model Im.Models.ApplicationUser
+
+@{
+    ViewBag.Title = "Personal_record";
+}
+<div  class="Personal_record_body_left_block">
+    <div class="Personal_record_main_img_lvl_1_div">
+        <div class="Personal_record_main_img_div">
+            @Html.Raw(string.Concat("<img  class='Personal_record_main_img'  id ='Personal_record_main_img_id'", " src=\"data:image/jpeg;base64,"
+                                , Convert.ToBase64String(Model.Main_images[0]), "\" />"))
+        </div>
+        <div>редактировать кнопка</div>
+    </div>
+
+
+
+</div>
+<div class="Personal_record_body_right_block">
+
+
+
+</div>

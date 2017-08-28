@@ -5,10 +5,25 @@ using System.Web;
 
 namespace Im.Models
 {
+    public class Person_short
+    {
+        public int Person_id { get; set; }
+        public byte[] Image { get; set; }
+        public string Name { get; set; }
+    }
 
+    public class Group_short
+    {
+        public int Group_id { get; set; }
+        public int Count_followers { get; set; }
+        public byte[] Image { get; set; }
+        public string Name { get; set; }
+    }
+    /*
     public abstract class rec
     {
-        public int Id { get; set; }
+
+        //в IdentityUser есть  public int Id { get; set; }
         public string Name { get; set; }
         public string Status { get; set; }
         public DateTime Birthday { get; set; }
@@ -66,11 +81,13 @@ namespace Im.Models
 
 
 
-        public string Black_list { get; set; }//id людей
+        public string Black_list_str { get; set; }//id людей
+        public List<Person_short> Black_list { get; set; }
         //настройки о том что слева и остальное
 
         public string Menu_left { get; set; }
     }
+    */
 
 
 
@@ -80,13 +97,8 @@ namespace Im.Models
 
 
 
-    
-    public class Person_short
-    {
-        public int Person_id { get; set; }
-        public byte[] Image { get; set; }
-        public string Name { get; set; }
-    }
+
+    /*
     public class Group : rec
     {
 
@@ -96,19 +108,10 @@ namespace Im.Models
 
 
 
-
-
-
-
-
     }
-    public class Group_short
-    {
-        public int Group_id { get; set; }
-        public int Count_followers { get; set; }
-        public byte[] Image { get; set; }
-        public string Name { get; set; }
-    }
+    */
+
+    /*
     public class memes
     {
         public string Description { get; set; }
@@ -121,12 +124,15 @@ namespace Im.Models
         public DateTime Birthday { get; set; }
 
     }
+    
     public class Message_obg
     {
-        
+        public int Id { get; set; }
         public int Person_id { get; set; }
         public Person_short Person { get; set; }
+        public string Messages_str { get; set; }
         public List<string> Messages { get; set; }//TODO нет прикрепленных файлов к сообщению
         public byte[] Image { get; set; }
     }
+    */
 }
