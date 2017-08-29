@@ -106,32 +106,89 @@ div.Layout_body{
     width:800px;
     margin-left:230px;
    
-    height:1000px;
+    height:1030px;
     
 }
 div.Layout_all_l_b {
     margin-left: 10%;
     margin-top: 10px;
+    width:1100px;
 }
 
 /*Personal_record*/
 
-div.Personal_record_main_img_div{
-    width:300px;
-    height:400px;
+div.Personal_record_main_img_div {
+   
+    width: 300px;
+    height: 350px;
+   
+    background-color: aquamarine; /*убрать*/
+    
+    
 }
 div.Personal_record_main_img_lvl_1_div {
     width: 350px;
     height: 450px;
+    background-color: white;
+    padding-top: 25px;
+    padding-left: 25px;
 }
 
 div.Personal_record_body_left_block {
-    width: 300px;
-    height: 400px;
-    background-color: blueviolet;
+    width: 350px;
+    height: 900px;
+    background-color: white;
+    display: inline-block;
+    vertical-align: top;
 }
 div.Personal_record_body_right_block {
-    width: 400px;
-    height: 400px;
-    background-color: blueviolet;
+    width: 430px;
+    height: 900px;
+    background-color: white;
+    display: inline-block;
+    vertical-align: top;
+    margin-left:10px;
+}
+div.Personal_record_edit_under_main_img{
+    background-color:white;
+    border:solid 2px;
+    margin-top:20px;
+}
+div.Personal_record_main_info_1{
+    height:400px;
+    background-color:antiquewhite;
+}
+
+div.Personal_record_body_right_block_info_main {
+    background-color: white;
+}
+div.Personal_record_photo_block{
+    height:300px;
+}
+div.Personal_record_wall {
+    height: 300px;
+}
+div.Personal_record_num {
+    height: 100px;
+    margin-left:2px;
+    text-align:center;
+}
+.Personal_record_num_div_small_block {
+   display:inline-block;
+   vertical-align:top;
+   width:82px;
+   height:50px;
+   border:1px solid black;
+}
+.Personal_record_num_p_big {
+    font-size: 14pt;
+    color: darkcyan;
+    margin: 0;
+    padding: 0;
+}
+.Personal_record_num_p_small {
+    font-size: 9pt;
+    color: #B8860B;
+    margin: 0;
+    padding: 0;
 }

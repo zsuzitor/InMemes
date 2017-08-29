@@ -82,7 +82,35 @@ public ActionResult Index()
             return PartialView();
         }
 
+
+        public ActionResult Get_info_person_ajax_1(bool open=false, string id = "")
+        {
+            ApplicationUser res = Record(id);
+            ViewBag.Open = open;
+            //параметры учетки в viewbag
+            ViewBag.Age = res.Age;
+            ViewBag.Country = res.Country;
+            ViewBag.Town = res.Town;
+            ViewBag.Street = res.Street;
+            ViewBag.Description = res.Description;
+
+
+            
+
+            return PartialView();
+        }
         //END-PARTIAL BLOCK------------------------------------------------------------------------------------------------------------------------------//
 
+
+
+
+
+        public ApplicationUser Record(string id)
+        {
+
+
+
+            return new ApplicationUser();
+        }
     }
 }

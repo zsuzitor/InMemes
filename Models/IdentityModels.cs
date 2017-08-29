@@ -17,7 +17,7 @@ namespace Im.Models
         //в IdentityUser есть  public int Id { get; set; }
         public string Name { get; set; }
         public string Status { get; set; }
-        public DateTime Birthday { get; set; }
+        public DateTime? Birthday { get; set; }
         
         
 
@@ -25,7 +25,7 @@ namespace Im.Models
 
 
         //TODO меню слева
-        public int Age { get; set; }
+        public int? Age { get; set; }
         public string Login { get; set; }
         public string Nickname { get; set; }
 
@@ -40,46 +40,53 @@ namespace Im.Models
         // заявки 
         public string Followers_id { get; set; }//id не принятых(отвергнутых) друзей
         public List<Person_short> Followers { get; set; }
+        public int Followers_count { get; set; }
 
         //друзья
         public string Friends_id { get; set; }//id друзей
         public List<Person_short> Friends { get; set; }
-
+        public int Friends_count { get; set; }
         // подписчики
         public string Followers_ignore_id { get; set; }//id подписчиков
         public List<Person_short> Followers_ignore { get; set; }
-
+        public int Followers_ignore_count { get; set; }
         //семья 
         public string Family_id { get; set; }
         public List<Person_short> Family { get; set; }
-
+        public int Family_ignore_count { get; set; }
         //сообщения 
         public string Message_id { get; set; }//id объектов
         public List<Message_obg> Message { get; set; }
-
+        public int Message_count { get; set; }
+        public int New_message_count { get; set; }
         //новости 
         public string News_id { get; set; }
         public List<Memes> News { get; set; }
-
+        public int News_count { get; set; }
         //стена 
         public string Wall_id { get; set; }//id записей
         public List<Memes> Wall { get; set; }
+        public int Wall_count { get; set; }
         //фото //
         public string Images_id { get; set; }//id фото
         public List<byte[]> Images { get; set; }
+        public int Images_count { get; set; }
         //авы
         public string Main_images_id { get; set; }//id фото
         public List<byte[]> Main_images { get; set; }
+        
         //группы
         public string Groups_id { get; set; }
         public List<Group_short> Groups { get; set; }
+        public int Groups_count { get; set; }
 
-       
+
 
 
         public string Black_list_id { get; set; }//id людей
+       
         public List<Person_short> Black_list { get; set; }
-
+        public int Black_list_count { get; set; }
         //о себе 
         public string Description { get; set; }
 

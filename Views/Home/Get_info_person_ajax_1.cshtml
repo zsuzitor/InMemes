@@ -1,0 +1,32 @@
+﻿@{string message = "Показать полностью"}
+<div id="Personal_record_Not_main_info_id">
+    @if (ViewBag.open == true)
+    {
+        //закрыть
+        ViewBag.open = !ViewBag.open;
+
+
+    }
+    @if (ViewBag.open == false)
+    {
+        //открыть
+        message = "Скрыть";
+        ViewBag.open = !ViewBag.open;
+    <div>
+        <p>@ViewBag.Age</p>
+        <p>@ViewBag.Country</p>
+        <p>@ViewBag.Town</p>
+        <p>@ViewBag.Street</p>
+        <p>@ViewBag.Description</p>
+    </div>
+
+    }
+
+
+    <div>
+
+        @Ajax.ActionLink(message, "Get_info_person_ajax_1", "Home",
+new { open = ViewBag.open, id = Model.Id },
+new AjaxOptions { UpdateTargetId = "Personal_record_Not_main_info_id" }, new { @class = "link_standart_for_div" })
+    </div>
+</div>
