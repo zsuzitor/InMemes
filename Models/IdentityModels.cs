@@ -95,6 +95,79 @@ namespace Im.Models
         public string Menu_left { get; set; }
 
 
+        public ApplicationUser() : base(){
+            Age = null;
+            Nickname = null;
+            Online = false;
+            Surname = null;
+            Country = null;
+            Town = null;
+            Street = null;
+            Status = null;
+            Birthday = null;
+            // заявки
+            Followers_id = "";
+            Followers = new List<Person_short>();
+            Followers_count = 0;
+
+
+            //друзья
+            Friends_id = "";
+            Friends = new List<Person_short>();
+            Friends_count = 0;
+
+            // подписчики
+            Followers_ignore_id = "";
+            Followers_ignore = new List<Person_short>();
+            Followers_ignore_count = 0;
+
+            //семья 
+            Family_id = "";
+            Family = new List<Person_short>();
+            Family_ignore_count = 0;
+
+            //сообщения 
+            Message_id = "";
+            Message = new List<Message_obg>();
+            Message_count = 0;
+            New_message_count = 0;
+
+            //новости 
+            News_id = "";
+            News = new List<Memes>();
+            News_count = 0;
+
+            //стена 
+            Wall_id = "";
+            Wall = new List<Memes>();
+            Wall_count = 0;
+
+            //фото //
+            Images_id = "";
+            Images = new List<byte[]>();
+            Images_count = 0;
+
+            //авы
+            Main_images_id = "";
+            Main_images = new List<byte[]>();
+
+
+            //группы
+            Groups_id = "";
+            Groups = new List<Group_short>();
+            Groups_count = 0;
+        
+         Black_list_id = "";
+            Black_list = new List<Person_short>();
+            Black_list_count = 0;
+
+            //о себе 
+            Description = "";
+
+            //настройки о том что слева и остальное
+            //TODO сюда те поля которые слева должны быть
+            Menu_left = "Моя страница,Новости,Сообщения,Друзья,Фотографии,Музыка,Видео";
+    }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Обратите внимание, что authenticationType должен совпадать с типом, определенным в CookieAuthenticationOptions.AuthenticationType
@@ -165,6 +238,7 @@ namespace Im.Models
         public string Messages_str { get; set; }
         public List<string> Messages { get; set; }//TODO нет прикрепленных файлов к сообщению
         public byte[] Image { get; set; }
+        public int New_message_count { get; set; }
     }
 
 

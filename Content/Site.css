@@ -192,3 +192,33 @@ div.Personal_record_num {
     margin: 0;
     padding: 0;
 }
+div.Personal_record_not_main_img_small{
+    width:40px;
+    height:40px;
+}
+/*Get_info_person_ajax_1*/
+div.Get_info_person_ajax_1_div_all {
+    padding-left: 10px;
+}
+div.Get_info_person_ajax_1_div_1_info {
+    min-height: 20px;
+}
+div.Get_info_person_ajax_1_p_left {
+    color: grey;
+    width: 120px;
+    display: inline-flex;
+    vertical-align: top;
+}
+div.Get_info_person_ajax_1_p_right {
+    color: cornflowerblue;
+    display: inline-flex;
+    vertical-align: top;
+    width: 300px;
+}
+div.Get_info_person_ajax_1_show_n{
+    
+    height:30px;
+}
+    div.Get_info_person_ajax_1_show_n:hover {
+        background-color: darkgray;
+    }

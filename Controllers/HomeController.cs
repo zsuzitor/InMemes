@@ -71,6 +71,14 @@ public ActionResult Index()
         }
 
 
+        public ActionResult Record_photo_page(string id=null)
+        {
+            //TODO закидывать фото юзеру и проверять что бы его фото отдавать продумать мб вообще не нужно
+            //смотреть че как и фото отображать
+            //
+            return View();
+        }
+
 
 
         //-PARTIAL BLOCK------------------------------------------------------------------------------------------------------------------------------//
@@ -82,10 +90,12 @@ public ActionResult Index()
             return PartialView();
         }
 
-
+       
         public ActionResult Get_info_person_ajax_1(bool open=false, string id = "")
         {
-            ApplicationUser res = Record(id);
+            //TODO раскоментить,доделать и заменить то что ниже до //
+            /*
+             ApplicationUser res = Record(id);
             ViewBag.Open = open;
             //параметры учетки в viewbag
             ViewBag.Age = res.Age;
@@ -93,6 +103,15 @@ public ActionResult Index()
             ViewBag.Town = res.Town;
             ViewBag.Street = res.Street;
             ViewBag.Description = res.Description;
+            */
+            
+            ViewBag.Open = open;
+            //параметры учетки в viewbag
+            ViewBag.Age = 20;
+            ViewBag.Country = "Россия";
+            ViewBag.Town = "Москва";
+            ViewBag.Street = "Ленина";
+            ViewBag.Description = "описание 0000000                        12          аааааааааааааааааа ыыыыыыыыыыыы       ссссссссссссссс";
 
 
             

@@ -1,9 +1,10 @@
-﻿@{string message = "Показать полностью"}
+﻿
+@{  string message = "Показать полностью";}
 <div id="Personal_record_Not_main_info_id">
     @if (ViewBag.open == true)
     {
         //закрыть
-        ViewBag.open = !ViewBag.open;
+        
 
 
     }
@@ -11,22 +12,41 @@
     {
         //открыть
         message = "Скрыть";
-        ViewBag.open = !ViewBag.open;
-    <div>
-        <p>@ViewBag.Age</p>
-        <p>@ViewBag.Country</p>
-        <p>@ViewBag.Town</p>
-        <p>@ViewBag.Street</p>
-        <p>@ViewBag.Description</p>
+
+    <div class="Get_info_person_ajax_1_div_all">
+        @if (ViewBag.Age != null)
+        {
+            <div class="Get_info_person_ajax_1_div_1_info"><div class="Get_info_person_ajax_1_p_left">Возраст</div><div class="Get_info_person_ajax_1_p_right">@ViewBag.Age</div></div>
+        }
+        @if (ViewBag.Country != null)
+        {
+            <div class="Get_info_person_ajax_1_div_1_info"><div class="Get_info_person_ajax_1_p_left">Страна</div><div class="Get_info_person_ajax_1_p_right">@ViewBag.Country</div></div>
+        }
+        @if (ViewBag.Town != null)
+        {
+            <div class="Get_info_person_ajax_1_div_1_info"><div class="Get_info_person_ajax_1_p_left">Город</div><div class="Get_info_person_ajax_1_p_right">@ViewBag.Town</div></div>
+        }
+        @if (ViewBag.Street != null)
+        {
+            <div class="Get_info_person_ajax_1_div_1_info"><div class="Get_info_person_ajax_1_p_left">Улица</div><div class="Get_info_person_ajax_1_p_right">@ViewBag.Street</div></div>
+        }
+        @if (ViewBag.Description != null)
+        {
+            <div class="Get_info_person_ajax_1_div_1_info"><div class="Get_info_person_ajax_1_p_left">О Себе</div><div class="Get_info_person_ajax_1_p_right">@ViewBag.Description</div></div>
+        }
+        
     </div>
 
     }
 
 
-    <div>
+    <div class="Get_info_person_ajax_1_show_n">
 
+        @{ 
+            ViewBag.open = !ViewBag.open;
+        }
         @Ajax.ActionLink(message, "Get_info_person_ajax_1", "Home",
-new { open = ViewBag.open, id = Model.Id },
+new { open = ViewBag.open },//TODO , id = Model.Id
 new AjaxOptions { UpdateTargetId = "Personal_record_Not_main_info_id" }, new { @class = "link_standart_for_div" })
     </div>
 </div>
