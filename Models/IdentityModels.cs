@@ -176,70 +176,7 @@ namespace Im.Models
             return userIdentity;
         }
     }
-    public class Group 
-    {
-
-        //в IdentityUser есть  public int Id { get; set; }
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Status { get; set; }
-        public DateTime Birthday { get; set; }
-        // заявки 
-        public string Followers_id { get; set; }//id не принятых(отвергнутых) друзей
-        public List<Person_short> Followers { get; set; }
-        //стена 
-        public string Wall_id { get; set; }//id записей
-        public List<Memes> Wall { get; set; }
-        //фото //
-        public string Images_id { get; set; }//id фото
-        public List<byte[]> Images { get; set; }
-
-        //авы
-        public string Main_images_id { get; set; }//id фото
-        public List<byte[]> Main_images { get; set; }
-        //группы
-        public string Groups_id { get; set; }
-        public List<Group_short> Groups { get; set; }
-
-
-
-
-
-    }
-    public class Img
-    {
-        public string Name;
-        public int Id { get; set; }
-        public byte[] bytes;
-
-    }
-
-    public class Memes
-    {
-        public int Id { get; set; }
-        public string Description { get; set; }
-        public string Source { get; set; }
-        public string Source_id { get; set; }
-        public byte[] Image { get; set; }
-        public string Images_id { get; set; }//id фото
-        public List<byte[]> Images { get; set; }
-        public string Liked_id { get; set; }//id кто лайкнул
-        public string Repost_id { get; set; }//id кто репостнул
-        public DateTime Birthday { get; set; }
-
-    }
-
-
-    public class Message_obg
-    {
-        public int Id { get; set; }
-        public string Person_id { get; set; }
-        public List<Person_short> Person { get; set; }
-        public string Messages_str { get; set; }
-        public List<string> Messages { get; set; }//TODO нет прикрепленных файлов к сообщению
-        public byte[] Image { get; set; }
-        public int New_message_count { get; set; }
-    }
+    
 
 
 

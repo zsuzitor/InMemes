@@ -14,17 +14,22 @@
         <div class="main_header_home">
             @Html.ActionLink("InMemes", "Index", "Home", new { }, new { @class = "link_standart_for_div" })
         </div>
+        @Html.Partial("_LoginPartial")
+            @{
+/*
+ <div class="main_header_r_l">
+<div class="main_header_r_l_but">
+    @Html.ActionLink("Регистрация", "Register", "Account", new { }, new {@class= "link_standart_for_div" })
+</div>
+<div class="main_header_r_l_but">
+    @Html.ActionLink("Войти", "Login", "Account", new { }, new { @class = "link_standart_for_div" })
+    @{//@Html.Partial("_LoginPartial")
+      }
+</div>
+</div>
+*/
+             }
             
-            <div class="main_header_r_l">
-                <div class="main_header_r_l_but">
-                    @Html.ActionLink("Регистрация", "Register", "Account", new { }, new {@class= "link_standart_for_div" })
-                </div>
-                <div class="main_header_r_l_but">
-                    @Html.ActionLink("Войти", "Login", "Account", new { }, new { @class = "link_standart_for_div" })
-                    @{//@Html.Partial("_LoginPartial")
-                      }
-                </div>
-                </div>
         
     </div>
     <div class="Layout_all_l_b">

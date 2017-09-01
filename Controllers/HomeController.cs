@@ -41,6 +41,37 @@ using Microsoft.AspNet.Identity.EntityFramework;
     [HttpPost]
         public ActionResult Ad_img_add_ad(HttpPostedFileBase[] uploadImage,string obg=null)
         {
+
+    if ( uploadImage != null)//ModelState.IsValid &&
+            {
+                foreach(var i in uploadImage)
+                {
+                    try
+                    {
+                        byte[] imageData = null;
+                        // считываем переданный файл в массив байтов
+                        using (var binaryReader = new BinaryReader(i.InputStream))
+                        {
+                            imageData = binaryReader.ReadBytes(i.ContentLength);
+                        }
+                        // установка массива байтов
+                        res.Images_byte.Add(imageData);
+
+
+
+                        //return RedirectToAction("Add_new_ad", res);
+
+                    }
+                    catch
+                    {
+
+                    }
+
+
+                }
+
+
+
         }
   
  * */
@@ -49,10 +80,18 @@ namespace Im.Controllers
     public class HomeController : Controller
     {
 
-        ApplicationDbContext db = new ApplicationDbContext();
-    
-public ActionResult Index()
+        ApplicationDbContext db_users = new ApplicationDbContext();
+        All_db_Context db_all = new All_db_Context();
+
+        /*db.Users.Add(user2);
+                db.SaveChanges();*/
+
+
+        public ActionResult Index()
         {
+            //db_all.Groups.Add(new Group("тестова група 1"));
+            //db_all.SaveChanges();
+            
             //если залогинен то на страницу
             //если не залогинен то на главную
             return View();
@@ -130,6 +169,13 @@ public ActionResult Index()
 
 
             return new ApplicationUser();
+        }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            db_all.Dispose();
+            base.Dispose(disposing);
         }
     }
 }
