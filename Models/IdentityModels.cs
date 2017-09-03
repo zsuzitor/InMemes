@@ -162,7 +162,7 @@ namespace Im.Models
             Black_list_count = 0;
 
             //о себе 
-            Description = "";
+            Description = null;
 
             //настройки о том что слева и остальное
             //TODO сюда те поля которые слева должны быть

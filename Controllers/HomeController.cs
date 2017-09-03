@@ -8,7 +8,10 @@ using Newtonsoft.Json;
 using System.Web.Mvc.Ajax;
 using Im.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
 
+//JsonConvert.SerializeObject(Model)
+// res = JsonConvert.DeserializeObject<Person_info_short>(obg);
 
 /*
  * в представление загрузка картинок
@@ -83,8 +86,8 @@ namespace Im.Controllers
         ApplicationDbContext db_users = new ApplicationDbContext();
         All_db_Context db_all = new All_db_Context();
 
-        /*db.Users.Add(user2);
-                db.SaveChanges();*/
+        //db.Users.Add(user2);
+                //db.SaveChanges();
 
 
         public ActionResult Index()
@@ -99,14 +102,16 @@ namespace Im.Controllers
 
         public ActionResult Personal_record(int id=1)
         {
-            
-            return View();
+            var res = db_users.Users.First();
+            return View(res);
         }
 
         public ActionResult Group_record(int id = 1)
         {
+            var res = db_all.Groups.First();
 
-            return View();
+
+            return View(res);
         }
 
 
@@ -130,7 +135,7 @@ namespace Im.Controllers
         }
 
        
-        public ActionResult Get_info_person_ajax_1(bool open=false, string id = "")
+        public ActionResult Get_info_person_ajax_1(bool open=false, string id = "",string obg=null)
         {
             //TODO раскоментить,доделать и заменить то что ниже до //
             /*
@@ -143,23 +148,78 @@ namespace Im.Controllers
             ViewBag.Street = res.Street;
             ViewBag.Description = res.Description;
             */
+            Person_info_short res = null;
+            if (obg != null)
+                res = JsonConvert.DeserializeObject<Person_info_short>(obg);
+            else
+            {
+                //по id доставать параметры
+            }
             
             ViewBag.Open = open;
+            ViewBag.Id = id;
             //параметры учетки в viewbag
+            /*
             ViewBag.Age = 20;
             ViewBag.Country = "Россия";
             ViewBag.Town = "Москва";
             ViewBag.Street = "Ленина";
             ViewBag.Description = "описание 0000000                        12          аааааааааааааааааа ыыыыыыыыыыыы       ссссссссссссссс";
+            */
 
 
-            
 
-            return PartialView();
+            return PartialView(res);
         }
         //END-PARTIAL BLOCK------------------------------------------------------------------------------------------------------------------------------//
 
+            [HttpPost]
+        public ActionResult Add_new_memes(HttpPostedFileBase[] uploadImage,string Description,string id,string bool_access)
+        {
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            Memes res = null;
+            switch (bool_access)
+            {
+                case "person"://добавление записи со страницы пользователя
 
+                    if(id== check_id)
+                    {
+                        var pers=Record(id);
+                         res = new Memes(string.Concat(pers.Name, " ", pers.Surname), id)
+                        {
+                            Description = Description
+                        };
+                        List<byte[]>photo_byte= Get_photo(uploadImage);
+                        if (photo_byte.Count == 1)
+                        { 
+                            res.Image = photo_byte[0];
+                        }
+                        if (photo_byte.Count > 1)
+                        {
+                            foreach(var i in photo_byte)
+                            {
+                                res.Images.Add(i);
+                                Img tmp = new Img(i);
+                                db_all.Images.Add(tmp);
+                                db_all.SaveChanges();
+                                res.Images_id += tmp.Id + ",";
+                            }
+                        }
+                        
+
+                    }
+                    
+
+                    break;
+
+
+                case "group"://добавление записи со страницы группы
+
+                    break;
+            }
+           
+                return PartialView(res);
+        }
 
 
 
@@ -169,6 +229,40 @@ namespace Im.Controllers
 
 
             return new ApplicationUser();
+        }
+        public List<byte[]> Get_photo(HttpPostedFileBase[] uploadImage)
+        {
+            List<byte[]> res = new List<byte[]>();
+            if (uploadImage != null)
+            {
+                
+                    foreach (var i in uploadImage)
+                    {
+                        try
+                        {
+                            byte[] imageData = null;
+                            // считываем переданный файл в массив байтов
+                            using (var binaryReader = new BinaryReader(i.InputStream))
+                            {
+                                imageData = binaryReader.ReadBytes(i.ContentLength);
+                            }
+                            // установка массива байтов
+                            res.Add(imageData); 
+
+                        }
+                        catch
+                        {
+
+                        }
+
+
+                    
+                }
+
+            }
+
+
+            return res;
         }
 
 

@@ -4,9 +4,10 @@
     @Scripts.Render("~/scripts/jquery.unobtrusive-ajax.js")
 }
 @model Im.Models.ApplicationUser
-
+@using Newtonsoft.Json;
 @{
     ViewBag.Title = "Personal_record";
+    Im.Models.Person_info_short info_in_inf_aj = new Im.Models.Person_info_short(Model);
 }
 <div  class="Personal_record_body_left_block">
     <div class="Personal_record_main_img_lvl_1_div">
@@ -26,7 +27,7 @@
 </div>
 <div class="Personal_record_body_right_block">
     <div class="Personal_record_body_right_block_info_main">
-        <h1>Имя_____ ___________</h1>@{ 
+        <h1>@Model.Name   @Model.Surname</h1>@{ 
 /*
    if (Model.Online)
    {
@@ -39,10 +40,13 @@
    */
 
         }
-        <p>статус ффффффффф уцццццццццццццц ааааааааааааа ссссссс чччччччччч</p>
+        
+            <p>@Model.Status</p>
+        
+        
         <hr />
         <div class="Personal_record_main_info_1"></div>
-        @Html.Action("Get_info_person_ajax_1", "Home", new { open = true })@{/*TODO в параметры   , id = Model.Id */ }
+        @Html.Action("Get_info_person_ajax_1", "Home", new { open = true, obg= JsonConvert.SerializeObject(info_in_inf_aj), id = Model.Id })
         
         
         
@@ -51,20 +55,20 @@
             
                 <div class="Personal_record_num_div_small_block">
                     @{ 
-//<p  class="Personal_record_num_p_big">@Model.Friends_count</p>
+<p  class="Personal_record_num_p_big">@Model.Friends_count</p>
                         <p class="Personal_record_num_p_small">Друзей</p>
                     }
 
                 </div>
                 <div class="Personal_record_num_div_small_block">
                     @{
-//<p class="Personal_record_num_p_big">@Model.Followers_ignore_count</p>
+<p class="Personal_record_num_p_big">@Model.Followers_ignore_count</p>
                         <p class="Personal_record_num_p_small">Подписчиков</p>
                     }
                 </div>
                 <div class="Personal_record_num_div_small_block">
                     @{
-//<p class="Personal_record_num_p_big">@Model.Images_count</p>
+<p class="Personal_record_num_p_big">@Model.Images_count</p>
                         <p class="Personal_record_num_p_small">Фотографий</p>
                     }
                 </div>
@@ -85,17 +89,17 @@
 
     </div>
     <div class="Personal_record_photo_block">
-        @Html.ActionLink("ФОтографии", "Record_photo_page", "Home", new { }, new { })@{/*id=Model.Id*/}
+        @Html.ActionLink("Фотографии", "Record_photo_page", "Home", new { }, new { })@{/*id=Model.Id*/}
         @{ 
-/*
- @for (int i = 1; i < Model.Main_images.Count; ++i)
+
+ for (int i = 1; i < Model.Main_images.Count; ++i)
 {
 
 @Html.Raw(string.Concat("<img  class='Personal_record_not_main_img_small' ", " src=\"data:image/jpeg;base64,"
 , Convert.ToBase64String(Model.Main_images[i]), "\" />"))
 
 }
-*/
+
         }
         
                 
@@ -104,7 +108,16 @@
     </div>
 
     <div class="Personal_record_wall">
+
+        @using (Html.BeginForm("Add_new_memes","Home", FormMethod.Post, new { enctype = "multipart/form-data" ))
+        {
+            @Html.Hidden("bool_access","person")
+            @Html.Hidden("id",Model.Id)
+            @Html.Editor("", "Description", new { })
+            <input type="file" name="uploadImage[0]" />
+        }
         @{ 
+
             //создание постов и сама стена
         }
 

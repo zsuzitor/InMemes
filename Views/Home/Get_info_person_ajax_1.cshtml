@@ -1,5 +1,6 @@
-﻿
+﻿@model Im.Models.Person_info_short
 @{  string message = "Показать полностью";}
+@using Newtonsoft.Json;
 <div id="Personal_record_Not_main_info_id">
     @if (ViewBag.open == true)
     {
@@ -14,23 +15,23 @@
         message = "Скрыть";
 
     <div class="Get_info_person_ajax_1_div_all">
-        @if (ViewBag.Age != null)
+        @if (Model.Age != null)
         {
             <div class="Get_info_person_ajax_1_div_1_info"><div class="Get_info_person_ajax_1_p_left">Возраст</div><div class="Get_info_person_ajax_1_p_right">@ViewBag.Age</div></div>
         }
-        @if (ViewBag.Country != null)
+        @if (Model.Country != null)
         {
             <div class="Get_info_person_ajax_1_div_1_info"><div class="Get_info_person_ajax_1_p_left">Страна</div><div class="Get_info_person_ajax_1_p_right">@ViewBag.Country</div></div>
         }
-        @if (ViewBag.Town != null)
+        @if (Model.Town != null)
         {
             <div class="Get_info_person_ajax_1_div_1_info"><div class="Get_info_person_ajax_1_p_left">Город</div><div class="Get_info_person_ajax_1_p_right">@ViewBag.Town</div></div>
         }
-        @if (ViewBag.Street != null)
+        @if (Model.Street != null)
         {
             <div class="Get_info_person_ajax_1_div_1_info"><div class="Get_info_person_ajax_1_p_left">Улица</div><div class="Get_info_person_ajax_1_p_right">@ViewBag.Street</div></div>
         }
-        @if (ViewBag.Description != null)
+        @if (Model.Description != null)
         {
             <div class="Get_info_person_ajax_1_div_1_info"><div class="Get_info_person_ajax_1_p_left">О Себе</div><div class="Get_info_person_ajax_1_p_right">@ViewBag.Description</div></div>
         }
@@ -46,7 +47,7 @@
             ViewBag.open = !ViewBag.open;
         }
         @Ajax.ActionLink(message, "Get_info_person_ajax_1", "Home",
-new { open = ViewBag.open },//TODO , id = Model.Id
+new { open = ViewBag.open ,id= ViewBag.Id ,obg= JsonConvert.SerializeObject(Model) },//TODO , id = Model.Id
 new AjaxOptions { UpdateTargetId = "Personal_record_Not_main_info_id" }, new { @class = "link_standart_for_div" })
     </div>
 </div>

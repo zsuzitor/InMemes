@@ -162,11 +162,32 @@ namespace Im.Models
             this.Name = Name;
         }
     }
+    public class Person_info_short
+    {
+        public int? Age { get; set; }
+        public string Country { get; set; }
+        public string Town { get; set; }
+        public string Street { get; set; }
+        public string Description { get; set; }
 
-    public class Group_short
+        public Person_info_short()
+        {
+
+        }
+        public Person_info_short(ApplicationUser a)
+        {
+            Age = a.Age;
+            Country = a.Country;
+            Town = a.Town;
+            Street = a.Street;
+            Description = a.Description;
+        }
+    }
+
+        public class Group_short
     {
         public int Id { get; set; }
-        public string Group_id { get; set; }
+        public string Group_id_s { get; set; }
         public int Count_followers { get; set; }
         public byte[] Image { get; set; }
         public string Name { get; set; }
@@ -174,7 +195,7 @@ namespace Im.Models
         public Group_short(string Group_id, int Count_followers, byte[] Image, string Name)
         {
             Id = -1;
-            this.Group_id = Group_id;
+            this.Group_id_s = Group_id;
             this.Count_followers = Count_followers;
             this.Image = Image;
             this.Name = Name;
