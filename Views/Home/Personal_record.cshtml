@@ -9,6 +9,7 @@
     ViewBag.Title = "Personal_record";
     Im.Models.Person_info_short info_in_inf_aj = new Im.Models.Person_info_short(Model);
 }
+
 <div  class="Personal_record_body_left_block">
     <div class="Personal_record_main_img_lvl_1_div">
         <div class="Personal_record_main_img_div">
@@ -19,7 +20,9 @@
              }
             
         </div>
-        <div class="Personal_record_edit_under_main_img">Редактировать</div>
+        <div class="Personal_record_edit_under_main_img">
+            @Html.ActionLink("Редатировать", "Edit_personal_record","Home",new { },new {@class= "link_standart_for_div" })
+        </div>
     </div>
 
 
@@ -27,19 +30,15 @@
 </div>
 <div class="Personal_record_body_right_block">
     <div class="Personal_record_body_right_block_info_main">
-        <h1>@Model.Name   @Model.Surname</h1>@{ 
-/*
-   if (Model.Online)
-   {
-  <h1>Online</h1>
-   }
-   if (!Model.Online)
-   {
-   <h1>Ofline</h1>
-       }
-   */
-
-        }
+        <h1>@Model.Name   @Model.Surname</h1><div>
+               @if (Model.Online)
+               {
+                <h1>Online</h1>
+               }
+            @if (!Model.Online)
+            {
+            <h1>Ofline</h1>
+            }</div>
         
             <p>@Model.Status</p>
         
@@ -108,17 +107,40 @@
     </div>
 
     <div class="Personal_record_wall">
-
-        @using (Html.BeginForm("Add_new_memes","Home", FormMethod.Post, new { enctype = "multipart/form-data" ))
+        
+        @using (Html.BeginForm("Add_new_memes", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
-            @Html.Hidden("bool_access","person")
-            @Html.Hidden("id",Model.Id)
-            @Html.Editor("", "Description", new { })
+            @Html.Hidden("bool_access", "person")
+            @Html.Hidden("id", Model.Id)
+            @Html.Editor("Description", new { })
             <input type="file" name="uploadImage[0]" />
+            <input type="submit" class="submit" value="Поделиться" />
         }
-        @{ 
-
+        @{
             //создание постов и сама стена
+            <ul>
+                @foreach (var i in Model.Wall)
+            {
+<li>
+        <div>
+            <p>@i.Description</p>
+            @if (i.Image != null)
+            {
+                Html.Raw(string.Concat("<img  class=''  id =''", " src=\"data:image/jpeg;base64,"
+, Convert.ToBase64String(i.Image), "\" />"));
+            }
+             @if (i.Images != null)
+             {
+                 foreach(var i2 in i.Images)
+                 {
+                     Html.Raw(string.Concat("<img  class=''  id =''", " src=\"data:image/jpeg;base64,"
+, Convert.ToBase64String(i.Image), "\" />"));
+                 }
+             }
+        </div>
+        </li>
+            }
+            </ul>
         }
 
     </div>

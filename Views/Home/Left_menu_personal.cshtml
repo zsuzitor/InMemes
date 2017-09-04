@@ -1,1 +1,30 @@
 ﻿
+@{ 
+    List<string> list = null;
+    if (!string.IsNullOrEmpty(ViewBag.list_str))
+    {
+        list = ((string)ViewBag.list_str).Split(',').ToList();
+    }
+
+}
+@if (list!=null)
+{
+    <div class="Layout_left_menu">
+        <ul>
+            @for (int i=0;i< list.Count;++i)
+            {
+                if (!string.IsNullOrEmpty(list[i]))
+                {
+            <li>
+                @Html.ActionLink(list[i], list[++i], new { id = ViewBag.id }, new { })
+            </li>
+                }
+            }
+            
+        </ul>
+        <hr>
+
+
+    </div>
+}
+

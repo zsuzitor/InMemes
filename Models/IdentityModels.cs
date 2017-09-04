@@ -9,8 +9,12 @@ using System.Collections.Generic;
 
 namespace Im.Models
 {
+    public interface IPage_view
+    {
+
+    }
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit https://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUser : IdentityUser, IPage_view
     {
         //поля
 
@@ -166,7 +170,7 @@ namespace Im.Models
 
             //настройки о том что слева и остальное
             //TODO сюда те поля которые слева должны быть
-            Menu_left = "Моя страница,Новости,Сообщения,Друзья,Фотографии,Музыка,Видео";
+            Menu_left = "Моя Cтраница,Personal_record,Новости,News,Сообщения,Mesages,Друзья,Friends,Фотографии,Albums,Музыка,Music,Видео,Video";
     }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

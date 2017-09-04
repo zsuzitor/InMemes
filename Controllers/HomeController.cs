@@ -13,71 +13,7 @@ using Microsoft.AspNet.Identity;
 //JsonConvert.SerializeObject(Model)
 // res = JsonConvert.DeserializeObject<Person_info_short>(obg);
 
-/*
- * в представление загрузка картинок
- @using (Html.BeginForm("Ad_img_add_ad", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-        @Html.Hidden("obg", JsonConvert.SerializeObject(Model))
-        <input type="file" name="uploadImage[0]" />
-        <input type="file" name="uploadImage[1]" />
-        <input type="file" name="uploadImage[2]" />
-        <input type="file" name="uploadImage[3]" />
-        <input type="file" name="uploadImage[4]" />
-        <input type="file" name="uploadImage[5]" />
-        <input type="file" name="uploadImage[6]" />
-        <input type="file" name="uploadImage[7]" />
-        <input type="file" name="uploadImage[8]" />
-        <input type="file" name="uploadImage[9]" />
 
-
-
-                        <input type="submit" value="Добавить" />
-    } 
-  
-  в представление отображение картинки
-
-    @Html.Raw(string.Concat("<img  class='Show_one_ad_featured_big_img'  id ='Show_one_ad_featured_small_img_id_main'", " src=\"data:image/jpeg;base64,"
-                                , Convert.ToBase64String(Model.Images_byte[0]), "\" />"))
-
-
-    метод в контроллер для картинки 
-    [HttpPost]
-        public ActionResult Ad_img_add_ad(HttpPostedFileBase[] uploadImage,string obg=null)
-        {
-
-    if ( uploadImage != null)//ModelState.IsValid &&
-            {
-                foreach(var i in uploadImage)
-                {
-                    try
-                    {
-                        byte[] imageData = null;
-                        // считываем переданный файл в массив байтов
-                        using (var binaryReader = new BinaryReader(i.InputStream))
-                        {
-                            imageData = binaryReader.ReadBytes(i.ContentLength);
-                        }
-                        // установка массива байтов
-                        res.Images_byte.Add(imageData);
-
-
-
-                        //return RedirectToAction("Add_new_ad", res);
-
-                    }
-                    catch
-                    {
-
-                    }
-
-
-                }
-
-
-
-        }
-  
- * */
 namespace Im.Controllers
 {
     public class HomeController : Controller
@@ -86,27 +22,31 @@ namespace Im.Controllers
         ApplicationDbContext db_users = new ApplicationDbContext();
         All_db_Context db_all = new All_db_Context();
 
-        //db.Users.Add(user2);
-                //db.SaveChanges();
+        
 
 
         public ActionResult Index()
         {
-            //db_all.Groups.Add(new Group("тестова група 1"));
-            //db_all.SaveChanges();
+            //var a=db_users.Users.First();
             
+           // a.Menu_left= "Моя Cтраница,Personal_record,Новости,News,Сообщения,Mesages,Друзья,Friends,Фотографии,Albums,Музыка,Music,Видео,Video";
+            //db_users.SaveChanges();
             //если залогинен то на страницу
             //если не залогинен то на главную
             return View();
         }
 
-        public ActionResult Personal_record(int id=1)
+        public ActionResult Personal_record(string id)
         {
-            var res = db_users.Users.First();
+            if (string.IsNullOrEmpty(id))
+            {
+                 id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            }
+            var res = Record(id, "Personal_record");
             return View(res);
         }
 
-        public ActionResult Group_record(int id = 1)
+        public ActionResult Group_record(string id)
         {
             var res = db_all.Groups.First();
 
@@ -114,61 +54,102 @@ namespace Im.Controllers
             return View(res);
         }
 
-
-        public ActionResult Record_photo_page(string id=null)
+        //TODO 
+        public ActionResult Record_photo_page(string id)
         {
             //TODO закидывать фото юзеру и проверять что бы его фото отдавать продумать мб вообще не нужно
             //смотреть че как и фото отображать
             //
             return View();
         }
+        //TODO 
+        public ActionResult Albums(string id)
+        {
+            //TODO 
+            var res = db_users.Users.First(x1 => x1.Id == id);
 
+            return View();
+        }
+        //TODO 
+        public ActionResult News(string id)
+        {
+            //TODO 
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+
+            return View();
+        }
+        //TODO 
+        public ActionResult Mesages(string id)
+        {
+            //TODO 
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+
+            return View();
+        }
+        //TODO 
+        public ActionResult Friends(string id)
+        {
+            //TODO 
+            var res = db_users.Users.First(x1 => x1.Id == id);
+
+            return View();
+        }
+        //TODO 
+        public ActionResult Music(string id)
+        {
+            //TODO 
+            var res = db_users.Users.First(x1 => x1.Id == id);
+
+            return View();
+        }
+        //TODO 
+        public ActionResult Video(string id)
+        {
+            //TODO 
+            var res = db_users.Users.First(x1 => x1.Id == id);
+
+            return View();
+        }
+        //TODO 
+        public ActionResult Edit_personal_record()
+        {
+            //TODO 
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+
+            return View();
+        }
 
 
         //-PARTIAL BLOCK------------------------------------------------------------------------------------------------------------------------------//
 
         [ChildActionOnly]
-        public ActionResult Left_menu_personal(int id = 1)
+        public ActionResult Left_menu_personal()
         {
-            //показывать меню именно того пользователя мб id убрать хз пока как
+            
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            var pers = Record(check_id, "info_person");
+            ViewBag.list_str = pers.Menu_left;
+            ViewBag.id = check_id;
             return PartialView();
         }
 
        
         public ActionResult Get_info_person_ajax_1(bool open=false, string id = "",string obg=null)
         {
-            //TODO раскоментить,доделать и заменить то что ниже до //
-            /*
-             ApplicationUser res = Record(id);
-            ViewBag.Open = open;
-            //параметры учетки в viewbag
-            ViewBag.Age = res.Age;
-            ViewBag.Country = res.Country;
-            ViewBag.Town = res.Town;
-            ViewBag.Street = res.Street;
-            ViewBag.Description = res.Description;
-            */
+            
             Person_info_short res = null;
             if (obg != null)
                 res = JsonConvert.DeserializeObject<Person_info_short>(obg);
             else
             {
                 //по id доставать параметры
+                var pers = Record(id, "info_person");
+                res = new Person_info_short() { Age=pers.Age, Country = pers.Country, Town = pers.Town, Street = pers.Street, Description = pers.Description };
             }
             
             ViewBag.Open = open;
             ViewBag.Id = id;
-            //параметры учетки в viewbag
-            /*
-            ViewBag.Age = 20;
-            ViewBag.Country = "Россия";
-            ViewBag.Town = "Москва";
-            ViewBag.Street = "Ленина";
-            ViewBag.Description = "описание 0000000                        12          аааааааааааааааааа ыыыыыыыыыыыы       ссссссссссссссс";
-            */
-
-
-
+ 
             return PartialView(res);
         }
         //END-PARTIAL BLOCK------------------------------------------------------------------------------------------------------------------------------//
@@ -178,18 +159,19 @@ namespace Im.Controllers
         {
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             Memes res = null;
+            IPage_view res_page = null;
             switch (bool_access)
             {
                 case "person"://добавление записи со страницы пользователя
 
                     if(id== check_id)
                     {
-                        var pers=Record(id);
+                        var pers=Record(id, "Personal_record");
                          res = new Memes(string.Concat(pers.Name, " ", pers.Surname), id)
                         {
                             Description = Description
                         };
-                        List<byte[]>photo_byte= Get_photo(uploadImage);
+                        List<byte[]>photo_byte= Get_photo_post(uploadImage);
                         if (photo_byte.Count == 1)
                         { 
                             res.Image = photo_byte[0];
@@ -205,32 +187,45 @@ namespace Im.Controllers
                                 res.Images_id += tmp.Id + ",";
                             }
                         }
-                        
-
+                        db_all.Memes.Add(res);
+                        db_all.SaveChanges();
+                        pers.Wall.Add(res);
+                        pers.Wall_id+= res.Id+",";
+                        pers.Wall_count += 1;
+                        db_users.SaveChanges();
+                        res_page=(IPage_view)pers;
                     }
                     
 
                     break;
 
 
-                case "group"://добавление записи со страницы группы
+                case "group"://добавление записи со страницы группы +проверки
 
                     break;
             }
            
-                return PartialView(res);
+                return View("Personal_record", res_page);
         }
 
 
 
-        public ApplicationUser Record(string id)
+        public ApplicationUser Record(string id,string bool_fullness)
         {
+            var res = db_users.Users.First(x1 => x1.Id == id);
+            //TODO заполнять все поля правильно в зависимости от bool_fullness
+
+            //Personal_record
+            //info_person
+            //
 
 
 
-            return new ApplicationUser();
+            return res;
         }
-        public List<byte[]> Get_photo(HttpPostedFileBase[] uploadImage)
+        
+
+        public List<byte[]> Get_photo_post(HttpPostedFileBase[] uploadImage)
         {
             List<byte[]> res = new List<byte[]>();
             if (uploadImage != null)

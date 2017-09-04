@@ -98,7 +98,7 @@ div.main_header_r_l_but:hover{
 div.Layout_left_menu {
     background-color: aqua;
     width: 200px;
-    height: 600px;
+    
     position: fixed;
     
 }

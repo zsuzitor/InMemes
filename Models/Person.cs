@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Im.Models
 {
-    public class Group
+    public class Group: IPage_view
     {
 
         //в IdentityUser есть  public int Id { get; set; }
