@@ -47,7 +47,7 @@
             ViewBag.open = !ViewBag.open;
         }
         @Ajax.ActionLink(message, "Get_info_person_ajax_1", "Home",
-new { open = ViewBag.open ,id= ViewBag.Id ,obg= JsonConvert.SerializeObject(Model) },//TODO , id = Model.Id
+new { open = ViewBag.open ,id= ViewBag.Id ,obg= JsonConvert.SerializeObject(Model) },
 new AjaxOptions { UpdateTargetId = "Personal_record_Not_main_info_id" }, new { @class = "link_standart_for_div" })
     </div>
 </div>

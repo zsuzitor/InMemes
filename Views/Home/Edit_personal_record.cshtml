@@ -1,0 +1,19 @@
+﻿@section scripts
+    {
+    @Scripts.Render("~/scripts/jquery-3.1.1.js")
+    @Scripts.Render("~/scripts/jquery.unobtrusive-ajax.js")
+}
+@{
+    ViewBag.Title = "Edit_personal_record";
+}
+
+
+
+
+
+<div id="Edit_personal_record_info_load_ajax_main_div_id">
+    @Html.Action("Edit_personal_record_info_load_ajax", "Home", new { })
+
+</div>
+
+

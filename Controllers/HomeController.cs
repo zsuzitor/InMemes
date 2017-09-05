@@ -115,6 +115,7 @@ namespace Im.Controllers
         {
             //TODO 
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            ViewBag.list_menu = new string[] {"Основное","Контакты","Интересы","Образование","Карьера","Военная служба","Жизненная позиция" };
 
             return View();
         }
@@ -132,8 +133,34 @@ namespace Im.Controllers
             ViewBag.id = check_id;
             return PartialView();
         }
+        [ChildActionOnly]
+        public ActionResult Wall_memes(string from,string id)
+        {
+            
+            
+            IPage_view pers= null;
+            switch (from)
+            {
+                case "Personal_record":
+                     pers = Record(id, "Wall");
+                    return PartialView(((ApplicationUser)pers).Wall);
+                    break;
 
-       
+                default ://"News"
+                    string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                    pers = Record(check_id, "News");
+                    return PartialView(((ApplicationUser)pers).News);
+                    break;
+            }
+
+          
+
+
+
+            
+        }
+
+
         public ActionResult Get_info_person_ajax_1(bool open=false, string id = "",string obg=null)
         {
             
@@ -152,6 +179,18 @@ namespace Im.Controllers
  
             return PartialView(res);
         }
+        public ActionResult Edit_personal_record_info_load_ajax(string obg)
+        {
+            ViewBag.click = obg;
+            if (string.IsNullOrEmpty(obg))
+                ViewBag.click = "Основное";
+            
+            ViewBag.list_menu = new string[] { "Основное", "Контакты", "Интересы", "Образование", "Карьера", "Военная служба", "Жизненная позиция" };
+
+
+            return PartialView();
+        }
+            
         //END-PARTIAL BLOCK------------------------------------------------------------------------------------------------------------------------------//
 
             [HttpPost]
@@ -216,8 +255,9 @@ namespace Im.Controllers
             //TODO заполнять все поля правильно в зависимости от bool_fullness
 
             //Personal_record
-            //info_person
-            //
+            //Info_person
+            //Wall
+            //News
 
 
 

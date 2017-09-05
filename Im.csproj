@@ -272,6 +272,10 @@
     <Content Include="Views\Home\Personal_record.cshtml" />
     <Content Include="Views\Home\Group_record.cshtml" />
     <Content Include="Views\Home\Get_info_person_ajax_1.cshtml" />
+    <Content Include="Views\Home\Wall_memes.cshtml" />
+    <Content Include="Views\Home\News.cshtml" />
+    <Content Include="Views\Home\Edit_personal_record.cshtml" />
+    <Content Include="Views\Home\Edit_personal_record_info_load_ajax.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

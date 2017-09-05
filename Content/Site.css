@@ -56,11 +56,26 @@ div.for_separation {
 }
 
 
+div.div_color_white{
+    background-color:white;
+}
+
+
+div.Memes_under_block_small{
+    width:70px;
+    height:30px;
+}
+
+
+
+
+
+
+
 
 
 
 /*main_header*/
-
 div.main_header {
     position: absolute;
     position: fixed;
@@ -106,7 +121,7 @@ div.Layout_body{
     width:800px;
     margin-left:230px;
    
-    height:1030px;
+    
     
 }
 div.Layout_all_l_b {
@@ -136,15 +151,15 @@ div.Personal_record_main_img_lvl_1_div {
 
 div.Personal_record_body_left_block {
     width: 350px;
-    height: 900px;
+    
     background-color: white;
     display: inline-block;
     vertical-align: top;
 }
 div.Personal_record_body_right_block {
     width: 430px;
-    height: 900px;
-    background-color: white;
+    
+    
     display: inline-block;
     vertical-align: top;
     margin-left:10px;
@@ -161,12 +176,16 @@ div.Personal_record_main_info_1{
 
 div.Personal_record_body_right_block_info_main {
     background-color: white;
+    margin-top:-20px;
 }
 div.Personal_record_photo_block{
-    height:300px;
+    margin-top:30px;
+    height:120px;
 }
 div.Personal_record_wall {
+    margin-top:30px;
     height: 300px;
+    background-color:  #DCDCDC;
 }
 div.Personal_record_num {
     height: 100px;
@@ -222,3 +241,36 @@ div.Get_info_person_ajax_1_show_n{
     div.Get_info_person_ajax_1_show_n:hover {
         background-color: darkgray;
     }
+
+/* Edit_personal_record*/
+#Edit_personal_record_info_load_ajax_main_div_id {
+    width: 700px;
+}
+div.Edit_personal_record_info_load_ajax_osn_left_block {
+    display: inline-block;
+    vertical-align: top;
+    width: 400px;
+    height: 300px;
+    background-color:white;
+}
+
+div.Edit_personal_record_info_load_ajax_osn_right_block {
+    display: inline-block;
+    vertical-align: top;
+    width: 200px;
+    height: 300px;
+    background-color: white;
+    margin-left:20px;
+    position:fixed;
+}
+div.Edit_personal_record_info_load_ajax_link_st{
+    background-color:white;
+}
+div.Edit_personal_record_info_load_ajax_link_not_st{
+    background-color:blue;
+}
+
+/*Wall_memes*/
+div.Wall_memes_all_memes_wall{
+    margin-top:30px;
+}

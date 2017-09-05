@@ -29,7 +29,7 @@
 
 </div>
 <div class="Personal_record_body_right_block">
-    <div class="Personal_record_body_right_block_info_main">
+    <div class="Personal_record_body_right_block_info_main div_color_white">
         <h1>@Model.Name   @Model.Surname</h1><div>
                @if (Model.Online)
                {
@@ -87,8 +87,8 @@
         </div>
 
     </div>
-    <div class="Personal_record_photo_block">
-        @Html.ActionLink("Фотографии", "Record_photo_page", "Home", new { }, new { })@{/*id=Model.Id*/}
+    <div class="Personal_record_photo_block div_color_white">
+        @Html.ActionLink("Фотографии", "Record_photo_page", "Home", new {id=Model.Id }, new { })@{/*id=Model.Id*/}
         @{ 
 
  for (int i = 1; i < Model.Main_images.Count; ++i)
@@ -107,41 +107,18 @@
     </div>
 
     <div class="Personal_record_wall">
-        
-        @using (Html.BeginForm("Add_new_memes", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            @Html.Hidden("bool_access", "person")
-            @Html.Hidden("id", Model.Id)
-            @Html.Editor("Description", new { })
-            <input type="file" name="uploadImage[0]" />
-            <input type="submit" class="submit" value="Поделиться" />
-        }
-        @{
-            //создание постов и сама стена
-            <ul>
-                @foreach (var i in Model.Wall)
+        <div class="div_color_white">
+            @using (Html.BeginForm("Add_new_memes", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
-<li>
-        <div>
-            <p>@i.Description</p>
-            @if (i.Image != null)
-            {
-                Html.Raw(string.Concat("<img  class=''  id =''", " src=\"data:image/jpeg;base64,"
-, Convert.ToBase64String(i.Image), "\" />"));
+                @Html.Hidden("bool_access", "person")
+                @Html.Hidden("id", Model.Id)
+                @Html.Editor("Description", new { })
+                <input type="file" name="uploadImage[0]" />
+                <input type="submit" class="submit" value="Поделиться" />
             }
-             @if (i.Images != null)
-             {
-                 foreach(var i2 in i.Images)
-                 {
-                     Html.Raw(string.Concat("<img  class=''  id =''", " src=\"data:image/jpeg;base64,"
-, Convert.ToBase64String(i.Image), "\" />"));
-                 }
-             }
         </div>
-        </li>
-            }
-            </ul>
-        }
+        @Html.Action("Wall_memes","Home",new { from= "Personal_record" ,id=Model.Id})
+       
 
     </div>
 </div>
