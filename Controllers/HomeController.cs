@@ -186,15 +186,128 @@ namespace Im.Controllers
                 ViewBag.click = "Основное";
             
             ViewBag.list_menu = new string[] { "Основное", "Контакты", "Интересы", "Образование", "Карьера", "Военная служба", "Жизненная позиция" };
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            var pers = Record(check_id, "Personal_record");
 
-
-            return PartialView();
+            return PartialView(pers);
         }
-            
-        //END-PARTIAL BLOCK------------------------------------------------------------------------------------------------------------------------------//
 
+        //END-PARTIAL BLOCK------------------------------------------------------------------------------------------------------------------------------//
+        
+        public ActionResult Change_pers_rec(ApplicationUser a,string click)
+        {
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            //var pers = db_users.Users.First(x1=>x1.Id==check_id);
+            //TODO проверять валидацией все
+            var pers = Record(check_id, "Personal_record");
+
+
+
+            switch (click)
+    {
+        case "Основное":
+            {
+                        pers.Name = a.Name;
+                        pers.Surname = a.Surname;
+                        pers.Birthday = a.Birthday;
+                        pers.Country = a.Country;
+                        pers.Town = a.Town;
+                        pers.Street = a.Street;
+                        pers.Status = a.Status;
+                        pers.Description = a.Description;
+                        db_users.SaveChanges();
+
+                break;
+            }
+        case "Контакты":
+            {
+                /*@Html.EditorFor(x1 => x1.Family_id)
+                     @Html.EditorFor(x1 => x1.Black_list_id)
+                    @Html.EditorFor(x1 => x1.Groups_id)
+                    @Html.EditorFor(x1 => x1.Menu_left)
+                    */
+                    
+                break;
+            }
+        case "Интересы":
+            {
+
+
+                break;
+            }
+        case "Образование":
+            {
+
+
+                break;
+            }
+        case "Карьера":
+            {
+
+
+                break;
+            }
+        case "Военная служба":
+            {
+
+
+                break;
+            }
+        case "Жизненная позиция":
+            {
+
+
+                break;
+            }
+
+
+    }
+
+            ViewBag.click = click;
+            ViewBag.save_chenges = true;
+            if (string.IsNullOrEmpty(click))
+                ViewBag.click = "Основное";
+
+            ViewBag.list_menu = new string[] { "Основное", "Контакты", "Интересы", "Образование", "Карьера", "Военная служба", "Жизненная позиция" };
+
+
+
+            return PartialView("Edit_personal_record_info_load_ajax", pers);
+        }
+        [HttpPost]
+        public ActionResult Add_new_image(HttpPostedFileBase[] uploadImage, string for_what,string from)
+        {
+            IPage_view res_page = null;
+            var lst1 = Get_photo_post(uploadImage);
+            var lst2 = Get_photo_post(lst1);
+            if (from == "person")
+            {
+                string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                res_page  = Record(check_id, "Personal_record");
+                db_all.Images.Add(lst2[0]);
+                db_all.SaveChanges();
+                ((ApplicationUser)res_page).Images_count += 1;
+                ((ApplicationUser)res_page).Images_id += lst2[0].Id + ",";
+                ((ApplicationUser)res_page).Images.Insert(0, lst1[0]);
+                if (for_what == "main_img")
+                {
+                    ((ApplicationUser)res_page).Main_images_id += lst2[0].Id + ",";
+                    ((ApplicationUser)res_page).Main_images.Insert(0, lst1[0]);
+                }
+                    
+                
+                db_users.SaveChanges();
+
+            }
+            if (from == "group")
+            {
+
+            }
+
+            return View("Personal_record", res_page);
+        }
             [HttpPost]
-        public ActionResult Add_new_memes(HttpPostedFileBase[] uploadImage,string Description,string id,string bool_access)
+        public ActionResult Add_new_memes(HttpPostedFileBase[] uploadImage,string Description_mem,string id,string bool_access)
         {
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             Memes res = null;
@@ -208,8 +321,8 @@ namespace Im.Controllers
                         var pers=Record(id, "Personal_record");
                          res = new Memes(string.Concat(pers.Name, " ", pers.Surname), id)
                         {
-                            Description = Description
-                        };
+                            Description = Description_mem
+                         };
                         List<byte[]>photo_byte= Get_photo_post(uploadImage);
                         if (photo_byte.Count == 1)
                         { 
@@ -253,6 +366,36 @@ namespace Im.Controllers
         {
             var res = db_users.Users.First(x1 => x1.Id == id);
             //TODO заполнять все поля правильно в зависимости от bool_fullness
+            /*
+            res.Images_count = 0;
+            res.Images_id = "";
+            res.Main_images_id = "";
+            db_users.SaveChanges();
+            */
+            try
+            {
+                //АВА
+                if (bool_fullness == "Personal_record")
+                {
+                    var main_img = res.Main_images_id.Split(',');
+                    res.Main_images.Add(db_all.Images.First(x1 => x1.Id == Convert.ToInt32(main_img[main_img.Count() - 1])).bytes);
+                }
+                //ФОТО, потом под 1 засунуть мб
+                if (bool_fullness == "Personal_record")
+                {
+                    var not_main_img = res.Images_id.Split(',');
+                    for (int b = 0, i = not_main_img.Count() - 1; i > 0 && b < 5; --i, b++)
+                    {
+                        res.Images.Add(db_all.Images.First(x1 => x1.Id == Convert.ToInt32(not_main_img[i])).bytes);
+                    }
+
+                }
+            }
+            catch
+            {
+
+            }
+            
 
             //Personal_record
             //Info_person
@@ -263,9 +406,17 @@ namespace Im.Controllers
 
             return res;
         }
-        
+        public List<Img> Get_photo_post(IEnumerable<byte[]> Images)
+        {
+            List<Img> res = new List<Img>();
+            foreach(var i in Images)
+            {
+                res.Add(new Img(i));
+            }
+            return res;
+        }
 
-        public List<byte[]> Get_photo_post(HttpPostedFileBase[] uploadImage)
+            public List<byte[]> Get_photo_post(HttpPostedFileBase[] uploadImage)
         {
             List<byte[]> res = new List<byte[]>();
             if (uploadImage != null)

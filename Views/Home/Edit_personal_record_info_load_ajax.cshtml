@@ -1,8 +1,113 @@
 ﻿@model Im.Models.ApplicationUser
    @{ string class_li_div = "Edit_personal_record_info_load_ajax_link_st";}
+@{ 
+    AjaxOptions ajaxOpts = new AjaxOptions
+    {
+        UpdateTargetId = "Edit_personal_record_info_load_ajax_main_div_id",
+        Url = Url.Action("Change_pers_rec")
 
+       
+    };
+}
 <div class="Edit_personal_record_info_load_ajax_osn_left_block">
-    
+    @if (ViewBag.save_chenges != null)
+    {
+        <h1>Изменения сохранены</h1>
+    }
+
+    @switch ((string)ViewBag.click)
+    {
+        case "Основное":
+            {
+                <div>
+                    @using (Ajax.BeginForm(ajaxOpts))
+                    {
+                        @Html.Hidden("click", (string)ViewBag.click)
+                    <div class="Edit_personal_record_info_load_ajax_div_str_1">@Html.Label("Имя:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
+                    @Html.EditorFor(x1 => x1.Name)</div>
+                    <div class="Edit_personal_record_info_load_ajax_div_str_1">@Html.Label("Фамилия:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
+                    @Html.EditorFor(x1 => x1.Surname)</div>
+                    <div class="Edit_personal_record_info_load_ajax_div_str_1">@Html.Label("День Рождения:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
+                    @Html.EditorFor(x1 => x1.Birthday)</div>
+                    <div class="Edit_personal_record_info_load_ajax_div_str_1">@Html.Label("Страна:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
+                    @Html.EditorFor(x1 => x1.Country)</div>
+                    <div class="Edit_personal_record_info_load_ajax_div_str_1">@Html.Label("Город:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
+                    @Html.EditorFor(x1 => x1.Town)</div>
+                    <div class="Edit_personal_record_info_load_ajax_div_str_1">@Html.Label("Улица:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
+                    @Html.EditorFor(x1 => x1.Street)</div>
+                    <hr />
+                    <div class="Edit_personal_record_info_load_ajax_div_str_1">@Html.Label("Статус:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
+                    @Html.EditorFor(x1 => x1.Status)</div>
+
+                    <div class="Edit_personal_record_info_load_ajax_div_str_1">@Html.Label("О Себе:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
+                    @Html.EditorFor(x1 => x1.Description)</div>
+                    <hr />
+                    <input type="submit" value="Сохранить" />
+                    }
+
+
+
+
+
+                </div>
+
+                break;
+            }
+        case "Контакты":
+            {
+                <div>
+                    <div class="Edit_personal_record_info_load_ajax_div_str_1">
+                        @Html.Label("Родственники:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
+                        @Html.EditorFor(x1 => x1.Family_id)
+                    </div>
+                    <div class="Edit_personal_record_info_load_ajax_div_str_1">
+                        @Html.Label("Черный лист:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
+                        @Html.EditorFor(x1 => x1.Black_list_id)
+                    </div>
+                    <div class="Edit_personal_record_info_load_ajax_div_str_1">
+                        @Html.Label("Группы:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
+                        @Html.EditorFor(x1 => x1.Groups_id)
+                    </div>
+                    <div class="Edit_personal_record_info_load_ajax_div_str_1">
+                        @Html.Label("Настройки меню слева:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
+                        @Html.EditorFor(x1 => x1.Menu_left)
+                    </div>
+                </div>
+                break;
+            }
+        case "Интересы":
+            {
+
+
+                break;
+            }
+        case "Образование":
+            {
+
+
+                break;
+            }
+        case "Карьера":
+            {
+
+
+                break;
+            }
+        case "Военная служба":
+            {
+
+
+                break;
+            }
+        case "Жизненная позиция":
+            {
+
+
+                break;
+            }
+
+
+    }
 
 
 </div>
@@ -16,12 +121,12 @@
                 <li>
                     @if ((string)ViewBag.click == i)
                     {
-                        class_li_div = "Edit_personal_record_info_load_ajax_link_not_st";
-                    }
-                    @if ((string)ViewBag.click != i)
+                    class_li_div = "Edit_personal_record_info_load_ajax_link_not_st";
+                }
+                @if ((string)ViewBag.click != i)
                     {
-                        class_li_div = "Edit_personal_record_info_load_ajax_link_st";
-                    }
+                    class_li_div = "Edit_personal_record_info_load_ajax_link_st";
+                }
                     <div class=@class_li_div>
 
 
