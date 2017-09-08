@@ -56,8 +56,12 @@ namespace Im.Models
         public string Name;
         public int Id { get; set; }
         public byte[] bytes;
-
-
+        
+        public Img()
+        {
+            Id = -1;
+            bytes = new byte[0];
+        }
         public Img(byte[] a)
         {
             Id = -1;

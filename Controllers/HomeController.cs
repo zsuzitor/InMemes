@@ -27,12 +27,20 @@ namespace Im.Controllers
 
         public ActionResult Index()
         {
-            //var a=db_users.Users.First();
-            
-           // a.Menu_left= "Моя Cтраница,Personal_record,Новости,News,Сообщения,Mesages,Друзья,Friends,Фотографии,Albums,Музыка,Music,Видео,Video";
+            /*
+            var a=db_users.Users.First();
+            a.Images_count = 0;
+            a.Images_id = "";
+            a.Main_images_id = "";
+            db_users.SaveChanges();
+            var t = db_all.Images.RemoveRange(db_all.Images.ToList());
+            db_all.SaveChanges();
+            */
+            // a.Menu_left= "Моя Cтраница,Personal_record,Новости,News,Сообщения,Mesages,Друзья,Friends,Фотографии,Albums,Музыка,Music,Видео,Video";
             //db_users.SaveChanges();
             //если залогинен то на страницу
             //если не залогинен то на главную
+            //var res = Record(System.Web.HttpContext.Current.User.Identity.GetUserId(), "Personal_record");
             return View();
         }
 
@@ -43,6 +51,7 @@ namespace Im.Controllers
                  id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             }
             var res = Record(id, "Personal_record");
+           
             return View(res);
         }
 
@@ -286,6 +295,12 @@ namespace Im.Controllers
                 res_page  = Record(check_id, "Personal_record");
                 db_all.Images.Add(lst2[0]);
                 db_all.SaveChanges();
+                //СЕЙЧАС УБРАТЬ
+                foreach (var i in db_all.Images)
+                {
+                    var t = i;
+                }
+
                 ((ApplicationUser)res_page).Images_count += 1;
                 ((ApplicationUser)res_page).Images_id += lst2[0].Id + ",";
                 ((ApplicationUser)res_page).Images.Insert(0, lst1[0]);
@@ -297,13 +312,19 @@ namespace Im.Controllers
                     
                 
                 db_users.SaveChanges();
+                //СЕЙЧАС УБРАТЬ
+                //res_page = Record(check_id, "Personal_record");
 
             }
             if (from == "group")
             {
 
             }
-
+            //СЕЙЧАС УБРАТЬ
+            foreach (var i in db_all.Images)
+            {
+                var t = i;
+            }
             return View("Personal_record", res_page);
         }
             [HttpPost]
@@ -362,7 +383,7 @@ namespace Im.Controllers
 
 
 
-        public ApplicationUser Record(string id,string bool_fullness)
+        public ApplicationUser Record(string id,string bool_fullness = "Personal_record")
         {
             var res = db_users.Users.First(x1 => x1.Id == id);
             //TODO заполнять все поля правильно в зависимости от bool_fullness
@@ -378,15 +399,29 @@ namespace Im.Controllers
                 if (bool_fullness == "Personal_record")
                 {
                     var main_img = res.Main_images_id.Split(',');
-                    res.Main_images.Add(db_all.Images.First(x1 => x1.Id == Convert.ToInt32(main_img[main_img.Count() - 1])).bytes);
+                    int id_tmp = Convert.ToInt32(main_img[main_img.Count() - 2]);
+
+                    var a_b123_tmp = db_all.Images.First(x1 => x1.Id == id_tmp);
+                    //СЕЙЧАС
+                    foreach(var i in db_all.Images)
+                    {
+                        var t = i;
+                    }
+
+                    var a_b_tmp = db_all.Images.First(x1 => x1.Id == id_tmp).bytes;
+                    
+                    
+                    res.Main_images.Add(a_b_tmp);
                 }
                 //ФОТО, потом под 1 засунуть мб
                 if (bool_fullness == "Personal_record")
                 {
                     var not_main_img = res.Images_id.Split(',');
-                    for (int b = 0, i = not_main_img.Count() - 1; i > 0 && b < 5; --i, b++)
+                    
+                    for (int b = 0, i = not_main_img.Count() - 2; i > 0 && b < 5; --i, b++)
                     {
-                        res.Images.Add(db_all.Images.First(x1 => x1.Id == Convert.ToInt32(not_main_img[i])).bytes);
+                        int id_tmp = Convert.ToInt32(not_main_img[i]);
+                        res.Images.Add(db_all.Images.First(x1 => x1.Id == id_tmp).bytes);
                     }
 
                 }
