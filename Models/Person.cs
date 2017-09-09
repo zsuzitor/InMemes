@@ -5,7 +5,29 @@ using System.Web;
 
 namespace Im.Models
 {
-    public class Group: IPage_view
+    public interface IPage_view
+    {
+
+    }
+    public class Img
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public byte[] bytes { get; set; }
+
+        public Img()
+        {
+            Id = -1;
+            bytes = null;
+        }
+        public Img(byte[] a)
+        {
+            Id = -1;
+            bytes = a;
+        }
+
+    }
+    public class Group
     {
 
         //в IdentityUser есть  public int Id { get; set; }
@@ -15,20 +37,20 @@ namespace Im.Models
         public DateTime Birthday { get; set; }
         // заявки 
         public string Followers_id { get; set; }//id не принятых(отвергнутых) друзей
-        public List<Person_short> Followers { get; set; }
+
         //стена 
         public string Wall_id { get; set; }//id записей
-        public List<Memes> Wall { get; set; }
+
         //фото //
         public string Images_id { get; set; }//id фото
-        public List<byte[]> Images { get; set; }
+
 
         //авы
         public string Main_images_id { get; set; }//id фото
-        public List<byte[]> Main_images { get; set; }
+
         //группы
         public string Groups_id { get; set; }
-        public List<Group_short> Groups { get; set; }
+
 
 
 
@@ -43,29 +65,7 @@ namespace Im.Models
             Images_id = "";
             Main_images_id = "";
             Groups_id = "";
-            Followers = new List<Person_short>();
-            Wall = new List<Memes>();
-            Images = new List<byte[]>();
-            Main_images = new List<byte[]>();
-            Groups = new List<Group_short>();
-        }
 
-    }
-    public class Img
-    {
-        public string Name;
-        public int Id { get; set; }
-        public byte[] bytes;
-        
-        public Img()
-        {
-            Id = -1;
-            bytes = new byte[0];
-        }
-        public Img(byte[] a)
-        {
-            Id = -1;
-            bytes = a;
         }
 
     }
@@ -78,13 +78,25 @@ namespace Im.Models
         public string Source_id { get; set; }
         public byte[] Image { get; set; }
         public string Images_id { get; set; }//id фото
-        public List<byte[]> Images { get; set; }
+
         public string Liked_id { get; set; }//id кто лайкнул
         public string Repost_id { get; set; }//id кто репостнул
         public DateTime Birthday { get; set; }
 
+        public Memes()
+        {
+            Id = -1;
+            this.Source = null;
+            this.Source_id = null;
+            Description = null;
+            Image = null;
+            Images_id = null;
 
-        public Memes(string Source,string Source_id)
+            Liked_id = "";
+            Repost_id = "";
+            Birthday = DateTime.Now;
+        }
+        public Memes(string Source, string Source_id)
         {
             Id = -1;
             this.Source = Source;
@@ -92,7 +104,7 @@ namespace Im.Models
             Description = null;
             Image = null;
             Images_id = null;
-            Images = null;
+
             Liked_id = "";
             Repost_id = "";
             Birthday = DateTime.Now;
@@ -102,23 +114,35 @@ namespace Im.Models
     }
 
 
+
+
     public class Message_obg
     {
         public int Id { get; set; }
         public string Person_id { get; set; }
-        public List<Person_short> Person { get; set; }
+        
         public string Messages_id { get; set; }//id
-        public List<Message> Messages { get; set; }//TODO нет прикрепленных файлов к сообщению
+        
         public byte[] Image { get; set; }
         public int New_message_count { get; set; }
 
-        public Message_obg(string Person_id)
+        public Message_obg()
+        {
+            Id = -1;
+            this.Person_id = null;
+
+            Messages_id = "";
+
+            Image = null;
+            New_message_count = 0;
+        }
+            public Message_obg(string Person_id)
         {
             Id = -1;
             this.Person_id = Person_id;
-            Person = new List<Person_short>();
+            
             Messages_id = "";
-            Messages = new List<Message>();
+            
             Image = null;
             New_message_count = 0;
         }
@@ -130,8 +154,15 @@ namespace Im.Models
         public string Message_text { get; set; }
         public string Person_id { get; set; }
         public byte[] Image { get; set; }
+        public Message()
+        {
+            Id = -1;
+            this.Message_text = null;
+            this.Person_id = null;
+            Image = null;
+        }
 
-        public Message(string Message_text,string Person_id)
+            public Message(string Message_text, string Person_id)
         {
             Id = -1;
             this.Message_text = Message_text;
@@ -141,6 +172,149 @@ namespace Im.Models
         }
 
     }
+
+    //------------------------------------------------------------------------------------------------------------------------
+
+
+        public class Message_obg_record
+    {
+        Message_obg db;
+        
+        public List<Person_short> Person { get; set; }
+       
+        public List<Message> Messages { get; set; }//TODO нет прикрепленных файлов к сообщению
+        
+
+        public Message_obg_record(Message_obg a)
+        {
+            db = a;
+            
+            Person = new List<Person_short>();
+            
+            Messages = new List<Message>();
+            
+        }
+    }
+
+    
+
+
+
+    public class Group_record : IPage_view
+    {
+        public Group db;
+
+        // заявки 
+
+        public List<Person_short> Followers { get; set; }
+        //стена 
+
+        public List<Memes> Wall { get; set; }
+        //фото //
+
+        public List<byte[]> Images { get; set; }
+
+        //авы
+
+        public List<byte[]> Main_images { get; set; }
+        //группы
+
+        public List<Group_short> Groups { get; set; }
+
+        public Group_record(Group a)
+        {
+            db = a;
+            Followers = new List<Person_short>();
+            Wall = new List<Memes>();
+            Images = new List<byte[]>();
+            Main_images = new List<byte[]>();
+            Groups = new List<Group_short>();
+        }
+
+    }
+
+    public class Personal_record : IPage_view
+    {
+        public ApplicationUser db;
+        // заявки 
+        public List<Person_short> Followers { get; set; }
+        //друзья
+        public List<Person_short> Friends { get; set; }
+        // подписчики
+        public List<Person_short> Followers_ignore { get; set; }
+        //семья 
+        public List<Person_short> Family { get; set; }
+        //сообщения 
+        public List<Message_obg> Message { get; set; }
+        //новости 
+        public List<Memes> News { get; set; }
+        //стена 
+        public List<Memes> Wall { get; set; }
+        //фото //
+        public List<byte[]> Images { get; set; }
+        //авы
+        public List<byte[]> Main_images { get; set; }
+        //группы
+        public List<Group_short> Groups { get; set; }
+        public List<Person_short> Black_list { get; set; }
+
+
+
+
+        public Personal_record(ApplicationUser a)
+        {
+            /* Name = a.Name;
+             Status = a.Status;
+             Birthday = a.Birthday;
+             Age = a.Age;
+             Login = a.Login;
+             Nickname = a.Nickname;
+             Name = a.Name;
+             Name = a.Name;
+             Name = a.Name;
+             Name = a.Name;
+             Name = a.Name;
+             Name = a.Name;
+             Name = a.Name;
+             Name = a.Name;
+             Name = a.Name;*/
+
+            db = a;
+
+            Followers = new List<Person_short>();
+            Friends = new List<Person_short>();
+            Followers_ignore = new List<Person_short>();
+            Family = new List<Person_short>();
+            Message = new List<Message_obg>();
+            News = new List<Memes>();
+            Wall = new List<Memes>();
+            Images = new List<byte[]>();
+            Main_images = new List<byte[]>();
+            Groups = new List<Group_short>();
+            Black_list = new List<Person_short>();
+        }
+
+    }
+
+    public class Memes_record{
+        public Memes db;
+        public List<byte[]> Images { get; set; }
+        public Memes_record(Memes a)
+        {
+            db = a;
+            Images = null;
+
+
+        }
+
+    }
+
+    
+
+    
+
+
+    
 
 
 
@@ -207,120 +381,5 @@ namespace Im.Models
 
         }
     }
-    /*
-    public abstract class rec
-    {
-
-        //в IdentityUser есть  public int Id { get; set; }
-        public string Name { get; set; }
-        public string Status { get; set; }
-        public DateTime Birthday { get; set; }
-        // заявки 
-        public string Followers_str { get; set; }//id не принятых(отвергнутых) друзей
-        public List<Person_short> Followers { get; set; }
-        //стена 
-        public string Wall_str { get; set; }//id записей
-        public List<Person_short> Wall { get; set; }
-        //фото //
-        public string Images_str { get; set; }//id фото
-        public List<byte[]> Images { get; set; }
-        //группы
-        public string Group_str { get; set; }
-        public List<Group_short> Group { get; set; }
-    }
-    public class Person:rec
-    {
-        //TODO меню слева
-        public int Age { get; set; }
-        public string Login { get; set; }
-        public string Nickname { get; set; }
-        
-        public string Surname{ get; set; }
-        public string Country { get; set; }
-        public string Town { get; set; }
-        public string Street { get; set; }
-        
-       
-        public bool Online { get; set; }
-        //друзья
-        public string Friends_str { get; set; }//id друзей
-        public List<Person_short> Friends { get; set; }
-
-        // подписчики
-        public string Followers_ignore_str { get; set; }//id подписчиков
-        public List<Person_short> Followers_ignore { get; set; }
-        
-        //сообщения 
-        public string Message_str { get; set; }//id объектов
-        public List<Person_short> Message { get; set; }
-        
-        //семья 
-        public string Family_str { get; set; }
-        public List<Person_short> Family { get; set; }
-        
-        
-        //новости 
-        public string news_str { get; set; }
-        public List<memes> news { get; set; }
-        
-
-        //о себе 
-        public string Description { get; set; }
-
-
-
-        public string Black_list_str { get; set; }//id людей
-        public List<Person_short> Black_list { get; set; }
-        //настройки о том что слева и остальное
-
-        public string Menu_left { get; set; }
-    }
-    */
-
-
-
-
-
-
-
-
-
-
-    /*
-    public class Group : rec
-    {
-
-
-
-
-
-
-
-    }
-    */
-
-    /*
-    public class memes
-    {
-        public string Description { get; set; }
-        public string Source { get; set; }
-        public string Source_id { get; set; }
-        public string Images_str { get; set; }//id фото
-        public List<byte[]> Images { get; set; }
-        public string Liked_id { get; set; }//id кто лайкнул
-        public string Repost_id { get; set; }//id кто репостнул
-        public DateTime Birthday { get; set; }
-
-    }
-    
-    public class Message_obg
-    {
-        public int Id { get; set; }
-        public int Person_id { get; set; }
-        public Person_short Person { get; set; }
-        public string Messages_str { get; set; }
-        public List<string> Messages { get; set; }//TODO нет прикрепленных файлов к сообщению
-        public byte[] Image { get; set; }
-    }
-    */
+   
 }
