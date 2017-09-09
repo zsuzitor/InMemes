@@ -138,7 +138,7 @@ namespace Im.Controllers
             
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             var pers = Record(check_id, "info_person");
-            ViewBag.list_str = pers.Menu_left;
+            ViewBag.list_str = pers.db.Menu_left;
             ViewBag.id = check_id;
             return PartialView();
         }
@@ -152,13 +152,13 @@ namespace Im.Controllers
             {
                 case "Personal_record":
                      pers = Record(id, "Wall");
-                    return PartialView(((ApplicationUser)pers).Wall);
+                    return PartialView(((Personal_record)pers).Wall);
                     break;
 
                 default ://"News"
                     string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
                     pers = Record(check_id, "News");
-                    return PartialView(((ApplicationUser)pers).News);
+                    return PartialView(((Personal_record)pers).News);
                     break;
             }
 
@@ -180,7 +180,7 @@ namespace Im.Controllers
             {
                 //по id доставать параметры
                 var pers = Record(id, "info_person");
-                res = new Person_info_short() { Age=pers.Age, Country = pers.Country, Town = pers.Town, Street = pers.Street, Description = pers.Description };
+                res = new Person_info_short() { Age=pers.db.Age, Country = pers.db.Country, Town = pers.db.Town, Street = pers.db.Street, Description = pers.db.Description };
             }
             
             ViewBag.Open = open;
@@ -216,14 +216,14 @@ namespace Im.Controllers
     {
         case "Основное":
             {
-                        pers.Name = a.Name;
-                        pers.Surname = a.Surname;
-                        pers.Birthday = a.Birthday;
-                        pers.Country = a.Country;
-                        pers.Town = a.Town;
-                        pers.Street = a.Street;
-                        pers.Status = a.Status;
-                        pers.Description = a.Description;
+                        pers.db.Name = a.Name;
+                        pers.db.Surname = a.Surname;
+                        pers.db.Birthday = a.Birthday;
+                        pers.db.Country = a.Country;
+                        pers.db.Town = a.Town;
+                        pers.db.Street = a.Street;
+                        pers.db.Status = a.Status;
+                        pers.db.Description = a.Description;
                         db_users.SaveChanges();
 
                 break;
@@ -301,13 +301,13 @@ namespace Im.Controllers
                     var t = i;
                 }
 
-                ((ApplicationUser)res_page).Images_count += 1;
-                ((ApplicationUser)res_page).Images_id += lst2[0].Id + ",";
-                ((ApplicationUser)res_page).Images.Insert(0, lst1[0]);
+                ((Personal_record)res_page).db.Images_count += 1;
+                ((Personal_record)res_page).db.Images_id += lst2[0].Id + ",";
+                ((Personal_record)res_page).Images.Insert(0, lst1[0]);
                 if (for_what == "main_img")
                 {
-                    ((ApplicationUser)res_page).Main_images_id += lst2[0].Id + ",";
-                    ((ApplicationUser)res_page).Main_images.Insert(0, lst1[0]);
+                    ((Personal_record)res_page).db.Main_images_id += lst2[0].Id + ",";
+                    ((Personal_record)res_page).Main_images.Insert(0, lst1[0]);
                 }
                     
                 
@@ -331,7 +331,8 @@ namespace Im.Controllers
         public ActionResult Add_new_memes(HttpPostedFileBase[] uploadImage,string Description_mem,string id,string bool_access)
         {
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
-            Memes res = null;
+            Memes res_db = null;
+            var res = new Memes_record();
             IPage_view res_page = null;
             switch (bool_access)
             {
@@ -340,14 +341,14 @@ namespace Im.Controllers
                     if(id== check_id)
                     {
                         var pers=Record(id, "Personal_record");
-                         res = new Memes(string.Concat(pers.Name, " ", pers.Surname), id)
+                        res_db = new Memes(string.Concat(pers.db.Name, " ", pers.db.Surname), id)
                         {
                             Description = Description_mem
                          };
                         List<byte[]>photo_byte= Get_photo_post(uploadImage);
                         if (photo_byte.Count == 1)
-                        { 
-                            res.Image = photo_byte[0];
+                        {
+                            res_db.Image = photo_byte[0];
                         }
                         if (photo_byte.Count > 1)
                         {
@@ -357,16 +358,17 @@ namespace Im.Controllers
                                 Img tmp = new Img(i);
                                 db_all.Images.Add(tmp);
                                 db_all.SaveChanges();
-                                res.Images_id += tmp.Id + ",";
+                                res_db.Images_id += tmp.Id + ",";
                             }
                         }
-                        db_all.Memes.Add(res);
+                        db_all.Memes.Add(res_db);
                         db_all.SaveChanges();
-                        pers.Wall.Add(res);
-                        pers.Wall_id+= res.Id+",";
-                        pers.Wall_count += 1;
+                        pers.Wall.Add(res_db);
+                        pers.db.Wall_id+= res_db.Id+",";
+                        pers.db.Wall_count += 1;
                         db_users.SaveChanges();
                         res_page=(IPage_view)pers;
+                        res.db = res_db;
                     }
                     
 
@@ -383,9 +385,10 @@ namespace Im.Controllers
 
 
 
-        public ApplicationUser Record(string id,string bool_fullness = "Personal_record")
+        public Personal_record Record(string id,string bool_fullness = "Personal_record")
         {
-            var res = db_users.Users.First(x1 => x1.Id == id);
+            var res_ap = db_users.Users.First(x1 => x1.Id == id);
+            var res = new Personal_record(res_ap);
             //TODO заполнять все поля правильно в зависимости от bool_fullness
             /*
             res.Images_count = 0;
@@ -398,7 +401,7 @@ namespace Im.Controllers
                 //АВА
                 if (bool_fullness == "Personal_record")
                 {
-                    var main_img = res.Main_images_id.Split(',');
+                    var main_img = res_ap.Main_images_id.Split(',');
                     int id_tmp = Convert.ToInt32(main_img[main_img.Count() - 2]);
 
                     var a_b123_tmp = db_all.Images.First(x1 => x1.Id == id_tmp);
@@ -409,14 +412,14 @@ namespace Im.Controllers
                     }
 
                     var a_b_tmp = db_all.Images.First(x1 => x1.Id == id_tmp).bytes;
-                    
-                    
+
+
                     res.Main_images.Add(a_b_tmp);
                 }
                 //ФОТО, потом под 1 засунуть мб
                 if (bool_fullness == "Personal_record")
                 {
-                    var not_main_img = res.Images_id.Split(',');
+                    var not_main_img = res_ap.Images_id.Split(',');
                     
                     for (int b = 0, i = not_main_img.Count() - 2; i > 0 && b < 5; --i, b++)
                     {
@@ -430,7 +433,7 @@ namespace Im.Controllers
             {
 
             }
-            
+            //res.db = res_ap;
 
             //Personal_record
             //Info_person

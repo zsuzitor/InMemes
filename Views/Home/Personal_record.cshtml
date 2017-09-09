@@ -3,7 +3,7 @@
     @Scripts.Render("~/scripts/jquery-3.1.1.js")
     @Scripts.Render("~/scripts/jquery.unobtrusive-ajax.js")
 }
-@model Im.Models.ApplicationUser
+@model Im.Models.Personal_record
 @using Newtonsoft.Json;
 @{
     ViewBag.Title = "Personal_record";
@@ -48,22 +48,22 @@
 </div>
 <div class="Personal_record_body_right_block">
     <div class="Personal_record_body_right_block_info_main div_color_white">
-        <h1>@Model.Name   @Model.Surname</h1><div>
-               @if (Model.Online)
+        <h1>@Model.db.Name   @Model.db.Surname</h1><div>
+               @if (Model.db.Online)
                {
                 <h1>Online</h1>
                }
-            @if (!Model.Online)
+            @if (!Model.db.Online)
             {
             <h1>Ofline</h1>
             }</div>
         
-            <p>@Model.Status</p>
+            <p>@Model.db.Status</p>
         
         
         <hr />
         <div class="Personal_record_main_info_1"></div>
-        @Html.Action("Get_info_person_ajax_1", "Home", new { open = true, obg= JsonConvert.SerializeObject(info_in_inf_aj), id = Model.Id })
+        @Html.Action("Get_info_person_ajax_1", "Home", new { open = true, obg= JsonConvert.SerializeObject(info_in_inf_aj), id = Model.db.Id })
         
         
         
@@ -72,20 +72,20 @@
             
                 <div class="Personal_record_num_div_small_block">
                     @{ 
-<p  class="Personal_record_num_p_big">@Model.Friends_count</p>
+<p  class="Personal_record_num_p_big">@Model.db.Friends_count</p>
                         <p class="Personal_record_num_p_small">Друзей</p>
                     }
 
                 </div>
                 <div class="Personal_record_num_div_small_block">
                     @{
-<p class="Personal_record_num_p_big">@Model.Followers_ignore_count</p>
+<p class="Personal_record_num_p_big">@Model.db.Followers_ignore_count</p>
                         <p class="Personal_record_num_p_small">Подписчиков</p>
                     }
                 </div>
                 <div class="Personal_record_num_div_small_block">
                     @{
-<p class="Personal_record_num_p_big">@Model.Images_count</p>
+<p class="Personal_record_num_p_big">@Model.db.Images_count</p>
                         <p class="Personal_record_num_p_small">Фотографий</p>
                     }
                 </div>
@@ -106,7 +106,7 @@
 
     </div>
     <div class="Personal_record_photo_block div_color_white">
-        <div>@Html.ActionLink("Фотографии", "Record_photo_page", "Home", new { id = Model.Id }, new { })</div>
+        <div>@Html.ActionLink("Фотографии", "Record_photo_page", "Home", new { id = Model.db.Id }, new { })</div>
        
          
 
@@ -130,13 +130,13 @@
             @using (Html.BeginForm("Add_new_memes", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 @Html.Hidden("bool_access", "person")
-                @Html.Hidden("id", Model.Id)
+                @Html.Hidden("id", Model.db.Id)
                 @Html.Editor("Description_mem", new { })
                 <input type="file" name="uploadImage[0]" />
                 <input type="submit" class="submit" value="Поделиться" />
             }
         </div>
-        @Html.Action("Wall_memes","Home",new { from= "Personal_record" ,id=Model.Id})
+        @Html.Action("Wall_memes","Home",new { from= "Personal_record" ,id=Model.db.Id})
        
 
     </div>

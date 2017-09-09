@@ -260,7 +260,22 @@ namespace Im.Models
 
 
 
+        public Personal_record()
+        {
+            db = null;
 
+             Followers = new List<Person_short>();
+            Friends = new List<Person_short>();
+            Followers_ignore = new List<Person_short>();
+            Family = new List<Person_short>();
+            Message = new List<Message_obg>();
+            News = new List<Memes>();
+            Wall = new List<Memes>();
+            Images = new List<byte[]>();
+            Main_images = new List<byte[]>();
+            Groups = new List<Group_short>();
+            Black_list = new List<Person_short>();
+        }
         public Personal_record(ApplicationUser a)
         {
             /* Name = a.Name;
@@ -299,6 +314,13 @@ namespace Im.Models
     public class Memes_record{
         public Memes db;
         public List<byte[]> Images { get; set; }
+        public Memes_record()
+        {
+            db = null;
+            Images = null;
+
+
+        }
         public Memes_record(Memes a)
         {
             db = a;
@@ -348,9 +370,17 @@ namespace Im.Models
         public string Street { get; set; }
         public string Description { get; set; }
 
-        public Person_info_short()
-        {
+        //public Person_info_short()
+        //{
 
+        //}
+        public Person_info_short(Personal_record a)
+        {
+            Age = a.db.Age;
+            Country = a.db.Country;
+            Town = a.db.Town;
+            Street = a.db.Street;
+            Description = a.db.Description;
         }
         public Person_info_short(ApplicationUser a)
         {
