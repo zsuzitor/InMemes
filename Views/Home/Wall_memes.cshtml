@@ -19,9 +19,13 @@
                                 <p>@i.db.Description</p>
                                 @if (i.db.Image != null)
                                 {
-                                    Html.Raw(string.Concat("<img  class=''  id =''", " src=\"data:image/jpeg;base64,"
-                    , Convert.ToBase64String(i.db.Image), "\" />"));
+                                    <div class="Wall_memes_one_mem_img">
+                                        @Html.Raw(string.Concat("<img class='' id='' ", " src=\"data:image/jpeg;base64,"
+                                                                     , Convert.ToBase64String(i.db.Image), "\" />"))
+                                    </div>
                                 }
+                                    
+
                                 @if (i.Images != null)
                                 {
                                     foreach (var i2 in i.Images)

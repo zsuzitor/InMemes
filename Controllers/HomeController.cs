@@ -12,7 +12,7 @@ using Microsoft.AspNet.Identity;
 
 //JsonConvert.SerializeObject(Model)
 // res = JsonConvert.DeserializeObject<Person_info_short>(obg);
-
+//string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
 
 namespace Im.Controllers
 {
@@ -200,7 +200,7 @@ namespace Im.Controllers
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             var pers = Record(check_id, "Personal_record");
 
-            return PartialView(pers);
+            return PartialView(pers.db);
         }
 
         //END-PARTIAL BLOCK------------------------------------------------------------------------------------------------------------------------------//
@@ -283,7 +283,7 @@ namespace Im.Controllers
 
 
 
-            return PartialView("Edit_personal_record_info_load_ajax", pers);
+            return PartialView("Edit_personal_record_info_load_ajax", pers.db);
         }
         [HttpPost]
         public ActionResult Add_new_image(HttpPostedFileBase[] uploadImage, string for_what,string from)
@@ -365,7 +365,7 @@ namespace Im.Controllers
                         }
                         db.Memes.Add(res_db);
                         db.SaveChanges();
-                        pers.Wall.Add(new Memes_record(res_db));
+                        //pers.Wall.Add(new Memes_record(res_db));
                         pers.db.Wall_id+= res_db.Id+",";
                         pers.db.Wall_count += 1;
                         db.SaveChanges();
@@ -389,20 +389,22 @@ namespace Im.Controllers
 
         public Personal_record Record(string id,string bool_fullness = "Personal_record")
         {
+
+            //Personal_record
+            //Info_person
+            //bool_fullness=Wall,News------- список мемов :Personal_record
+            //News
+
+
             //TODO сравнивать id и если одинаковые то и меню слева отправлять иначе нет
             //TODO заполнять все списки и с мемами и тд
             Personal_record res = null;
-            if (id != null)
+            if (id != null)//убрать условие?
             {
                 var res_ap = db.Users.First(x1 => x1.Id == id);
                 res = new Personal_record(res_ap);
                 //TODO заполнять все поля правильно в зависимости от bool_fullness
-                /*
-                res.Images_count = 0;
-                res.Images_id = "";
-                res.Main_images_id = "";
-                db_users.SaveChanges();
-                */
+                
                 try
                 {
                     //АВА
@@ -428,12 +430,35 @@ namespace Im.Controllers
                     {
                         var not_main_img = res_ap.Images_id.Split(',');
 
-                        for (int b = 0, i = not_main_img.Count() - 2; i > 0 && b < 5; --i, b++)
+                        for (int b = 0, i = not_main_img.Count() - 2; i >= 0 && b < 5; --i, b++)
                         {
                             int id_tmp = Convert.ToInt32(not_main_img[i]);
                             res.Images.Add(db.Images.First(x1 => x1.Id == id_tmp).bytes);
                         }
 
+                    }
+                    //мемы стена
+                    if (bool_fullness == "Wall")
+                    {
+                        var str_mem_id = res.db.Wall_id.Split(',');
+                        for(int b=0, i= str_mem_id.Count() - 2; i>0||b<10 ;++b, --i)
+                        {
+                            string id_mem=str_mem_id[i];
+                            var mem_tmp = db.Memes.First(x1=>x1.Id.ToString()== id_mem);
+                            res.Wall.Add(new Memes_record(mem_tmp));
+                        }
+                        
+                    }
+                    //мемы новости
+                    if (bool_fullness == "News")
+                    {
+                        var str_mem_id = res.db.News_id.Split(',');
+                        for (int b = 0, i = str_mem_id.Count() - 2; i > 0 || b < 10; ++b, ++i)
+                        {
+                            string id_mem = str_mem_id[i];
+                            var mem_tmp = db.Memes.First(x1 => x1.Id.ToString() == id_mem);
+                            res.News.Add(new Memes_record(mem_tmp));
+                        }
                     }
                 }
                 catch
@@ -442,10 +467,7 @@ namespace Im.Controllers
                 }
                 //res.db = res_ap;
 
-                //Personal_record
-                //Info_person
-                //Wall
-                //News
+                
             }
 
 
