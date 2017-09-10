@@ -138,6 +138,7 @@ namespace Im.Controllers
             
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             var pers = Record(check_id, "info_person");
+            if(pers!=null)
             ViewBag.list_str = pers.db.Menu_left;
             ViewBag.id = check_id;
             return PartialView();
@@ -180,7 +181,8 @@ namespace Im.Controllers
             {
                 //по id доставать параметры
                 var pers = Record(id, "info_person");
-                res = new Person_info_short() { Age=pers.db.Age, Country = pers.db.Country, Town = pers.db.Town, Street = pers.db.Street, Description = pers.db.Description };
+                //res = new Person_info_short() { Age=pers.db.Age, Country = pers.db.Country, Town = pers.db.Town, Street = pers.db.Street, Description = pers.db.Description };
+                res = new Person_info_short(pers);
             }
             
             ViewBag.Open = open;
@@ -387,58 +389,64 @@ namespace Im.Controllers
 
         public Personal_record Record(string id,string bool_fullness = "Personal_record")
         {
-            var res_ap = db_users.Users.First(x1 => x1.Id == id);
-            var res = new Personal_record(res_ap);
-            //TODO заполнять все поля правильно в зависимости от bool_fullness
-            /*
-            res.Images_count = 0;
-            res.Images_id = "";
-            res.Main_images_id = "";
-            db_users.SaveChanges();
-            */
-            try
+            //TODO сравнивать id и если одинаковые то и меню слева отправлять иначе нет
+            Personal_record res = null;
+            if (id != null)
             {
-                //АВА
-                if (bool_fullness == "Personal_record")
+                var res_ap = db_users.Users.First(x1 => x1.Id == id);
+                res = new Personal_record(res_ap);
+                //TODO заполнять все поля правильно в зависимости от bool_fullness
+                /*
+                res.Images_count = 0;
+                res.Images_id = "";
+                res.Main_images_id = "";
+                db_users.SaveChanges();
+                */
+                try
                 {
-                    var main_img = res_ap.Main_images_id.Split(',');
-                    int id_tmp = Convert.ToInt32(main_img[main_img.Count() - 2]);
-
-                    var a_b123_tmp = db_all.Images.First(x1 => x1.Id == id_tmp);
-                    //СЕЙЧАС
-                    foreach(var i in db_all.Images)
+                    //АВА
+                    if (bool_fullness == "Personal_record")
                     {
-                        var t = i;
+                        var main_img = res_ap.Main_images_id.Split(',');
+                        int id_tmp = Convert.ToInt32(main_img[main_img.Count() - 2]);
+
+                        var a_b123_tmp = db_all.Images.First(x1 => x1.Id == id_tmp);
+                        //СЕЙЧАС
+                        foreach (var i in db_all.Images)
+                        {
+                            var t = i;
+                        }
+
+                        var a_b_tmp = db_all.Images.First(x1 => x1.Id == id_tmp).bytes;
+
+
+                        res.Main_images.Add(a_b_tmp);
                     }
+                    //ФОТО, потом под 1 засунуть мб
+                    if (bool_fullness == "Personal_record")
+                    {
+                        var not_main_img = res_ap.Images_id.Split(',');
 
-                    var a_b_tmp = db_all.Images.First(x1 => x1.Id == id_tmp).bytes;
+                        for (int b = 0, i = not_main_img.Count() - 2; i > 0 && b < 5; --i, b++)
+                        {
+                            int id_tmp = Convert.ToInt32(not_main_img[i]);
+                            res.Images.Add(db_all.Images.First(x1 => x1.Id == id_tmp).bytes);
+                        }
 
-
-                    res.Main_images.Add(a_b_tmp);
+                    }
                 }
-                //ФОТО, потом под 1 засунуть мб
-                if (bool_fullness == "Personal_record")
+                catch
                 {
-                    var not_main_img = res_ap.Images_id.Split(',');
-                    
-                    for (int b = 0, i = not_main_img.Count() - 2; i > 0 && b < 5; --i, b++)
-                    {
-                        int id_tmp = Convert.ToInt32(not_main_img[i]);
-                        res.Images.Add(db_all.Images.First(x1 => x1.Id == id_tmp).bytes);
-                    }
 
                 }
-            }
-            catch
-            {
+                //res.db = res_ap;
 
+                //Personal_record
+                //Info_person
+                //Wall
+                //News
             }
-            //res.db = res_ap;
 
-            //Personal_record
-            //Info_person
-            //Wall
-            //News
 
 
 

@@ -370,10 +370,10 @@ namespace Im.Models
         public string Street { get; set; }
         public string Description { get; set; }
 
-        //public Person_info_short()
-        //{
+        public Person_info_short()
+        {
 
-        //}
+        }
         public Person_info_short(Personal_record a)
         {
             Age = a.db.Age;

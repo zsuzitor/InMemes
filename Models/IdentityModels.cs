@@ -19,7 +19,7 @@ namespace Im.Models
         public string Name { get; set; }
         public string Status { get; set; }
         public DateTime? Birthday { get; set; }
-        
+        public bool Sex { get; set; }
         
 
         //
