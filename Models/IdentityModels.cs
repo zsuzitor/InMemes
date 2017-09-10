@@ -188,6 +188,12 @@ namespace Im.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<Img> Images { get; set; }
+        public DbSet<Memes> Memes { get; set; }
+        public DbSet<Message_obg> Messages_obg { get; set; }
+        public DbSet<Message> Messages { get; set; }
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {

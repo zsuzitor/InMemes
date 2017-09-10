@@ -183,9 +183,16 @@ namespace Im.Models
         public List<Person_short> Person { get; set; }
        
         public List<Message> Messages { get; set; }//TODO нет прикрепленных файлов к сообщению
-        
+        public Message_obg_record()
+        {
+            db = null;
 
-        public Message_obg_record(Message_obg a)
+            Person = new List<Person_short>();
+
+            Messages = new List<Message>();
+        }
+
+            public Message_obg_record(Message_obg a)
         {
             db = a;
             
@@ -209,7 +216,7 @@ namespace Im.Models
         public List<Person_short> Followers { get; set; }
         //стена 
 
-        public List<Memes> Wall { get; set; }
+        public List<Memes_record> Wall { get; set; }
         //фото //
 
         public List<byte[]> Images { get; set; }
@@ -225,7 +232,7 @@ namespace Im.Models
         {
             db = a;
             Followers = new List<Person_short>();
-            Wall = new List<Memes>();
+            Wall = new List<Memes_record>();
             Images = new List<byte[]>();
             Main_images = new List<byte[]>();
             Groups = new List<Group_short>();
@@ -245,11 +252,11 @@ namespace Im.Models
         //семья 
         public List<Person_short> Family { get; set; }
         //сообщения 
-        public List<Message_obg> Message { get; set; }
+        public List<Message_obg_record> Message { get; set; }
         //новости 
-        public List<Memes> News { get; set; }
+        public List<Memes_record> News { get; set; }
         //стена 
-        public List<Memes> Wall { get; set; }
+        public List<Memes_record> Wall { get; set; }
         //фото //
         public List<byte[]> Images { get; set; }
         //авы
@@ -268,9 +275,9 @@ namespace Im.Models
             Friends = new List<Person_short>();
             Followers_ignore = new List<Person_short>();
             Family = new List<Person_short>();
-            Message = new List<Message_obg>();
-            News = new List<Memes>();
-            Wall = new List<Memes>();
+            Message = new List<Message_obg_record>();
+            News = new List<Memes_record>();
+            Wall = new List<Memes_record>();
             Images = new List<byte[]>();
             Main_images = new List<byte[]>();
             Groups = new List<Group_short>();
@@ -300,9 +307,9 @@ namespace Im.Models
             Friends = new List<Person_short>();
             Followers_ignore = new List<Person_short>();
             Family = new List<Person_short>();
-            Message = new List<Message_obg>();
-            News = new List<Memes>();
-            Wall = new List<Memes>();
+            Message = new List<Message_obg_record>();
+            News = new List<Memes_record>();
+            Wall = new List<Memes_record>();
             Images = new List<byte[]>();
             Main_images = new List<byte[]>();
             Groups = new List<Group_short>();

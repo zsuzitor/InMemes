@@ -19,8 +19,8 @@ namespace Im.Controllers
     public class HomeController : Controller
     {
 
-        ApplicationDbContext db_users = new ApplicationDbContext();
-        All_db_Context db_all = new All_db_Context();
+        ApplicationDbContext db = new ApplicationDbContext();
+        
 
         
 
@@ -57,7 +57,7 @@ namespace Im.Controllers
 
         public ActionResult Group_record(string id)
         {
-            var res = db_all.Groups.First();
+            var res = db.Groups.First();
 
 
             return View(res);
@@ -75,7 +75,7 @@ namespace Im.Controllers
         public ActionResult Albums(string id)
         {
             //TODO 
-            var res = db_users.Users.First(x1 => x1.Id == id);
+            var res = db.Users.First(x1 => x1.Id == id);
 
             return View();
         }
@@ -99,7 +99,7 @@ namespace Im.Controllers
         public ActionResult Friends(string id)
         {
             //TODO 
-            var res = db_users.Users.First(x1 => x1.Id == id);
+            var res = db.Users.First(x1 => x1.Id == id);
 
             return View();
         }
@@ -107,7 +107,7 @@ namespace Im.Controllers
         public ActionResult Music(string id)
         {
             //TODO 
-            var res = db_users.Users.First(x1 => x1.Id == id);
+            var res = db.Users.First(x1 => x1.Id == id);
 
             return View();
         }
@@ -115,7 +115,7 @@ namespace Im.Controllers
         public ActionResult Video(string id)
         {
             //TODO 
-            var res = db_users.Users.First(x1 => x1.Id == id);
+            var res = db.Users.First(x1 => x1.Id == id);
 
             return View();
         }
@@ -226,7 +226,7 @@ namespace Im.Controllers
                         pers.db.Street = a.Street;
                         pers.db.Status = a.Status;
                         pers.db.Description = a.Description;
-                        db_users.SaveChanges();
+                        db.SaveChanges();
 
                 break;
             }
@@ -295,10 +295,10 @@ namespace Im.Controllers
             {
                 string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
                 res_page  = Record(check_id, "Personal_record");
-                db_all.Images.Add(lst2[0]);
-                db_all.SaveChanges();
+                db.Images.Add(lst2[0]);
+                db.SaveChanges();
                 //СЕЙЧАС УБРАТЬ
-                foreach (var i in db_all.Images)
+                foreach (var i in db.Images)
                 {
                     var t = i;
                 }
@@ -311,9 +311,9 @@ namespace Im.Controllers
                     ((Personal_record)res_page).db.Main_images_id += lst2[0].Id + ",";
                     ((Personal_record)res_page).Main_images.Insert(0, lst1[0]);
                 }
-                    
-                
-                db_users.SaveChanges();
+
+
+                db.SaveChanges();
                 //СЕЙЧАС УБРАТЬ
                 //res_page = Record(check_id, "Personal_record");
 
@@ -323,7 +323,7 @@ namespace Im.Controllers
 
             }
             //СЕЙЧАС УБРАТЬ
-            foreach (var i in db_all.Images)
+            foreach (var i in db.Images)
             {
                 var t = i;
             }
@@ -358,17 +358,17 @@ namespace Im.Controllers
                             {
                                 res.Images.Add(i);
                                 Img tmp = new Img(i);
-                                db_all.Images.Add(tmp);
-                                db_all.SaveChanges();
+                                db.Images.Add(tmp);
+                                db.SaveChanges();
                                 res_db.Images_id += tmp.Id + ",";
                             }
                         }
-                        db_all.Memes.Add(res_db);
-                        db_all.SaveChanges();
-                        pers.Wall.Add(res_db);
+                        db.Memes.Add(res_db);
+                        db.SaveChanges();
+                        pers.Wall.Add(new Memes_record(res_db));
                         pers.db.Wall_id+= res_db.Id+",";
                         pers.db.Wall_count += 1;
-                        db_users.SaveChanges();
+                        db.SaveChanges();
                         res_page=(IPage_view)pers;
                         res.db = res_db;
                     }
@@ -390,10 +390,11 @@ namespace Im.Controllers
         public Personal_record Record(string id,string bool_fullness = "Personal_record")
         {
             //TODO сравнивать id и если одинаковые то и меню слева отправлять иначе нет
+            //TODO заполнять все списки и с мемами и тд
             Personal_record res = null;
             if (id != null)
             {
-                var res_ap = db_users.Users.First(x1 => x1.Id == id);
+                var res_ap = db.Users.First(x1 => x1.Id == id);
                 res = new Personal_record(res_ap);
                 //TODO заполнять все поля правильно в зависимости от bool_fullness
                 /*
@@ -410,14 +411,14 @@ namespace Im.Controllers
                         var main_img = res_ap.Main_images_id.Split(',');
                         int id_tmp = Convert.ToInt32(main_img[main_img.Count() - 2]);
 
-                        var a_b123_tmp = db_all.Images.First(x1 => x1.Id == id_tmp);
+                        var a_b123_tmp = db.Images.First(x1 => x1.Id == id_tmp);
                         //СЕЙЧАС
-                        foreach (var i in db_all.Images)
+                        foreach (var i in db.Images)
                         {
                             var t = i;
                         }
 
-                        var a_b_tmp = db_all.Images.First(x1 => x1.Id == id_tmp).bytes;
+                        var a_b_tmp = db.Images.First(x1 => x1.Id == id_tmp).bytes;
 
 
                         res.Main_images.Add(a_b_tmp);
@@ -430,7 +431,7 @@ namespace Im.Controllers
                         for (int b = 0, i = not_main_img.Count() - 2; i > 0 && b < 5; --i, b++)
                         {
                             int id_tmp = Convert.ToInt32(not_main_img[i]);
-                            res.Images.Add(db_all.Images.First(x1 => x1.Id == id_tmp).bytes);
+                            res.Images.Add(db.Images.First(x1 => x1.Id == id_tmp).bytes);
                         }
 
                     }
@@ -500,7 +501,7 @@ namespace Im.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            db_all.Dispose();
+            db.Dispose();
             base.Dispose(disposing);
         }
     }
