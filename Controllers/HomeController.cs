@@ -392,7 +392,7 @@ namespace Im.Controllers
 
             //Personal_record
             //Info_person
-            //bool_fullness=Wall,News------- список мемов :Personal_record
+            //bool_fullness=Wall,News-------только список мемов :Personal_record
             //News
 
 
