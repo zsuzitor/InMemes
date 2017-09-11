@@ -131,19 +131,52 @@ div.Layout_all_l_b {
 }
 
 /*Personal_record*/
-
-div.Personal_record_main_img_div {
-   
+div.Personal_record_one_group {
+    padding-left: 10px;
+    padding-top: 5px;
+    margin-top: 10px;
+    height: 100px;
+    background-color: black;
+}
+div.Personal_record_group_info_block {
+    background-color: red;
+    width: 270px;
+    display: inline-block;
+    vertical-align: top;
+}
+div.Personal_record_group_img_block {
+    border-radius: 30px;
+    display: inline-block;
+    vertical-align: top;
+    background-color: green;
+    width: 60px;
+    height: 60px;
+}div.Personal_record_groups_block_all {
+    margin-top: 30px;
+}div.Personal_record_one_line_friend {
+    margin-top: 10px;
+}div.Personal_record_friend_all_block {
+    margin-top: 30px;
+}div.Personal_record_one_friend_img {
+    width: 100px;
+    height: 100px;
+    background-color: black;
+}
+div.Personal_record_one_friend_block {
+    width: 100px;
+    height: 120px;
+    margin-left: 12px;
+    display: inline-block;
+    vertical-align: top;
+    background-color: red;
+}div.Personal_record_main_img_div {
     width: 300px;
     height: 350px;
-   
     background-color: aquamarine; /*убрать*/
-    
-    
 }
 div.Personal_record_main_img_lvl_1_div {
     width: 350px;
-    height: 450px;
+    height: 500px;
     background-color: white;
     padding-top: 25px;
     padding-left: 25px;
@@ -152,7 +185,7 @@ div.Personal_record_main_img_lvl_1_div {
 div.Personal_record_body_left_block {
     width: 350px;
     
-    background-color: white;
+    
     display: inline-block;
     vertical-align: top;
 }
@@ -170,8 +203,7 @@ div.Personal_record_edit_under_main_img{
     margin-top:20px;
 }
 div.Personal_record_main_info_1{
-    height:400px;
-    background-color:antiquewhite;
+    
 }
 
 div.Personal_record_body_right_block_info_main {
@@ -283,8 +315,11 @@ div.Edit_personal_record_info_load_ajax_link_not_st{
 
 /*Wall_memes*/
 div.Wall_memes_all_memes_wall{
-    margin-top:30px;
+    margin-top:10px;
 }
 div.Wall_memes_one_mem_img{
     height:400px;
+}
+ul.Wall_memes_main_ul li{
+    padding-top:20px;
 }

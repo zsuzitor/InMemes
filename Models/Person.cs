@@ -406,10 +406,12 @@ namespace Im.Models
         public int Count_followers { get; set; }
         public byte[] Image { get; set; }
         public string Name { get; set; }
+        public string Status { get; set; }
 
-        public Group_short(string Group_id, int Count_followers, byte[] Image, string Name)
+        public Group_short(string Status, string Group_id, int Count_followers, byte[] Image, string Name)
         {
             Id = -1;
+            this.Status = Status;
             this.Group_id_s = Group_id;
             this.Count_followers = Count_followers;
             this.Image = Image;

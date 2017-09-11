@@ -54,7 +54,14 @@ namespace Im.Controllers
            
             return View(res);
         }
+        
+            public ActionResult Groups_personal(string id)
+        {
+            
 
+
+            return View();
+        }
         public ActionResult Group_record(string id)
         {
             var res = db.Groups.First();

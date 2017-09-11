@@ -13,7 +13,7 @@
 <div  class="Personal_record_body_left_block">
     <div class="Personal_record_main_img_lvl_1_div">
         <div class="Personal_record_main_img_div">
-           @if (Model.Main_images.Count>0)
+           @if (Model.Main_images.Count > 0)
            {
             @Html.Raw(string.Concat("<img  class='Personal_record_main_img'  id ='Personal_record_main_img_id'", " src=\"data:image/jpeg;base64,"
 , Convert.ToBase64String(Model.Main_images[0]), "\" />"))
@@ -30,20 +30,143 @@
         <div class="Personal_record_edit_under_main_img">
             <div>
                 @using (Html.BeginForm("Add_new_image", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
-            {
+                {
                     @Html.Hidden("from", "person")
                     @Html.Hidden("for_what", "main_img")
-                    
+
                     <input type="file" name="uploadImage[0]" />
                     <input type="submit" class="submit" value="Поделиться" />
                 }
             </div>
             
-            @Html.ActionLink("Редактировать", "Edit_personal_record","Home",new { },new {@class= "link_standart_for_div" })
+            @Html.ActionLink("Редактировать", "Edit_personal_record", "Home", new { }, new { @class = "link_standart_for_div" })
         </div>
     </div>
 
+    <div class="div_color_white Personal_record_friend_all_block">
+        @Html.ActionLink("Друзья", "Friends", "Home", new { id = Model.db.Id }, new { })
+        <div>
 
+            @{ /*  ПРОСТО ТЕСТ ДЛЯ ТОГО ЧТО СНИЗУ ПОКА НЕТ ЗАПИСЕЙ */
+
+            }
+ <div  class="Personal_record_one_line_friend">
+<div class="Personal_record_one_friend_block">
+    <div class="Personal_record_one_friend_img">
+
+    </div><p>ИМЯ   аввввв</p>
+</div>
+<div class="Personal_record_one_friend_block">
+    <div class="Personal_record_one_friend_img">
+
+    </div><p>ИМЯ   аввввв</p>
+</div>
+<div class="Personal_record_one_friend_block">
+    <div class="Personal_record_one_friend_img">
+
+    </div><p>ИМЯ   аввввв</p>
+</div>
+</div>
+<div   class="Personal_record_one_line_friend">
+<div class="Personal_record_one_friend_block">
+    <div class="Personal_record_one_friend_img">
+
+    </div><p>ИМЯ   аввввв</p>
+</div>
+<div class="Personal_record_one_friend_block">
+    <div class="Personal_record_one_friend_img">
+
+    </div><p>ИМЯ   аввввв</p>
+</div>
+<div class="Personal_record_one_friend_block">
+    <div class="Personal_record_one_friend_img">
+
+    </div><p>ИМЯ   аввввв</p>
+</div>
+</div>
+
+
+            
+
+
+
+
+
+
+
+
+            <div class="Personal_record_one_line_friend">
+                @for (int i = 0; i < Model.Friends.Count / 2; ++i)
+                {
+                    <div class="Personal_record_one_friend_block">
+                        <div class="Personal_record_one_friend_img">
+                            @Html.Raw(string.Concat("<img  class=''  id =''", " src=\"data:image/jpeg;base64,"
+, Convert.ToBase64String(Model.Friends[i].Image), "\" />"))
+                        </div><p>@Model.Friends[i].Name</p>
+                    </div>
+                }
+            </div>
+            <div class="Personal_record_one_line_friend">
+                @for (int i = Model.Friends.Count / 2; i < Model.Friends.Count; ++i)
+            {
+                    <div class="Personal_record_one_friend_block">
+                        <div class="Personal_record_one_friend_img">
+                            <a href='@Url.Action("Personal_record", "Home",new { id = Model.Friends[i].Id })'>
+                                @Html.Raw(string.Concat("<img  class=''  id =''", " src=\"data:image/jpeg;base64,"
+, Convert.ToBase64String(Model.Friends[i].Image), "\" />")) />
+                        </a>
+                            
+                        </div><p>@Html.ActionLink(Model.Friends[i].Name, "Personal_record", "Home", new { id = @Model.Friends[i].Id }, new { }) </p>
+                    </div>
+                }
+            </div>
+            </div>
+        
+
+    </div>
+    <div class="div_color_white Personal_record_groups_block_all">
+        
+        @Html.ActionLink("Группы","Groups_personal","Home",new {id=Model.db.Id },new { })
+        <div>
+            @{/*  ПРОСТО ТЕСТ ДЛЯ ТОГО ЧТО СНИЗУ ПОКА НЕТ ЗАПИСЕЙ */ }
+            <div class="Personal_record_one_group">
+                <div class="Personal_record_group_img_block">
+                    
+                </div>
+                <div class="Personal_record_group_info_block">
+                    <p>Name</p>
+                  
+                    <p>Statussssssss ssssssssssssssssssssssss ss ssssssssss</p>
+                </div>
+            </div>
+            <div class="Personal_record_one_group">
+                <div class="Personal_record_group_img_block">
+                    
+                </div>
+                <div class="Personal_record_group_info_block">
+                    <p>Name</p>
+                    <p>Status</p>
+                </div>
+            </div>
+            @foreach (var i in Model.Groups)
+            {
+                <div class="Personal_record_one_group">
+                    <div class="Personal_record_group_img_block">
+                        <a href='@Url.Action("Group_record", "Home",new { id = i.Id })'>@Html.Raw(string.Concat("<img  class=''  id =''", " src=\"data:image/jpeg;base64,"
+, Convert.ToBase64String(i.Image), "\" />")) /></a>
+                        
+                    </div>
+                    <div class="Personal_record_group_info_block">
+                        <p>@Html.ActionLink(@i.Name, "Group_record", "Home",new {id=i.Id },new { }) </p>
+                        <p>@i.Status</p>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="div_color_white">АЛЬБОМЫ</div>
+        <div class="div_color_white">Видео</div>
+        <div class="div_color_white">Аудио</div>
+    </div>
 
 </div>
 <div class="Personal_record_body_right_block">
@@ -62,7 +185,17 @@
         
         
         <hr />
-        <div class="Personal_record_main_info_1"></div>
+        <div class="Personal_record_main_info_1">
+            <p>@Model.db.Birthday</p>
+            <p>СП</p>
+            <p>ПОЛ?</p>
+            <p>ТД</p>
+            <p>1</p>
+            <p>2</p>
+            <p>3</p>
+
+        </div>
+        <hr />
         @Html.Action("Get_info_person_ajax_1", "Home", new { open = true, obg= JsonConvert.SerializeObject(info_in_inf_aj), id = Model.db.Id })
         
         
