@@ -30,7 +30,7 @@ namespace Im.Models
     public class Group
     {
 
-        //в IdentityUser есть  public int Id { get; set; }
+        
         public int Id { get; set; }
         public string Name { get; set; }
         public string Status { get; set; }
@@ -50,14 +50,29 @@ namespace Im.Models
 
         //группы
         public string Groups_id { get; set; }
+        //админы
+        public string Admins_id { get; set; }
 
 
+        public Group()
+        {
+            Id = -1;
+            Name = "";
+            Admins_id = "";
+            Status = "";
+            Birthday = DateTime.Now;
+            Followers_id = "";
+            Wall_id = "";
+            Images_id = "";
+            Main_images_id = "";
+            Groups_id = "";
+        }
 
-
-        public Group(string a)
+            public Group(string a,string id)
         {
             Id = -1;
             Name = a;
+            Admins_id = id;
             Status = "";
             Birthday = DateTime.Now;
             Followers_id = "";

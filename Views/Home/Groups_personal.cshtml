@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Im.Models.Group_record>
+
+@{
+    ViewBag.Title = "Groups_personal";
+}
+<div>
+    <div>
+        <div></div>
+        <div>форма добавляния новой</div>
+    </div>
+
+    <div>
+@foreach (var i in Model)
+{
+    <div>
+        <div>
+            <a href='@Url.Action("Group_record", "Home",new { id = i.db.Id })'>
+                @Html.Raw(string.Concat("<img  class=''  id =''", " src=\"data:image/jpeg;base64,"
+, Convert.ToBase64String(i.Main_images[0]), "\" />")) />
+            </a>
+        </div>
+        <div>
+            <p>@Html.ActionLink(i.db.Name, "Group_record","Home",new { },new { })</p>
+            <p>@i.db.Status</p>
+        </div>
+    </div>
+}
+    </div>
+</div>

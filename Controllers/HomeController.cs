@@ -126,6 +126,15 @@ namespace Im.Controllers
 
             return View();
         }
+        
+        //TODO 
+        public ActionResult Edit_group_record()
+        {
+            //TODO 
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            
+            return View();
+        }
         //TODO 
         public ActionResult Edit_personal_record()
         {
@@ -138,6 +147,16 @@ namespace Im.Controllers
 
 
         //-PARTIAL BLOCK------------------------------------------------------------------------------------------------------------------------------//
+
+        //TODO 
+        [ChildActionOnly]
+        public ActionResult Add_new_group()
+        {
+            //TODO 
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+
+            return PartialView();
+        }
 
         [ChildActionOnly]
         public ActionResult Left_menu_personal()
@@ -291,6 +310,20 @@ namespace Im.Controllers
 
 
             return PartialView("Edit_personal_record_info_load_ajax", pers.db);
+        }
+
+        //TODO 
+        [HttpPost]
+        public ActionResult Add_new_group(Group a)
+        {
+            //TODO 
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            a.Admins_id = check_id;
+            //TODO проверять есть ли такие названия и тд тд тд
+            db.Groups.Add(a);
+            db.SaveChanges();
+
+            return View("Group_record",new Group_record(a));
         }
         [HttpPost]
         public ActionResult Add_new_image(HttpPostedFileBase[] uploadImage, string for_what,string from)
