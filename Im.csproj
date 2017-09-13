@@ -272,6 +272,7 @@
     <Content Include="Views\Home\Edit_personal_record.cshtml" />
     <Content Include="Views\Home\Edit_personal_record_info_load_ajax.cshtml" />
     <Content Include="Views\Home\Groups_personal.cshtml" />
+    <Content Include="Views\Home\Add_new_group_ajax.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

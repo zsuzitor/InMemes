@@ -35,6 +35,7 @@ namespace Im.Models
         public string Name { get; set; }
         public string Status { get; set; }
         public DateTime Birthday { get; set; }
+        public byte[] Image { get; set; }
         // заявки 
         public string Followers_id { get; set; }//id не принятых(отвергнутых) друзей
 
@@ -369,7 +370,7 @@ namespace Im.Models
 
 
 
-        public class Person_short
+        public class Person_short: IPage_view
     {
         public int Id { get; set; }
         public string Person_id { get; set; }
@@ -414,7 +415,7 @@ namespace Im.Models
         }
     }
 
-        public class Group_short
+        public class Group_short: IPage_view
     {
         public int Id { get; set; }
         public string Group_id_s { get; set; }
@@ -423,7 +424,18 @@ namespace Im.Models
         public string Name { get; set; }
         public string Status { get; set; }
 
-        public Group_short(string Status, string Group_id, int Count_followers, byte[] Image, string Name)
+        public Group_short(Group a)
+        {
+            Id = a.Id;
+            this.Status = a.Status;
+            this.Group_id_s = "";
+            this.Count_followers = a.Followers_id.Split(',').Count()-1;
+            this.Image = a.Image;
+            this.Name = a.Name;
+
+
+        }
+            public Group_short(string Status, string Group_id, int Count_followers, byte[] Image, string Name)
         {
             Id = -1;
             this.Status = Status;

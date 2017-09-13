@@ -47,14 +47,14 @@
         @Html.ActionLink("Друзья", "Friends", "Home", new { id = Model.db.Id }, new { })
         <div>
 
-            @{ /*  ПРОСТО ТЕСТ ДЛЯ ТОГО ЧТО СНИЗУ ПОКА НЕТ ЗАПИСЕЙ */
-
-            }
+            @{ /*  ПРОСТО ТЕСТ ДЛЯ ТОГО ЧТО СНИЗУ ПОКА НЕТ ЗАПИСЕЙ 
  <div  class="Personal_record_one_line_friend">
 <div class="Personal_record_one_friend_block">
-    <div class="Personal_record_one_friend_img">
-
-    </div><p>ИМЯ   аввввв</p>
+    <div class="Personal_record_one_friend_img" style="background: url('/Content/images/H98hxNY4xTo.jpg');background-size: cover;">
+        <a class="link_standart_for_circle_50_div" href='@Url.Action("Personal_record", "Home",new { } )'></a>
+    </div>
+    
+    <p>ИМЯ   аввввв</p>
 </div>
 <div class="Personal_record_one_friend_block">
     <div class="Personal_record_one_friend_img">
@@ -84,14 +84,9 @@
     </div><p>ИМЯ   аввввв</p>
 </div>
 </div>
+            */
 
-
-            
-
-
-
-
-
+            }
 
 
 
@@ -99,10 +94,34 @@
                 @for (int i = 0; i < Model.Friends.Count / 2; ++i)
                 {
                     <div class="Personal_record_one_friend_block">
-                        <div class="Personal_record_one_friend_img">
+                        
+                            @if (Model.Friends[i].Image != null)
+                            {
+                                <div class="Personal_record_one_friend_img" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(Model.Friends[i].Image) );background-size: cover; ">
+                                    <a class="link_standart_for_circle_50_div" href='@Url.Action("Personal_record", "Home",new { id = Model.Friends[i].Id } )'></a>
+                                </div>
+                            }
+                            @if (Model.Friends[i].Image == null)
+                            {
+                                //background-size: cover;background - size: 60px 60px;
+
+                                <div class="Personal_record_one_friend_img" style="background: url('/Content/images/H98hxNY4xTo.jpg');background-size: cover;">
+                                    <a class="link_standart_for_circle_50_div" href='@Url.Action("Personal_record", "Home",new {id = Model.Friends[i].Id } )'></a>
+                                </div>
+                            }
+                        @{ 
+                            /*
+                              <div class="Personal_record_one_friend_img">
+
                             @Html.Raw(string.Concat("<img  class=''  id =''", " src=\"data:image/jpeg;base64,"
-, Convert.ToBase64String(Model.Friends[i].Image), "\" />"))
-                        </div><p>@Model.Friends[i].Name</p>
+            , Convert.ToBase64String(Model.Friends[i].Image), "\" />"))
+                        </div>
+
+                             */
+                        }
+                        
+                        
+                        <p>@Model.Friends[i].Name</p>
                     </div>
                 }
             </div>
@@ -128,34 +147,62 @@
         
         @Html.ActionLink("Группы","Groups_personal","Home",new {id=Model.db.Id },new { })
         <div>
-            @{/*  ПРОСТО ТЕСТ ДЛЯ ТОГО ЧТО СНИЗУ ПОКА НЕТ ЗАПИСЕЙ */ }
-            <div class="Personal_record_one_group">
-                <div class="Personal_record_group_img_block">
-                    
-                </div>
-                <div class="Personal_record_group_info_block">
-                    <p>Name</p>
-                  
-                    <p>Statussssssss ssssssssssssssssssssssss ss ssssssssss</p>
-                </div>
-            </div>
-            <div class="Personal_record_one_group">
-                <div class="Personal_record_group_img_block">
-                    
-                </div>
-                <div class="Personal_record_group_info_block">
-                    <p>Name</p>
-                    <p>Status</p>
-                </div>
-            </div>
+           
             @foreach (var i in Model.Groups)
             {
                 <div class="Personal_record_one_group">
-                    <div class="Personal_record_group_img_block">
-                        <a href='@Url.Action("Group_record", "Home",new { id = i.Id })'>@Html.Raw(string.Concat("<img  class=''  id =''", " src=\"data:image/jpeg;base64,"
-, Convert.ToBase64String(i.Image), "\" />")) /></a>
-                        
-                    </div>
+                   
+                    
+                        @if (i.Image != null)
+                        {
+                            <div class="Personal_record_group_img_block"  style = "background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.Image) );background-size: cover; ">
+                                
+                                
+                                <a class="link_standart_for_circle_30_div" href='@Url.Action("Group_record", "Home",new { id = i.Id } )'></a>
+                            </div>
+
+                           
+
+                        }
+                                @if (i.Image == null)
+                                {
+                                    //background-size: cover;background - size: 60px 60px;
+
+                                    <div class="Personal_record_group_img_block"  style = "background: url('/Content/images/H98hxNY4xTo.jpg');background-size: cover;">
+                                        <a class="link_standart_for_circle_30_div" href='@Url.Action("Group_record", "Home",new { id = i.Id } )'></a>
+                                    </div>
+                                }
+                    
+
+                    @{ 
+                        /*
+                         <div class="Personal_record_group_img_block">
+                        @if (i.Image != null)
+                        {
+
+
+        <a href='@Url.Action("Group_record", "Home",new { id = i.Id })'>
+        @Html.Raw(string.Concat("<img  class=''  id =''", " src=\"data:image/jpeg;base64,"
+        , Convert.ToBase64String(i.Image), "\" />")) />
+        </a>
+
+
+
+
+                                }
+        @if (i.Image == null)
+        {
+        <a href='@Url.Action("Group_record", "Home",new { id = i.Id })'><img src="~/Content/images/H98hxNY4xTo.jpg" /></a>
+        }
+
+
+        </div>
+                         */
+
+                    }
+
+
+                    
                     <div class="Personal_record_group_info_block">
                         <p>@Html.ActionLink(@i.Name, "Group_record", "Home",new {id=i.Id },new { }) </p>
                         <p>@i.Status</p>

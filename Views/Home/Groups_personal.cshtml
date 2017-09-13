@@ -1,27 +1,83 @@
-﻿@model IEnumerable<Im.Models.Group_record>
+﻿@model IEnumerable<Im.Models.Group_short>
+@section scripts
+    {
+    @Scripts.Render("~/scripts/jquery-3.1.1.js")
+    @Scripts.Render("~/scripts/jquery.unobtrusive-ajax.js")
+}
 
 @{
     ViewBag.Title = "Groups_personal";
 }
 <div>
     <div>
-        <div></div>
-        <div>форма добавляния новой</div>
+        <div class="div_color_white Groups_personal_left_top_block"></div>
+        <div  class="div_color_white Groups_personal_right_top_block" id="Groups_personal_right_top_block_id">
+            @Html.Action("Add_new_group_ajax", "Home", new { })
+            
+            
+
+
+
+        </div>
     </div>
 
-    <div>
+    <div class="Groups_personal_block_list_group">
 @foreach (var i in Model)
 {
-    <div>
-        <div>
-            <a href='@Url.Action("Group_record", "Home",new { id = i.db.Id })'>
+    <div class="div_color_white Groups_personal_one_group_block">
+
+
+
+
+
+
+
+
+
+
+
+
+       
+
+
+
+        @{
+            /*
+             <div class=" Groups_personal_one_group_img">
+@if (i.Image != null)
+{
+            <a href='@Url.Action("Group_record", "Home", new { id = i.Id })'>
                 @Html.Raw(string.Concat("<img  class=''  id =''", " src=\"data:image/jpeg;base64,"
-, Convert.ToBase64String(i.Main_images[0]), "\" />")) />
+, Convert.ToBase64String(i.Image), "\" />")) />
             </a>
+}
+@if (i.Image == null)
+{
+    <a href='@Url.Action("Group_record", "Home",new { id = i.Id })'><img src="~/Content/images/H98hxNY4xTo.jpg" /></a>
+}
         </div>
-        <div>
-            <p>@Html.ActionLink(i.db.Name, "Group_record","Home",new { },new { })</p>
-            <p>@i.db.Status</p>
+             */
+
+        }
+
+        @if (i.Image != null)
+        {
+            <div class="Groups_personal_one_group_img" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.Image) );background-size: cover; ">
+                <a class="link_standart_for_circle_50_div" href='@Url.Action("Group_record", "Home", new { id = i.Id })'></a>
+            </div>
+        }
+        @if (i.Image == null)
+        {
+            //background-size: cover;background - size: 60px 60px;
+
+            <div class="Groups_personal_one_group_img" style="background: url('/Content/images/H98hxNY4xTo.jpg');background-size: cover;">
+                <a class="link_standart_for_circle_50_div" href='@Url.Action("Group_record", "Home", new { id = i.Id })'></a>
+            </div>
+        }
+        
+        <div  class="Groups_personal_one_group_info">
+            <p>@Html.ActionLink(i.Name, "Group_record","Home",new { },new { })</p>
+            <p>@i.Status</p>
         </div>
     </div>
 }

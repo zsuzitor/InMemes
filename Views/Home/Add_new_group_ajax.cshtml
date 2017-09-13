@@ -1,0 +1,29 @@
+﻿
+
+
+@{ 
+
+    AjaxOptions ajaxOpts = new AjaxOptions
+    {
+        UpdateTargetId = "Groups_personal_right_top_block_id",
+        Url = Url.Action("Add_new_group"),
+
+        
+    };
+}
+
+<p>Создание новой группы</p>
+
+<h1>@ViewBag.er_name</h1>
+<h1>@ViewBag.add_success</h1>
+@if (ViewBag.add_success != null)
+{
+    @Html.ActionLink("Перейти", "Group_record","Home",new {id= ViewBag.id },new { })
+}
+
+    @using (Ajax.BeginForm(ajaxOpts))
+{
+        @Html.Editor("Name", new { })
+    <input type="submit" value="Создать" />
+}
+

@@ -32,6 +32,20 @@ textarea {
     height: 100%; /* Высота на весь слой */
     color: black; /* Цвет ссылки */
 }
+.link_standart_for_circle_30_div {
+    display: block; /* Ссылка как блочный элемент */
+    text-align: center; /* Выравнивание по центру */
+    height: 100%; /* Высота на весь слой */
+    border-radius: 30px;
+}
+.link_standart_for_circle_50_div {
+    display: block; /* Ссылка как блочный элемент */
+    text-align: center; /* Выравнивание по центру */
+    height: 100%; /* Высота на весь слой */
+    border-radius: 50px;
+}
+
+
 img {
     width: 100%;
     height: 100%;
@@ -136,10 +150,10 @@ div.Personal_record_one_group {
     padding-top: 5px;
     margin-top: 10px;
     height: 100px;
-    background-color: black;
+    
 }
 div.Personal_record_group_info_block {
-    background-color: red;
+    
     width: 270px;
     display: inline-block;
     vertical-align: top;
@@ -148,10 +162,15 @@ div.Personal_record_group_img_block {
     border-radius: 30px;
     display: inline-block;
     vertical-align: top;
-    background-color: green;
+    
+    /*убрать*/
+    
+
+
     width: 60px;
     height: 60px;
-}div.Personal_record_groups_block_all {
+}
+ div.Personal_record_groups_block_all {
     margin-top: 30px;
 }div.Personal_record_one_line_friend {
     margin-top: 10px;
@@ -161,8 +180,8 @@ div.Personal_record_group_img_block {
 div.Personal_record_one_friend_img {
     width: 100px;
     height: 100px;
-    background-color: black;
-    border-radius: 30px;
+    
+    border-radius: 50px;
 }
 div.Personal_record_one_friend_block {
     width: 100px;
@@ -170,7 +189,7 @@ div.Personal_record_one_friend_block {
     margin-left: 12px;
     display: inline-block;
     vertical-align: top;
-    background-color: red;
+    
 }div.Personal_record_main_img_div {
     width: 300px;
     height: 350px;
@@ -324,4 +343,43 @@ div.Wall_memes_one_mem_img{
 }
 ul.Wall_memes_main_ul li{
     padding-top:20px;
+}
+
+
+
+/*Groups_personal*/
+
+div.Groups_personal_left_top_block {
+    width: 500px;
+    height: 150px;
+    display: inline-block;
+    vertical-align: top;
+}
+div.Groups_personal_right_top_block {
+    width: 200px;
+    height: 150px;
+    display: inline-block;
+    vertical-align: top;
+    margin-left:70px;
+}
+div.Groups_personal_one_group_block {
+    height: 120px;
+    margin-top:20px;
+   
+}
+div.Groups_personal_one_group_img {
+    display: inline-block;
+    vertical-align: top;
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+}
+div.Groups_personal_one_group_info {
+    margin-left:50px;
+    width: 330px;
+    display: inline-block;
+    vertical-align: top;
+}div.Groups_personal_block_list_group {
+    padding-top:10px;
+    width:500px;
 }
