@@ -76,7 +76,7 @@
         }
         
         <div  class="Groups_personal_one_group_info">
-            <p>@Html.ActionLink(i.Name, "Group_record","Home",new { },new { })</p>
+            <p>@Html.ActionLink(i.Name, "Group_record","Home",new { id = i.Id },new { })</p>
             <p>@i.Status</p>
         </div>
     </div>

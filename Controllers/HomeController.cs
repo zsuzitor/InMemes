@@ -72,11 +72,11 @@ namespace Im.Controllers
             var res = Record(id,"Groups_all");
 
 
-            return View(res.Groups);
+            return View(((Personal_record)res).Groups);
         }
         public ActionResult Group_record(string id)
         {
-            var res = db.Groups.First();
+            var res = Group(id, "Group_record");
 
 
             return View(res);
@@ -167,7 +167,7 @@ namespace Im.Controllers
         {
             
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
-            var pers = Record(check_id, "info_person");
+            var pers = (Personal_record)Record(check_id, "info_person");
             if(pers!=null)
             ViewBag.list_str = pers.db.Menu_left;
             ViewBag.id = check_id;
@@ -184,6 +184,11 @@ namespace Im.Controllers
                 case "Personal_record":
                      pers = Record(id, "Wall");
                     return PartialView(((Personal_record)pers).Wall);
+                    break;
+                    
+                        case "Group_record":
+                    pers = Group(id, "Wall");
+                    return PartialView(((Group_record)pers).Wall);
                     break;
 
                 default ://"News"
@@ -220,13 +225,150 @@ namespace Im.Controllers
                 //по id доставать параметры
                 var pers = Record(id, "info_person");
                 //res = new Person_info_short() { Age=pers.db.Age, Country = pers.db.Country, Town = pers.db.Town, Street = pers.db.Street, Description = pers.db.Description };
-                res = new Person_info_short(pers);
+                res = new Person_info_short((Personal_record)pers);
             }
             
             ViewBag.Open = open;
             ViewBag.Id = id;
  
             return PartialView(res);
+        }
+
+        //TODO
+        public ActionResult Follow_ajax(string from,string id ,bool click=false)
+        {
+            //Group
+            //Personal_record
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            ViewBag.id = id;
+
+            if(from== "Group")
+            {
+                var pers = Group(id, "DB");
+                var pers_peop = Record(check_id, "DB");
+                try
+                {
+                    var tmp = ((Group_record)pers).db.Followers_id.Split(',').First(x1 => x1 == check_id);
+                    if (tmp == null)
+                        throw new Exception();
+                    if (click)
+                    {
+                        //нужно отписать от группы
+                        
+                        var mass_peop = ((Personal_record)pers_peop).db.Groups_id.Split(',');
+                        var mass = ((Group_record)pers).db.Followers_id.Split(',');
+                        
+                        ((Group_record)pers).db.Followers_id = "";
+                        for (int i=0;i< mass.Count() - 1; ++i)
+                        {
+                            if (mass[i] != check_id)
+                                ((Group_record)pers).db.Followers_id+= mass[i]+",";
+                        }
+                        ((Personal_record)pers_peop).db.Groups_id = "";
+                        for (int i = 0; i < mass_peop.Count() - 1; ++i)
+                        {
+                            if (mass_peop[i] != id)
+                                ((Personal_record)pers_peop).db.Groups_id += mass_peop[i] + ",";
+                        }
+
+                        ViewBag.follow = false;
+                        ViewBag.message = "Подписаться";
+                    }
+                    else
+                    {
+                        ViewBag.follow = true;
+                        ViewBag.message = "Отписаться";
+                    }
+                    
+                }
+                catch
+                {
+                    
+                    if (click)
+                    {
+                        //нужно подписать на группу
+                        ((Group_record)pers).db.Followers_id += check_id + ",";
+                        ((Personal_record)pers_peop).db.Groups_count += 1;
+                        ((Personal_record)pers_peop).db.Groups_id +=id +",";
+                        ViewBag.follow = true;
+                        ViewBag.message = "Отписаться";
+                    }
+                    else
+                    {
+                        ViewBag.follow = false;
+                        ViewBag.message = "Подписаться";
+                    }
+                        
+                }
+            }
+            if (from == "Personal_record")
+            {
+                var pers = Record(id, "DB");
+                var pers_peop = Record(check_id, "DB");
+
+
+                try
+                {
+                    var tmp = ((Personal_record)pers).db.Followers_id.Split(',').First(x1 => x1 == check_id);
+                    if (tmp == null)
+                        throw new Exception();
+                    if (click)
+                    {
+                        //нужно отписать от человека
+
+                        var mass = ((Personal_record)pers).db.Followers_id.Split(',');
+                        var mass_peop = ((Personal_record)pers_peop).db.Friends_id.Split(',');
+                        ((Personal_record)pers).db.Followers_id = "";
+                        for (int i = 0; i < mass.Count() - 1; ++i)
+                        {
+                            if (mass[i] != check_id)
+                                ((Personal_record)pers).db.Followers_id += mass[i] + ",";
+                        }
+
+                        ((Personal_record)pers_peop).db.Friends_id = "";
+                        for (int i = 0; i < mass_peop.Count() - 1; ++i)
+                        {
+                            if (mass_peop[i] != id)
+                                ((Personal_record)pers_peop).db.Friends_id += mass_peop[i] + ",";
+                        }
+
+                        ViewBag.follow = false;
+                        ViewBag.message = "Подписаться";
+                    }
+                    else
+                    {
+                        ViewBag.follow = true;
+                        ViewBag.message = "Удалить из друзей";
+                    }
+
+                }
+                catch
+                {
+
+                    if (click)
+                    {
+                        //нужно подписать на человека
+                        ((Personal_record)pers).db.Followers_id += check_id + ",";
+
+                        
+                        ((Personal_record)pers_peop).db.Friends_count += 1;
+                        ((Personal_record)pers_peop).db.Friends_id += id + ",";
+
+                        ViewBag.follow = true;
+                        ViewBag.message = "Удалить из друзей";
+                    }
+                    else
+                    {
+                        ViewBag.follow = false;
+                        ViewBag.message = "Добавить в друзья";
+                    }
+
+                }
+
+
+            }
+
+                return PartialView();
         }
         public ActionResult Edit_personal_record_info_load_ajax(string obg)
         {
@@ -238,7 +380,7 @@ namespace Im.Controllers
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             var pers = Record(check_id, "Personal_record");
 
-            return PartialView(pers.db);
+            return PartialView(((Personal_record)pers).db);
         }
 
         //END-PARTIAL BLOCK------------------------------------------------------------------------------------------------------------------------------//
@@ -248,7 +390,7 @@ namespace Im.Controllers
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             //var pers = db_users.Users.First(x1=>x1.Id==check_id);
             //TODO проверять валидацией все
-            var pers = Record(check_id, "Personal_record");
+            var pers = (Personal_record)Record(check_id, "Personal_record");
 
 
 
@@ -344,7 +486,7 @@ namespace Im.Controllers
                 {
                     //
                     string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
-                    var pers = Record(check_id, "DB");
+                    var pers = (Personal_record)Record(check_id, "DB");
                     
                     a.Admins_id = check_id+",";
                     a.Followers_id = check_id + ",";
@@ -404,40 +546,84 @@ namespace Im.Controllers
 
             }
             //СЕЙЧАС УБРАТЬ
-            foreach (var i in db.Images)
-            {
-                var t = i;
-            }
+            //foreach (var i in db.Images)
+            //{
+              //  var t = i;
+            //}
             return View("Personal_record", res_page);
         }
             [HttpPost]
         public ActionResult Add_new_memes(HttpPostedFileBase[] uploadImage,string Description_mem,string id,string bool_access)
         {
+            //TODO проверять можно ли добавить пост туда куда требуют
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             Memes res_db = null;
-            var res = new Memes_record();
+            //var res = new Memes_record();
             IPage_view res_page = null;
             switch (bool_access)
             {
                 case "person"://добавление записи со страницы пользователя
-
-                    if(id== check_id)
+                    //TODO сейчас добавляется только на свою страницу
+                    
                     {
-                        var pers=Record(id, "Personal_record");
-                        res_db = new Memes(string.Concat(pers.db.Name, " ", pers.db.Surname), id)
+                        if (id == check_id)
+                        {
+                            var pers = (Personal_record)Record(id, "Personal_record");
+                            res_db = new Memes(string.Concat(pers.db.Name, " ", pers.db.Surname), id)
+                            {
+                                Description = Description_mem
+                            };
+                            List<byte[]> photo_byte = Get_photo_post(uploadImage);
+                            if (photo_byte.Count == 1)
+                            {
+                                res_db.Image = photo_byte[0];
+                            }
+                            if (photo_byte.Count > 1)
+                            {
+                                foreach (var i in photo_byte)
+                                {
+                                    //res.Images.Add(i);
+                                    Img tmp = new Img(i);
+                                    db.Images.Add(tmp);
+                                    db.SaveChanges();
+                                    res_db.Images_id += tmp.Id + ",";
+                                }
+                            }
+                            db.Memes.Add(res_db);
+                            db.SaveChanges();
+                            //???
+                            //res.db = res_db;
+                            //pers.Wall.Add(res);
+
+                            pers.db.Wall_id += res_db.Id + ",";
+                            pers.db.Wall_count += 1;
+                            db.SaveChanges();
+                            res_page = (IPage_view)pers;
+                            //res.db = res_db;
+                        }
+                    }
+
+                    break;
+
+
+                case "group"://добавление записи со страницы группы +проверки
+                    //TODO проверять можно ли добавить пост туда куда требуют
+                    {
+                        var pers = (Group_record)Group(id, "DB");
+                        res_db = new Memes(pers.db.Name, id)
                         {
                             Description = Description_mem
-                         };
-                        List<byte[]>photo_byte= Get_photo_post(uploadImage);
+                        };
+                        List<byte[]> photo_byte = Get_photo_post(uploadImage);
                         if (photo_byte.Count == 1)
                         {
                             res_db.Image = photo_byte[0];
                         }
                         if (photo_byte.Count > 1)
                         {
-                            foreach(var i in photo_byte)
+                            foreach (var i in photo_byte)
                             {
-                                res.Images.Add(i);
+                                //res.Images.Add(i);
                                 Img tmp = new Img(i);
                                 db.Images.Add(tmp);
                                 db.SaveChanges();
@@ -446,50 +632,156 @@ namespace Im.Controllers
                         }
                         db.Memes.Add(res_db);
                         db.SaveChanges();
-                        //pers.Wall.Add(new Memes_record(res_db));
-                        pers.db.Wall_id+= res_db.Id+",";
-                        pers.db.Wall_count += 1;
+                        //???
+                        //res.db = res_db;
+                        //pers.Wall.Add(res);
+
+
+                        pers.db.Wall_id += res_db.Id + ",";
                         db.SaveChanges();
-                        res_page=(IPage_view)pers;
-                        res.db = res_db;
+                        res_page = (IPage_view)pers;
+                        //res.db = res_db;
+
+
+                        return View("Group_record", res_page);
                     }
-                    
-
-                    break;
-
-
-                case "group"://добавление записи со страницы группы +проверки
-
                     break;
             }
            
                 return View("Personal_record", res_page);
         }
-
-        public IPage_view Group(string id, string bool_fullness = "Group_record")
+        public Memes_record Memes(string id)
         {
+            var not_res= db.Memes.First(x1 => x1.Id.ToString() == id);
+            Memes_record res=new Memes_record(not_res);
+            try
+            {
+                for (int i = 0; i < res.db.Images_id.Count() - 2; ++i)
+                {
+                    res.Images.Add((db.Images.First(x1 => x1.Id == res.db.Images_id[0])).bytes);
+                }
+            }
+            catch
+            {
+
+            }
+            
+
+
+            return res;
+        }
+            public IPage_view Group(string id, string bool_fullness = "Group_record")
+        {
+            //TODO брать инфу только ту которая нужна остальное убирать например Person_short
+
+            //DB
+            //Group_record
+            //Wall
+            //Group_short
+
             IPage_view res = null;
             var not_res= db.Groups.First(x1 => x1.Id.ToString() == id);
+
+
             if (bool_fullness == "Group_record")
             {
                 //TODO надо доделать что бы поля тоже заполнялись как в рекорде
                 res = new Group_record(not_res);
+                try
+                {
+                    var str = ((Group_record)res).db.Followers_id.Split(',');
+                    for (int b = 0, i = str.Count() - 2; i >= 0 && b < 5; --i, b++)
+                    {
+                        ((Group_record)res).Followers.Add(((Person_short)Record(str[i], "Person_short")));
+                    }
+                        
+                    
+                }
+                catch
+                {
+
+                }
+                
+                try
+                {
+                    var str = ((Group_record)res).db.Images_id.Split(',');
+                    for (int b = 0, i = str.Count() - 2; i >= 0 && b < 5; --i, b++)
+                    {
+                        ((Group_record)res).Images.Add(db.Images.First(x1=>x1.Id.ToString()== str[i]).bytes);
+                    }
+
+
+                }
+                catch
+                {
+
+                }
+                try
+                {
+                    var str = ((Group_record)res).db.Main_images_id.Split(',');
+                    
+                        ((Group_record)res).Main_images.Add(db.Images.First(x1 => x1.Id.ToString() == str[str.Count() - 2]).bytes);
+                    
+
+                }
+                catch
+                {
+
+                }
+                try
+                {
+                    
+                        var str = ((Group_record)res).db.Groups_id.Split(',');
+                    for (int b = 0, i = str.Count() - 2; i >= 0 && b < 5; --i, b++)
+                    {
+                        ((Group_record)res).Groups.Add((Group_short)Group(str[i], "Group_short"));
+                    }
+                }
+                catch
+                {
+
+                }
+
+            }
+            if (bool_fullness == "Wall")
+            {
+                try
+                {
+                    res = new Group_record(not_res);
+                    var str = ((Group_record)res).db.Wall_id.Split(',');
+                    for (int b = 0, i = str.Count() - 2; i >= 0 && b < 10; --i, b++)
+                    {
+                        ((Group_record)res).Wall.Add(Memes(str[i]));
+                    }
+
+
+                }
+                catch
+                {
+
+                }
+
             }
                 if (bool_fullness == "Group_short"){
                 res = new Group_short(not_res);
+            }
+            if (bool_fullness == "DB")
+            {
+                res = new Group_record(not_res);
             }
 
             return res;
         }
 
-            public Personal_record Record(string id,string bool_fullness = "Personal_record")
+            public IPage_view Record(string id,string bool_fullness = "Personal_record")
         {
-
+            //TODO брать инфу только ту которая нужна остальное убирать например Person_short
             //Personal_record
             //Info_person
             //bool_fullness=Wall,News-------только список мемов :Personal_record
             //News
             //Groups_all
+            //Person_short ????
 
 
 
@@ -509,8 +801,12 @@ namespace Im.Controllers
                     {
                         //просто с бд инфу отправлять выше сделано
                     }
-                    //АВА
-                    if (bool_fullness == "Personal_record")
+                    if (bool_fullness == "Person_short")
+                    {
+                        
+                    }
+                        //АВА
+                        if (bool_fullness == "Personal_record")
                     {
                         try
                         {
@@ -519,10 +815,10 @@ namespace Im.Controllers
 
                             var a_b123_tmp = db.Images.First(x1 => x1.Id == id_tmp);
                             //СЕЙЧАС
-                            foreach (var i in db.Images)
-                            {
-                                var t = i;
-                            }
+                            //foreach (var i in db.Images)
+                            //{
+                              //  var t = i;
+                           // }
 
                             var a_b_tmp = db.Images.First(x1 => x1.Id == id_tmp).bytes;
 

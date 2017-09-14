@@ -1,8 +1,52 @@
-﻿@model Im.Models.Group
+﻿@model Im.Models.Group_record
+@section scripts
+    {
+    @Scripts.Render("~/scripts/jquery-3.1.1.js")
+    @Scripts.Render("~/scripts/jquery.unobtrusive-ajax.js")
+}
 
 @{
     ViewBag.Title = "Group_record";
 }
+<div>
+    <div class="Group_record_left_all_block">
+        <div class="Group_record_head div_color_white">
+            <h1>@Model.db.Name</h1>
+            <p>@Model.db.Status</p>
+        </div>
+        <div  class="Group_record_wall_all">
+            <div class="div_color_white">
+                @using (Html.BeginForm("Add_new_memes", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                    @Html.Hidden("bool_access", "group")
+                    @Html.Hidden("id", Model.db.Id)
+                    @Html.Editor("Description_mem", new { })
+                    <input type="file" name="uploadImage[0]" />
+                    <input type="submit" class="submit" value="Поделиться" />
+                }
+            </div>
 
-<h2>Group_record</h2>
+            @Html.Action("Wall_memes", "Home", new { from = "Group_record", id = Model.db.Id })
+        </div>
 
+    </div>
+    <div class="Group_record_right_all_block">
+        
+        <div>
+            @if (Model.Main_images.Count > 0)
+            {
+                @Html.Raw(string.Concat("<img  class='Personal_record_main_img'  id ='Personal_record_main_img_id'", " src=\"data:image/jpeg;base64,"
+, Convert.ToBase64String(Model.Main_images[0]), "\" />"))
+            }
+            @if (Model.Main_images.Count == 0)
+            {
+                <img src="~/Content/images/H98hxNY4xTo.jpg" />
+            }
+        </div>
+        @Html.Action("Follow_ajax", "Home", new {from="Group",id=Model.db.Id  })
+    </div>
+
+
+
+
+</div>

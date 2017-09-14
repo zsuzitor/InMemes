@@ -383,3 +383,40 @@ div.Groups_personal_one_group_info {
     padding-top:10px;
     width:500px;
 }
+
+/*Group_record*/
+
+div.Group_record_left_all_block {
+    
+    width:450px;
+    
+    display: inline-block;
+    vertical-align: top;
+}
+div.Group_record_right_all_block {
+    margin-left:40px;
+    height: 500px;
+    width: 300px;
+    
+    display: inline-block;
+    vertical-align: top;
+}
+div.Group_record_head{
+    height:500px;
+    /*костыль что бы в самом верху не было схлапывания*/
+    margin-top:-20px;
+
+
+}
+div.Group_record_wall_all{
+    margin-top:30px;
+}
+
+/*Follow_ajax*/
+.Follow_ajax_main_div{
+    height:50px;
+    background-color:aqua;
+}
+    .Follow_ajax_main_div:hover {
+        background-color:antiquewhite;
+    }
