@@ -8,8 +8,23 @@
 @{
     ViewBag.Title = "Personal_record";
     Im.Models.Person_info_short info_in_inf_aj = new Im.Models.Person_info_short(Model);
-}
 
+
+    AjaxOptions ajaxOpts = new AjaxOptions
+    {
+        UpdateTargetId = "Wall_memes_all_memes_wall_id_for_replace",
+        Url = Url.Action("Additionally_Download"),
+        
+
+    };
+}
+<script>
+    function click_subm_load_wall() {
+        var hid = document.getElementById('start_for_form');
+        hid.value = +hid.value+ 10;
+    }
+
+</script>
 <div  class="Personal_record_body_left_block">
     <div class="Personal_record_main_img_lvl_1_div">
         <div class="Personal_record_main_img_div">
@@ -54,48 +69,6 @@
     <div class="div_color_white Personal_record_friend_all_block">
         @Html.ActionLink("Друзья", "Friends", "Home", new { id = Model.db.Id }, new { })
         <div>
-
-            @{ /*  ПРОСТО ТЕСТ ДЛЯ ТОГО ЧТО СНИЗУ ПОКА НЕТ ЗАПИСЕЙ 
- <div  class="Personal_record_one_line_friend">
-<div class="Personal_record_one_friend_block">
-    <div class="Personal_record_one_friend_img" style="background: url('/Content/images/H98hxNY4xTo.jpg');background-size: cover;">
-        <a class="link_standart_for_circle_50_div" href='@Url.Action("Personal_record", "Home",new { } )'></a>
-    </div>
-    
-    <p>ИМЯ   аввввв</p>
-</div>
-<div class="Personal_record_one_friend_block">
-    <div class="Personal_record_one_friend_img">
-
-    </div><p>ИМЯ   аввввв</p>
-</div>
-<div class="Personal_record_one_friend_block">
-    <div class="Personal_record_one_friend_img">
-
-    </div><p>ИМЯ   аввввв</p>
-</div>
-</div>
-<div   class="Personal_record_one_line_friend">
-<div class="Personal_record_one_friend_block">
-    <div class="Personal_record_one_friend_img">
-
-    </div><p>ИМЯ   аввввв</p>
-</div>
-<div class="Personal_record_one_friend_block">
-    <div class="Personal_record_one_friend_img">
-
-    </div><p>ИМЯ   аввввв</p>
-</div>
-<div class="Personal_record_one_friend_block">
-    <div class="Personal_record_one_friend_img">
-
-    </div><p>ИМЯ   аввввв</p>
-</div>
-</div>
-            */
-
-            }
-
 
 
             <div class="Personal_record_one_line_friend">
@@ -327,9 +300,25 @@
         <div class="Wall_memes_all_memes_wall">
 
 
-            <ul class="Wall_memes_main_ul">
+            
                 @Html.Action("Wall_memes", "Home", new { from = "Personal_record", id = Model.db.Id })
-            </ul>
+            
+            
+
+        </div>
+        <div>
+
+
+            @using (@Ajax.BeginForm(ajaxOpts))
+            {
+
+                @Html.Hidden("start_for_form", 0)
+                @Html.Hidden("from", "Personal_record")
+                @Html.Hidden("id", Model.db.Id)
+                @Html.Hidden("what_download", "Wall")
+                        
+                        <input type = "submit" onclick="click_subm_load_wall();" value = "Загрузить еще" class="" />
+            }
 
         </div>
 

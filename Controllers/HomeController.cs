@@ -176,35 +176,15 @@ namespace Im.Controllers
             return PartialView();
         }
         [ChildActionOnly]
-        public ActionResult Wall_memes(string from,string id)
+        public ActionResult Wall_memes(string from,string id,int start=0)
         {
-            
-            
-            IPage_view pers= null;
-            switch (from)
-            {
-                case "Personal_record":
-                     pers = Record(id, "Wall");
-                    return PartialView(((Personal_record)pers).Wall);
-                    break;
-                    
-                        case "Group_record":
-                    pers = Group(id, "Wall");
-                    return PartialView(((Group_record)pers).Wall);
-                    break;
-
-                default ://"News"
-                    string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
-                    pers = Record(check_id, "News");
-                    return PartialView(((Personal_record)pers).News);
-                    break;
-            }
-
-          
+            var res= Wall_memes_function(from, id, start);
+            return PartialView(res);
 
 
 
-            
+
+
         }
 
         //TODO 
@@ -475,6 +455,26 @@ namespace Im.Controllers
             return PartialView("Edit_personal_record_info_load_ajax", pers.db);
         }
 
+
+
+
+        [HttpPost]
+        public ActionResult Additionally_Download(string what_download, string from, string id, int start_for_form = 0)
+        {
+            switch (what_download)
+            {
+                case "Wall":
+                    {
+                        var res = Wall_memes_function(from, id, start_for_form);
+                        return PartialView("Wall_memes", res);
+                    }
+                    
+                    break;
+
+                    
+            }
+            return PartialView("Wall_memes");
+        }
         //TODO 
         [HttpPost]
         public ActionResult Add_new_group(Group a)
@@ -606,7 +606,33 @@ namespace Im.Controllers
 
                             pers.db.Wall_id += res_db.Id + ",";
                             pers.db.Wall_count += 1;
+
                             db.SaveChanges();
+                            //раскидать друзьям подписчикам
+                            {
+                                var mass_fr = pers.db.Friends_id.Split(',');
+                                foreach(var i in mass_fr)
+                                {
+                                    if (!string.IsNullOrEmpty(i))
+                                    {
+                                        var rec = Record(i, "DB");
+                                        ((Personal_record)rec).db.News_id += res_db.Id + ",";
+                                    }
+                                    
+
+                                }
+                                var mass_follow = pers.db.Followers_ignore_id.Split(',');
+                                foreach (var i in mass_fr)
+                                {
+                                    if (!string.IsNullOrEmpty(i))
+                                    {
+                                        var rec = Record(i, "DB");
+                                        ((Personal_record)rec).db.News_id += res_db.Id + ",";
+                                    }
+                                }
+                                db.SaveChanges();
+                            }
+
                             res_page = (IPage_view)pers;
                             //res.db = res_db;
                         }
@@ -648,6 +674,22 @@ namespace Im.Controllers
 
                         pers.db.Wall_id += res_db.Id + ",";
                         db.SaveChanges();
+
+                        //раскидать друзьям подписчикам
+                        {
+                            var mass_follow = pers.db.Followers_id.Split(',');
+                            foreach (var i in mass_follow)
+                            {
+                                if (!string.IsNullOrEmpty(i))
+                                {
+                                    var rec = Record(i, "DB");
+                                    ((Personal_record)rec).db.News_id += res_db.Id + ",";
+                                }
+                            }
+                            
+                            db.SaveChanges();
+                        }
+
                         res_page = (IPage_view)pers;
                         //res.db = res_db;
 
@@ -679,7 +721,7 @@ namespace Im.Controllers
 
             return res;
         }
-            public IPage_view Group(string id, string bool_fullness = "Group_record")
+            public IPage_view Group(string id, string bool_fullness = "Group_record",int start=0)
         {
             //TODO брать инфу только ту которая нужна остальное убирать например Person_short
 
@@ -758,7 +800,7 @@ namespace Im.Controllers
                 {
                     res = new Group_record(not_res);
                     var str = ((Group_record)res).db.Wall_id.Split(',');
-                    for (int b = 0, i = str.Count() - 2; i >= 0 && b < 10; --i, b++)
+                    for (int b = 0, i = str.Count() - 2 - start; i >= 0 && b < 10; --i, b++)
                     {
                         ((Group_record)res).Wall.Add(Memes(str[i]));
                     }
@@ -782,7 +824,7 @@ namespace Im.Controllers
             return res;
         }
 
-            public IPage_view Record(string id,string bool_fullness = "Personal_record")
+            public IPage_view Record(string id,string bool_fullness = "Personal_record",int start=0)
         {
             //TODO брать инфу только ту которая нужна остальное убирать например Person_short
             //Personal_record
@@ -879,7 +921,7 @@ namespace Im.Controllers
                         try
                         {
                             var str_mem_id = res.db.Wall_id.Split(',');
-                            for (int b = 0, i = str_mem_id.Count() - 2; i > 0 || b < 10; ++b, --i)
+                            for (int b = 0, i = str_mem_id.Count() - 2-start; i > 0 || b < 10; ++b, --i)
                             {
                                 string id_mem = str_mem_id[i];
                                 var mem_tmp = db.Memes.First(x1 => x1.Id.ToString() == id_mem);
@@ -900,7 +942,7 @@ namespace Im.Controllers
                         try
                         {
                             var str_mem_id = res.db.News_id.Split(',');
-                            for (int b = 0, i = str_mem_id.Count() - 2; i > 0 || b < 10; ++b, ++i)
+                            for (int b = 0, i = str_mem_id.Count() - 2-start; i > 0 || b < 10; ++b, ++i)
                             {
                                 string id_mem = str_mem_id[i];
                                 var mem_tmp = db.Memes.First(x1 => x1.Id.ToString() == id_mem);
@@ -997,5 +1039,46 @@ namespace Im.Controllers
             db.Dispose();
             base.Dispose(disposing);
         }
-    }
+
+
+        IEnumerable<Memes_record> Wall_memes_function(string from, string id, int start = 0)
+        {
+            if (string.IsNullOrEmpty(id))
+                id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+
+            IPage_view pers = null;
+            ViewBag.start = start;
+            switch (from)
+            {
+                case "Personal_record":
+                    pers = Record(id, "Wall", start);
+                    if (start == 0)
+                        if (((Personal_record)pers).Wall.Count == 0)
+                            ViewBag.Count = 0;
+
+
+                    return ((Personal_record)pers).Wall;
+                    break;
+
+                case "Group_record":
+                    pers = Group(id, "Wall", start);
+                    return ((Group_record)pers).Wall;
+                    break;
+
+                default://"News"
+                    string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                    pers = Record(check_id, "News", start);
+                    if (start == 0)
+                        if (((Personal_record)pers).News.Count == 0)
+                            ViewBag.Count = 0;
+
+                    return ((Personal_record)pers).News;
+                    break;
+            }
+        }
+
+
+        }
 }
+
+
