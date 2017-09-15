@@ -14,7 +14,7 @@
             <h1>@Model.db.Name</h1>
             <p>@Model.db.Status</p>
         </div>
-        <div  class="Group_record_wall_all">
+        <div class="Group_record_wall_all">
             <div class="div_color_white">
                 @using (Html.BeginForm("Add_new_memes", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
@@ -25,11 +25,17 @@
                     <input type="submit" class="submit" value="Поделиться" />
                 }
             </div>
+            <div class="Wall_memes_all_memes_wall">
 
-            @Html.Action("Wall_memes", "Home", new { from = "Group_record", id = Model.db.Id })
+
+                
+                    @Html.Action("Wall_memes", "Home", new { from = "Group_record", id = Model.db.Id })
+                
+
+            </div>
         </div>
 
-    </div>
+        </div>
     <div class="Group_record_right_all_block">
         
         <div>

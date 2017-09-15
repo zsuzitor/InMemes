@@ -324,8 +324,14 @@
                 <input type="submit" class="submit" value="Поделиться" />
             }
         </div>
-        @Html.Action("Wall_memes","Home",new { from= "Personal_record" ,id=Model.db.Id})
-       
+        <div class="Wall_memes_all_memes_wall">
+
+
+            <ul class="Wall_memes_main_ul">
+                @Html.Action("Wall_memes", "Home", new { from = "Personal_record", id = Model.db.Id })
+            </ul>
+
+        </div>
 
     </div>
-</div>
+    </div>
