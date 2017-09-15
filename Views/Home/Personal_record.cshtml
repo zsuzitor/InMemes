@@ -38,9 +38,17 @@
                     <input type="submit" class="submit" value="Поделиться" />
                 }
             </div>
-            
-            @Html.ActionLink("Редактировать", "Edit_personal_record", "Home", new { }, new { @class = "link_standart_for_div" })
-        </div>
+            @if ((bool)ViewBag.My_page)
+            {
+                @Html.ActionLink("Редактировать", "Edit_personal_record", "Home", new { }, new { @class = "link_standart_for_div" })
+
+            }
+@if (!(bool)ViewBag.My_page)
+{
+    @Html.Action("Follow_ajax", "Home", new { from = "Personal_record", id = Model.db.Id })
+}
+
+            </div>
     </div>
 
     <div class="div_color_white Personal_record_friend_all_block">

@@ -54,12 +54,14 @@ namespace Im.Controllers
 
         public ActionResult Personal_record(string id)
         {
+            ViewBag.My_page = false;
             if (string.IsNullOrEmpty(id))
             {
                  id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             }
             var res = Record(id, "Personal_record");
-           
+            if(id== System.Web.HttpContext.Current.User.Identity.GetUserId())
+            ViewBag.My_page = true;
             return View(res);
         }
         
@@ -237,12 +239,14 @@ namespace Im.Controllers
         //TODO
         public ActionResult Follow_ajax(string from,string id ,bool click=false)
         {
+            //TODO добавить список для не подтвержденных друей со стороны отправляющего
             //Group
             //Personal_record
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             ViewBag.id = id;
+            ViewBag.from = from;
 
-            if(from== "Group")
+            if (from== "Group")
             {
                 var pers = Group(id, "DB");
                 var pers_peop = Record(check_id, "DB");
@@ -270,7 +274,7 @@ namespace Im.Controllers
                             if (mass_peop[i] != id)
                                 ((Personal_record)pers_peop).db.Groups_id += mass_peop[i] + ",";
                         }
-
+                        db.SaveChanges();
                         ViewBag.follow = false;
                         ViewBag.message = "Подписаться";
                     }
@@ -290,6 +294,7 @@ namespace Im.Controllers
                         ((Group_record)pers).db.Followers_id += check_id + ",";
                         ((Personal_record)pers_peop).db.Groups_count += 1;
                         ((Personal_record)pers_peop).db.Groups_id +=id +",";
+                        db.SaveChanges();
                         ViewBag.follow = true;
                         ViewBag.message = "Отписаться";
                     }
@@ -331,6 +336,7 @@ namespace Im.Controllers
                             if (mass_peop[i] != id)
                                 ((Personal_record)pers_peop).db.Friends_id += mass_peop[i] + ",";
                         }
+                        db.SaveChanges();
 
                         ViewBag.follow = false;
                         ViewBag.message = "Подписаться";
@@ -349,10 +355,13 @@ namespace Im.Controllers
                     {
                         //нужно подписать на человека
                         ((Personal_record)pers).db.Followers_id += check_id + ",";
-
                         
+
+
+
                         ((Personal_record)pers_peop).db.Friends_count += 1;
                         ((Personal_record)pers_peop).db.Friends_id += id + ",";
+                        db.SaveChanges();
 
                         ViewBag.follow = true;
                         ViewBag.message = "Удалить из друзей";

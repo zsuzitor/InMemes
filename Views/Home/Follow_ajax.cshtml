@@ -3,7 +3,7 @@
 
 <div class="Follow_ajax_main_div" id="Follow_ajax_main_div_id">
     @Ajax.ActionLink((string)ViewBag.message, "Follow_ajax", "Home",
-new { from = "Group", id = ViewBag.id, click = true },
+new { from = ViewBag.from, id = ViewBag.id, click = true },
 new AjaxOptions { UpdateTargetId = "Follow_ajax_main_div_id" }, new { @class = "link_standart_for_div" })
 </div>
 
