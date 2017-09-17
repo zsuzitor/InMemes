@@ -1,11 +1,87 @@
-﻿
+﻿@model Im.Models.Personal_record
 @{
     ViewBag.Title = "News";
 }
+@section scripts
+    {
+    @Scripts.Render("~/scripts/jquery-3.1.1.js")
+    @Scripts.Render("~/scripts/jquery.unobtrusive-ajax.js")
+}
 
-<h2>News</h2>
-<div>
-    @Html.Action("Wall_memes", "Home", new { })
+@{ 
 
+    AjaxOptions ajaxOpts = new AjaxOptions
+    {
+        UpdateTargetId = "Wall_memes_all_memes_wall_id_for_replace",
+        Url = Url.Action("Additionally_Download"),
+        InsertionMode = InsertionMode.InsertAfter
+
+    };
+
+}
+<script>
+    function click_subm_load_wall() {
+        var hid = document.getElementById('start_for_form');
+        hid.value = +hid.value + 10;
+
+    }
+
+</script>
+<div class="News_left_all">
+    <div class="News_top_block"></div>
+
+    <div class="div_color_white News_add_block">
+        @using (Html.BeginForm("Add_new_memes", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+            @Html.Hidden("bool_access", "person")
+            @Html.Hidden("id", Model.db.Id)
+            @Html.Editor("Description_mem", new { })
+            <input type="file" name="uploadImage[0]" />
+                <input type="submit" class="submit" value="Поделиться" />
+        }
+    </div>
+
+
+
+    <div class="Wall_memes_all_memes_wall">
+
+        <div id="Wall_memes_all_memes_wall_id_for_replace">
+
+            @Html.Action("Wall_memes", "Home", new { from = "News", id = Model.db.Id })
+
+        </div>
+        <div>
+
+
+            @using (@Ajax.BeginForm(ajaxOpts))
+            {
+
+                @Html.Hidden("start_for_form", 0)
+                @Html.Hidden("from", "News")
+                @Html.Hidden("id", Model.db.Id)
+                @Html.Hidden("what_download", "Wall")
+
+                <input type="submit" onclick="click_subm_load_wall();" value="Загрузить еще" class="" />
+            }
+
+        </div>
+
+    </div>
 </div>
+<div  class="News_right_all div_color_white">
+    
+    <ul>
+    <li>ВИД 1</li>
+    <li>ВИД 2</li>
+    <li>ВИД 3</li>
+    <li>ВИД 4</li>
+    <li>ВИД 5</li>
+    <li>ВИД 6</li>
+
+</ul>
+    
+</div>
+
+
+
 

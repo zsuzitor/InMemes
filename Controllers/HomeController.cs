@@ -105,8 +105,9 @@ namespace Im.Controllers
         {
             //TODO 
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            var res = (Personal_record)Record(check_id, "News");
 
-            return View();
+            return View(res);
         }
         //TODO 
         public ActionResult Mesages(string id)
@@ -461,6 +462,8 @@ namespace Im.Controllers
         [HttpPost]
         public ActionResult Additionally_Download(string what_download, string from, string id, int start_for_form = 0)
         {
+            if (start_for_form < 0)
+                start_for_form = 0;
             switch (what_download)
             {
                 case "Wall":
@@ -523,17 +526,15 @@ namespace Im.Controllers
             IPage_view res_page = null;
             var lst1 = Get_photo_post(uploadImage);
             var lst2 = Get_photo_post(lst1);
+            ViewBag.My_page = false;
             if (from == "person")
             {
                 string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
                 res_page  = Record(check_id, "Personal_record");
+                ViewBag.My_page = true;
                 db.Images.Add(lst2[0]);
                 db.SaveChanges();
-                //СЕЙЧАС УБРАТЬ
-                foreach (var i in db.Images)
-                {
-                    var t = i;
-                }
+                
 
                 ((Personal_record)res_page).db.Images_count += 1;
                 ((Personal_record)res_page).db.Images_id += lst2[0].Id + ",";
@@ -546,19 +547,14 @@ namespace Im.Controllers
 
 
                 db.SaveChanges();
-                //СЕЙЧАС УБРАТЬ
-                //res_page = Record(check_id, "Personal_record");
+                
 
             }
             if (from == "group")
             {
 
             }
-            //СЕЙЧАС УБРАТЬ
-            //foreach (var i in db.Images)
-            //{
-              //  var t = i;
-            //}
+            
             return View("Personal_record", res_page);
         }
             [HttpPost]
@@ -569,6 +565,7 @@ namespace Im.Controllers
             Memes res_db = null;
             //var res = new Memes_record();
             IPage_view res_page = null;
+            ViewBag.My_page = false;
             switch (bool_access)
             {
                 case "person"://добавление записи со страницы пользователя
@@ -577,6 +574,7 @@ namespace Im.Controllers
                     {
                         if (id == check_id)
                         {
+                            ViewBag.My_page = true;
                             var pers = (Personal_record)Record(id, "Personal_record");
                             res_db = new Memes(string.Concat(pers.db.Name, " ", pers.db.Surname), id)
                             {
@@ -642,7 +640,7 @@ namespace Im.Controllers
 
 
                 case "group"://добавление записи со страницы группы +проверки
-                    //TODO проверять можно ли добавить пост туда куда требуют
+                    //TODO проверять можно ли добавить пост туда куда требуют и в списке админов то  ViewBag.My_page = true;
                     {
                         var pers = (Group_record)Group(id, "DB");
                         res_db = new Memes(pers.db.Name, id)
@@ -921,7 +919,7 @@ namespace Im.Controllers
                         try
                         {
                             var str_mem_id = res.db.Wall_id.Split(',');
-                            for (int b = 0, i = str_mem_id.Count() - 2-start; i > 0 || b < 10; ++b, --i)
+                            for (int b = 0, i = str_mem_id.Count() - 2-start; i > 0 && b < 10; ++b, --i)
                             {
                                 string id_mem = str_mem_id[i];
                                 var mem_tmp = db.Memes.First(x1 => x1.Id.ToString() == id_mem);
@@ -942,7 +940,7 @@ namespace Im.Controllers
                         try
                         {
                             var str_mem_id = res.db.News_id.Split(',');
-                            for (int b = 0, i = str_mem_id.Count() - 2-start; i > 0 || b < 10; ++b, ++i)
+                            for (int b = 0, i = str_mem_id.Count() - 2-start; i > 0 && b < 10; ++b, ++i)
                             {
                                 string id_mem = str_mem_id[i];
                                 var mem_tmp = db.Memes.First(x1 => x1.Id.ToString() == id_mem);

@@ -6,22 +6,23 @@
 @model Im.Models.Personal_record
 @using Newtonsoft.Json;
 @{
-    ViewBag.Title = "Personal_record";
-    Im.Models.Person_info_short info_in_inf_aj = new Im.Models.Person_info_short(Model);
+        ViewBag.Title = "Personal_record";
+        Im.Models.Person_info_short info_in_inf_aj = new Im.Models.Person_info_short(Model);
 
 
-    AjaxOptions ajaxOpts = new AjaxOptions
-    {
-        UpdateTargetId = "Wall_memes_all_memes_wall_id_for_replace",
-        Url = Url.Action("Additionally_Download"),
-        
+        AjaxOptions ajaxOpts = new AjaxOptions
+        {
+            UpdateTargetId = "Wall_memes_all_memes_wall_id_for_replace",
+            Url = Url.Action("Additionally_Download"),
+            InsertionMode = InsertionMode.InsertAfter
 
     };
 }
 <script>
     function click_subm_load_wall() {
         var hid = document.getElementById('start_for_form');
-        hid.value = +hid.value+ 10;
+        hid.value = +hid.value + 10;
+
     }
 
 </script>
@@ -299,13 +300,13 @@
         </div>
         <div class="Wall_memes_all_memes_wall">
 
+            <div id="Wall_memes_all_memes_wall_id_for_replace">
 
-            
                 @Html.Action("Wall_memes", "Home", new { from = "Personal_record", id = Model.db.Id })
-            
-            
+            </div>
 
-        </div>
+
+            </div>
         <div>
 
 

@@ -1,14 +1,18 @@
 ﻿@model IEnumerable<Im.Models.Memes_record>
 
-<ul class="Wall_memes_main_ul">
-    @if (ViewBag.Count == 0)
+@if (ViewBag.Count == 0)
             {
-        <li>
-            <div class="div_color_white">
-                <p>Нет записей</p>
-            </div>
-        </li>
-    }
+    
+        <div class="div_color_white">
+            <p>Нет записей</p>
+        </div>
+   
+}
+@if(Model.Count()>0)
+{ 
+<ul class="Wall_memes_main_ul">
+
+    
     @foreach (var i in Model)
     {
         <li>
@@ -41,4 +45,4 @@
         </li>
     }
 </ul>
-<div id="Wall_memes_all_memes_wall_id_for_replace"></div>
+}

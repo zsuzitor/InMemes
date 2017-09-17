@@ -7,29 +7,56 @@
     }
 
 }
+
+<script>
+    var t;
+    
+    /*
+    $(window).load(function () {
+        var window_height = $(window).height();
+        var up_1 = document.getElementById("Layout_left_menu_id");
+        up_1.height = window_height;
+            
+    });*/
+    function up() {
+        var top = Math.max(document.body.scrollTop, document.documentElement.scrollTop);
+        if (top > 0) {
+            window.scrollBy(0, -100);
+            t = setTimeout('up()', 20);
+        } else clearTimeout(t);
+        return false;
+    }
+
+</script>
 @if (list!=null)
 {
-    <div class="Layout_left_menu">
-        <ul>
-            @for (int i=0;i< list.Count;++i)
-            {
-                if (!string.IsNullOrEmpty(list[i]))
+    <div class="Layout_left_menu"id="Layout_left_menu_id">
+        <div class="Layout_left_menu_up">
+            <ul>
+                @for (int i = 0; i < list.Count; ++i)
                 {
-            <li>
-                @Html.ActionLink(list[i], list[++i], new { id = ViewBag.id }, new { })
-            </li>
+                    if (!string.IsNullOrEmpty(list[i]))
+                    {
+                        <li>
+                            @Html.ActionLink(list[i], list[++i], new { id = ViewBag.id }, new { })
+                        </li>
+                    }
                 }
-            }
-            
-        </ul>
-        <hr>
-        @Html.ActionLink("Редактировать","Edit_personal_record", "Home",new { },new { })
-        @{ 
+
+            </ul>
+            <hr>
+            @Html.ActionLink("Редактировать", "Edit_personal_record", "Home", new { }, new { })
+            @{
 //@Html.ActionLink("Создать группу", "Add_new_group", "Home", new { }, new { })
 
-        }
-
-
+            }
+        </div>
+        <div id="Left_menu_personal_up_block_id" class="Left_menu_personal_up_block" onclick="return up()">
+            <div class="Left_menu_personal_up_block_inscription">
+                <h1>^</h1><p>НАВЕРХ</p>
+            </div>
+        </div>
     </div>
+    
             }
 
