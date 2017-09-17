@@ -124,10 +124,12 @@ div.main_header_r_l_but:hover{
 
 /*Left_menu_personal*/
 div.Left_menu_personal_up_block {
-    height: 100%;
+   
     padding-top: 150px;
-    width: 50%;
-    transition:2s;
+    width: 120px;
+    transition: 1s;
+    position: fixed;
+    height: 100%;
 }
     div.Left_menu_personal_up_block:hover {
         
@@ -143,6 +145,7 @@ div.Left_menu_personal_up_block {
 }
 /*Layout*/
 div .Layout_left_menu {
+    /*СЮДА*/
     width: 200px;
     position: fixed;
     height: 1000px;
@@ -402,11 +405,50 @@ div.Groups_personal_one_group_info {
 }
 
 /*Group_record*/
-
-div.Group_record_left_all_block {
-    
-    width:450px;
-    
+div.Group_record_group_img_block {
+    border-radius: 30px;
+    display: inline-block;
+    vertical-align: top;
+    /*убрать*/
+    width: 60px;
+    height: 60px;
+}
+div.Group_record_one_group {
+    padding-left: 10px;
+    padding-top: 5px;
+    margin-top: 10px;
+    height: 100px;
+}
+div.Group_record_groups_block {
+    margin-top: 20px;
+}div.Group_record_followers_block {
+    margin-top: 20px;
+}div.Group_record_one_friend_img {
+    width: 90px;
+    height: 90px;
+    border-radius: 50px;
+}
+div.Group_record_one_line_friend {
+    margin-top: 10px;
+}
+div.Group_record_one_friend_block {
+    width: 95px;
+    height: 120px;
+    margin-left: 5px;
+    display: inline-block;
+    vertical-align: top;
+}
+div.Group_record_not_main_img_small {
+    width: 80px;
+    height: 100px;
+    margin-left: 2px;
+    display: inline-block;
+    vertical-align: top;
+}
+div.Group_record_photo_block {
+    margin-top:30px;
+}div.Group_record_left_all_block {
+    width: 450px;
     display: inline-block;
     vertical-align: top;
 }

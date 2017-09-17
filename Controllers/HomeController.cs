@@ -49,12 +49,43 @@ namespace Im.Controllers
             db.Users.First().Groups_id = "" ;
             db.SaveChanges();
             */
-            return View();
+            bool loginned = false;
+            string id = null;
+            Personal_record res = null;
+            //ViewBag.My_page = false;
+            try
+            {
+                id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                if (string.IsNullOrEmpty(id))
+                    throw new Exception();
+                
+                    ViewBag.My_page = true;
+                loginned = true;
+                res = (Personal_record)Record(id, "Personal_record");
+            }
+            catch
+            {
+                
+                loginned = false;
+            }
+            if (loginned)
+            {
+                return View("Personal_record",res);
+            }
+            else
+            {
+                //TODO
+                //на страницу регистрации.логина
+                return View();
+            }
+
+
+            
         }
 
         public ActionResult Personal_record(string id)
         {
-            ViewBag.My_page = false;
+           // ViewBag.My_page = false;
             if (string.IsNullOrEmpty(id))
             {
                  id = System.Web.HttpContext.Current.User.Identity.GetUserId();
@@ -65,30 +96,62 @@ namespace Im.Controllers
             return View(res);
         }
         
-            public ActionResult Groups_personal(string id)
+            public ActionResult Groups_personal(string from,string id)
         {
             if (string.IsNullOrEmpty(id))
             {
                 id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             }
-            var res = Record(id,"Groups_all");
+            IPage_view res = null;
+            switch (from)
+            {
+                case "Personal_record":
+                     res = Record(id, "Groups_all");
+                    break;
+                case "Group_record":
+                    break;
+            }
+            //var res = Record(id,"Groups_all");
 
 
             return View(((Personal_record)res).Groups);
         }
         public ActionResult Group_record(string id)
         {
-            var res = Group(id, "Group_record");
+            var res = (Group_record)Group(id, "Group_record");
+            var check_id= System.Web.HttpContext.Current.User.Identity.GetUserId();
+            foreach (var i in res.db.Admins_id.Split(','))
+            {
+
+                if (i == check_id)
+                {
+                    ViewBag.My_page = true;
+                }
+            }
 
 
             return View(res);
         }
 
         //TODO 
-        public ActionResult Record_photo_page(string id)
+        public ActionResult Record_photo_page(string from, string id)
         {
             //TODO закидывать фото юзеру и проверять что бы его фото отдавать продумать мб вообще не нужно
             //смотреть че как и фото отображать
+            if (string.IsNullOrEmpty(id))
+            {
+                id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            }
+            IPage_view res = null;
+
+            switch (from)
+            {
+                case "Personal_record":
+                    res = Record(id, "Groups_all");
+                    break;
+                case "Group_record":
+                    break;
+            }
             //
             return View();
         }
@@ -118,10 +181,25 @@ namespace Im.Controllers
             return View();
         }
         //TODO 
-        public ActionResult Friends(string id)
+        public ActionResult Friends(string from, string id)
         {
             //TODO 
-            var res = db.Users.First(x1 => x1.Id == id);
+            if (string.IsNullOrEmpty(id))
+            {
+                id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            }
+            IPage_view res = null;
+
+            switch (from)
+            {
+                case "Personal_record":
+                    res = Record(id, "Groups_all");
+                    break;
+                case "Group_record":
+                    break;
+            }
+
+            //var res = db.Users.First(x1 => x1.Id == id);
 
             return View();
         }
@@ -143,12 +221,22 @@ namespace Im.Controllers
         }
         
         //TODO 
-        public ActionResult Edit_group_record()
+        public ActionResult Edit_group_record(string id)
         {
             //TODO 
+            //
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
-            
-            return View();
+            var res = (Group_record)Group(id,"DB");
+            foreach(var i in res.db.Admins_id.Split(','))
+            {
+
+                if (i == check_id)
+                {
+                    return View(res);
+                }
+            }
+            res = (Group_record)Group(id, "Group_record");
+            return View("Group_record", res);
         }
         //TODO 
         public ActionResult Edit_personal_record()
@@ -526,7 +614,7 @@ namespace Im.Controllers
             IPage_view res_page = null;
             var lst1 = Get_photo_post(uploadImage);
             var lst2 = Get_photo_post(lst1);
-            ViewBag.My_page = false;
+            //ViewBag.My_page = false;
             if (from == "person")
             {
                 string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
@@ -565,7 +653,7 @@ namespace Im.Controllers
             Memes res_db = null;
             //var res = new Memes_record();
             IPage_view res_page = null;
-            ViewBag.My_page = false;
+           // ViewBag.My_page = false;
             switch (bool_access)
             {
                 case "person"://добавление записи со страницы пользователя
@@ -741,7 +829,11 @@ namespace Im.Controllers
                     var str = ((Group_record)res).db.Followers_id.Split(',');
                     for (int b = 0, i = str.Count() - 2; i >= 0 && b < 5; --i, b++)
                     {
-                        ((Group_record)res).Followers.Add(((Person_short)Record(str[i], "Person_short")));
+                        //СЕЙЧАС
+                        var a = ((Person_short)Record(str[i], "Person_short"));
+
+                        //((Group_record)res).Followers.Add(((Person_short)Record(str[i], "Person_short")));
+                        ((Group_record)res).Followers.Add(a);
                     }
                         
                     
@@ -852,7 +944,25 @@ namespace Im.Controllers
                     }
                     if (bool_fullness == "Person_short")
                     {
-                        
+                        byte[] a_b_tmp = null;
+                        try
+                        {
+                            var img = res.db.Main_images_id.Split(',');
+                            int id_tmp = Convert.ToInt32(img[img.Count() - 2]);
+
+                            var a_b123_tmp = db.Images.First(x1 => x1.Id == id_tmp);
+
+
+                             a_b_tmp = db.Images.First(x1 => x1.Id == id_tmp).bytes;
+
+
+                            
+                        }
+                        catch
+                        {
+
+                        }
+                            return new Person_short(res.db.Id, a_b_tmp, res.db.Name);
                     }
                         //АВА
                         if (bool_fullness == "Personal_record")
@@ -863,11 +973,7 @@ namespace Im.Controllers
                             int id_tmp = Convert.ToInt32(main_img[main_img.Count() - 2]);
 
                             var a_b123_tmp = db.Images.First(x1 => x1.Id == id_tmp);
-                            //СЕЙЧАС
-                            //foreach (var i in db.Images)
-                            //{
-                              //  var t = i;
-                           // }
+                           
 
                             var a_b_tmp = db.Images.First(x1 => x1.Id == id_tmp).bytes;
 
