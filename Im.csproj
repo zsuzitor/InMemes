@@ -275,6 +275,7 @@
     <Content Include="Views\Home\Add_new_group_ajax.cshtml" />
     <Content Include="Views\Home\Follow_ajax.cshtml" />
     <Content Include="Views\Home\Edit_group_record.cshtml" />
+    <Content Include="Views\Home\Memes_partial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

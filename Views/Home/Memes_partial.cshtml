@@ -1,0 +1,74 @@
+﻿@model Im.Models.Memes_record
+@section scripts
+    {
+    @Scripts.Render("~/scripts/jquery-3.1.1.js")
+    @Scripts.Render("~/scripts/jquery.unobtrusive-ajax.js")
+}
+@{ 
+    string Memes_under_block_small_like_name = "Memes_under_block_small";
+    string Memes_under_block_small_repost_name = "Memes_under_block_small";
+    if ((bool)ViewBag.like)
+    {
+        Memes_under_block_small_like_name = "Memes_under_block_small_true";
+    }
+    if ((bool)ViewBag.repost)
+    {
+        Memes_under_block_small_like_name = "Memes_under_block_small_true";
+    }
+}
+
+
+
+
+<div class="div_color_white">
+    <p>@Model.db.Description</p>
+    @if (Model.db.Image != null)
+    {
+        <div class="Wall_memes_one_mem_img">
+            @Html.Raw(string.Concat("<img class='' id='' ", " src=\"data:image/jpeg;base64,"
+                                                                     , Convert.ToBase64String(Model.db.Image), "\" />"))
+        </div>
+    }
+
+
+    @if (Model.Images != null)
+    {
+        foreach (var i2 in Model.Images)
+        {
+            Html.Raw(string.Concat("<img  class=''  id =''", " src=\"data:image/jpeg;base64,"
+, Convert.ToBase64String(Model.db.Image), "\" />"));
+        }
+    }
+    <hr />
+    <div class="Memes_partial_under_all_block">
+
+
+        <div class=@Memes_under_block_small_like_name>
+        @Ajax.ActionLink("Лайков:"+ Model.db.Liked_id.Split(',').Count(), "Action_memes", "Home",
+new { id=Model.db.Id, action_m = "like" },
+new AjaxOptions { UpdateTargetId = string.Concat("Wall_memes_mem_bock_id_", Model.db.Id) }, new { @class = "link_standart_for_div" })
+            @{ 
+//ViewBag.like от этого класс
+// ViewBag.repost
+            }
+
+
+        </div>
+        <div class="Memes_under_block_small">
+        
+        
+        
+        Коменты</div>
+        <div class=@Memes_under_block_small_repost_name>
+        @Ajax.ActionLink("Репостов:" + Model.db.Repost_id.Split(',').Count(), "Action_memes", "Home",
+new { id = Model.db.Id, action_m = "repost" },
+new AjaxOptions { UpdateTargetId = string.Concat("Wall_memes_mem_bock_id_", Model.db.Id) }, new { @class = "link_standart_for_div" })
+
+        
+        
+        </div>
+    </div>
+</div>
+
+
+

@@ -75,19 +75,24 @@ div.div_color_white{
 }
 
 
-div.Memes_under_block_small{
-    width:70px;
-    height:30px;
+div.Memes_under_block_small {
+    width: 70px;
+    height: 30px;
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 20px;
 }
-
-
-
-
-
-
-
-
-
+div.Memes_under_block_small_true {
+    width: 70px;
+    height: 30px;
+    display: inline-block;
+    vertical-align: top;
+    background-color: blueviolet;
+    margin-left: 20px;
+}
+div.Memes_partial_under_all_block{
+    height:45px;
+}
 
 /*main_header*/
 div.main_header {

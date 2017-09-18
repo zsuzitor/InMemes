@@ -247,11 +247,89 @@ namespace Im.Controllers
 
             return View();
         }
+        //TODO 
+        public ActionResult Action_memes(string id,string action_m)
+        {
+            //TODO 
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            var mem = Memes(id);
+            switch (action_m)
+            {
+                case "like":
+                    {
+                        var mass_liked = mem.db.Liked_id.Split(',');
+                        List<string> mass_liked_1 = new List<string>();
+                        bool liked = false;
+                        
+                            foreach (var i in mass_liked)
+                            {
+                                if (!string.IsNullOrEmpty(i))
+                                {
+                                if (i == check_id)
+                                    liked = true;
+                                else
+                                    mass_liked_1.Add(i);
+                                }
+                            }
+                        if (!liked)
+                        {
+                            mem.db.Liked_id += check_id + ",";
+                            ViewBag.like = true;
+
+                            
+
+                        }
+                        else
+                        {
+                            //уже лайкнул
+                            mem.db.Liked_id ="";
+                            foreach(var i in mass_liked_1)
+                            {
+                                mem.db.Liked_id +=i +",";
+                            }
+                            ViewBag.like = false;
+                        }
+                        db.SaveChanges();
+
+                    }
+                    
+                    break;
+                case "repost":
+                    {
+                        var pers =(Personal_record) Record(check_id, "DB");
+                        pers.db.Wall_id += mem.db.Id+",";
+                        bool fl = false;
+                        foreach(var i in mem.db.Repost_id.Split(','))
+                        {
+                            if (i == check_id)
+                                fl = true;
+                        }
+                        if (!fl)
+                            mem.db.Repost_id += check_id + ",";
+
+                        db.SaveChanges();
+
+                    }
+                    break;
+                case "":
+                    break;
+            }
+
+
+            return PartialView("Memes_partial", mem);
+        }
 
 
         //-PARTIAL BLOCK------------------------------------------------------------------------------------------------------------------------------//
+        [ChildActionOnly]
+        public ActionResult Memes_partial(string from,string id_mem)
+        {
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            var res = Memes(id_mem);
+            return PartialView(res);
+        }
 
-        
+
 
         [ChildActionOnly]
         public ActionResult Left_menu_personal()
@@ -267,8 +345,8 @@ namespace Im.Controllers
         [ChildActionOnly]
         public ActionResult Wall_memes(string from,string id,int start=0)
         {
-            var res= Wall_memes_function(from, id, start);
-            return PartialView(res);
+           var res = Wall_memes_function(from, id, start);
+            return PartialView(res.Reverse());
 
 
 
@@ -558,6 +636,7 @@ namespace Im.Controllers
                     {
                         var res = Wall_memes_function(from, id, start_for_form);
                         return PartialView("Wall_memes", res);
+                        //return PartialView("Wall_memes");
                     }
                     
                     break;
@@ -790,6 +869,9 @@ namespace Im.Controllers
         public Memes_record Memes(string id)
         {
             var not_res= db.Memes.First(x1 => x1.Id.ToString() == id);
+            ViewBag.like = false;
+            ViewBag.repost = false;
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             Memes_record res=new Memes_record(not_res);
             try
             {
@@ -802,8 +884,31 @@ namespace Im.Controllers
             {
 
             }
-            
 
+            
+            //проверка на лайк
+            foreach (var i in not_res.Liked_id.Split(','))
+            {
+                if (!string.IsNullOrEmpty(i))
+                {
+                    if (i == check_id)
+                        ViewBag.like = true;
+                    
+                }
+            }
+            //проверка на репост
+            foreach (var i in not_res.Repost_id.Split(','))
+            {
+                if (!string.IsNullOrEmpty(i))
+                {
+                    if (i == check_id)
+                        ViewBag.repost = true;
+
+                }
+            }
+
+
+            
 
             return res;
         }
@@ -886,6 +991,8 @@ namespace Im.Controllers
             }
             if (bool_fullness == "Wall")
             {
+                res = new Group_record(not_res);
+                /*
                 try
                 {
                     res = new Group_record(not_res);
@@ -901,6 +1008,7 @@ namespace Im.Controllers
                 {
 
                 }
+                */
 
             }
                 if (bool_fullness == "Group_short"){
@@ -1022,6 +1130,7 @@ namespace Im.Controllers
                     //мемы стена
                     if (bool_fullness == "Wall")
                     {
+                        /*
                         try
                         {
                             var str_mem_id = res.db.Wall_id.Split(',');
@@ -1036,13 +1145,13 @@ namespace Im.Controllers
                         {
 
                         }
-                        
+                        */
                         
                     }
                     //мемы новости
                     if (bool_fullness == "News")
                     {
-
+                        /*
                         try
                         {
                             var str_mem_id = res.db.News_id.Split(',');
@@ -1057,7 +1166,7 @@ namespace Im.Controllers
                         {
 
                         }
-                        
+                        */
                     }
                     if (bool_fullness == "Groups_all")
                     {
@@ -1145,38 +1254,42 @@ namespace Im.Controllers
         }
 
 
-        IEnumerable<Memes_record> Wall_memes_function(string from, string id, int start = 0)
+        IEnumerable<string> Wall_memes_function(string from, string id, int start = 0)
         {
             if (string.IsNullOrEmpty(id))
                 id = System.Web.HttpContext.Current.User.Identity.GetUserId();
 
             IPage_view pers = null;
+            IEnumerable<string> res = null;
             ViewBag.start = start;
             switch (from)
             {
                 case "Personal_record":
                     pers = Record(id, "Wall", start);
+                    res = ((Personal_record)pers).db.Wall_id.Split(',');
                     if (start == 0)
-                        if (((Personal_record)pers).Wall.Count == 0)
+                        if (res.Count() == 0)
                             ViewBag.Count = 0;
 
 
-                    return ((Personal_record)pers).Wall;
+                    return res;
                     break;
 
                 case "Group_record":
                     pers = Group(id, "Wall", start);
-                    return ((Group_record)pers).Wall;
+                    res = ((Group_record)pers).db.Wall_id.Split(','); 
+                    return res;
                     break;
 
                 default://"News"
                     string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
                     pers = Record(check_id, "News", start);
+                    res = ((Personal_record)pers).db.Wall_id.Split(',');
                     if (start == 0)
-                        if (((Personal_record)pers).News.Count == 0)
+                        if (res.Count() == 0)
                             ViewBag.Count = 0;
 
-                    return ((Personal_record)pers).News;
+                    return res;
                     break;
             }
         }
