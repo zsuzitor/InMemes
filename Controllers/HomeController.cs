@@ -181,27 +181,49 @@ namespace Im.Controllers
             return View();
         }
         //TODO 
-        public ActionResult Friends(string from, string id)
+        public ActionResult Friends(string from, string id,string what)
         {
             //TODO 
+            //what= Friends, Admins ,Followers
+            if (string.IsNullOrEmpty(id))
+            {
+                id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            }
+            Personal_record res = null;
+
+            
+                    res = (Personal_record)Record(id, "Friends");
+                    
+
+            //var res = db.Users.First(x1 => x1.Id == id);
+
+            return View(res);
+        }
+        //TODO 
+        public ActionResult Followers_group(string from, string id, string what)
+        {
+            //TODO 
+            //what= Friends, Admins ,Followers
             if (string.IsNullOrEmpty(id))
             {
                 id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             }
             IPage_view res = null;
 
-            switch (from)
+            switch (what)
             {
-                case "Personal_record":
-                    res = Record(id, "Groups_all");
+                case "Followers":
+
+                    res = Group(id, "Followers");
                     break;
-                case "Group_record":
+                case "Admins":
+                    res = Group(id, "Admins");
                     break;
             }
 
             //var res = db.Users.First(x1 => x1.Id == id);
 
-            return View();
+            return View((Group_record)res);
         }
         //TODO 
         public ActionResult Music(string id)
@@ -920,6 +942,7 @@ namespace Im.Controllers
             //Group_record
             //Wall
             //Group_short
+            //Followers  Admins
 
             IPage_view res = null;
             var not_res= db.Groups.First(x1 => x1.Id.ToString() == id);
@@ -934,7 +957,7 @@ namespace Im.Controllers
                     var str = ((Group_record)res).db.Followers_id.Split(',');
                     for (int b = 0, i = str.Count() - 2; i >= 0 && b < 5; --i, b++)
                     {
-                        //СЕЙЧАС
+                        //-СЕЙЧАС
                         var a = ((Person_short)Record(str[i], "Person_short"));
 
                         //((Group_record)res).Followers.Add(((Person_short)Record(str[i], "Person_short")));
@@ -947,7 +970,25 @@ namespace Im.Controllers
                 {
 
                 }
-                
+                try
+                {
+                    var str = ((Group_record)res).db.Admins_id.Split(',');
+                    for (int b = 0, i = str.Count() - 2; i >= 0 && b < 5; --i, b++)
+                    {
+                        //-СЕЙЧАС
+                        var a = ((Person_short)Record(str[i], "Person_short"));
+
+                        //((Group_record)res).Followers.Add(((Person_short)Record(str[i], "Person_short")));
+                        ((Group_record)res).Admins.Add(a);
+                    }
+
+
+                }
+                catch
+                {
+
+                }
+
                 try
                 {
                     var str = ((Group_record)res).db.Images_id.Split(',');
@@ -985,6 +1026,33 @@ namespace Im.Controllers
                 }
                 catch
                 {
+
+                }
+
+            }
+            if (bool_fullness == "Followers")
+            {
+                res = new Group_record(not_res);
+                var lst = not_res.Followers_id.Split(',');
+                foreach(var i in lst)
+                {
+                    if (string.IsNullOrEmpty(i))
+                    {
+                        ((Group_record)res).Followers.Add((Person_short)Record(i, "Person_short"));
+                    }
+                    
+                }
+            }
+            if (bool_fullness == "Admins")
+            {
+                res = new Group_record(not_res);
+                var lst = not_res.Admins_id.Split(',');
+                foreach (var i in lst)
+                {
+                    if (string.IsNullOrEmpty(i))
+                    {
+                        ((Group_record)res).Admins.Add((Person_short)Record(i, "Person_short"));
+                    }
 
                 }
 
@@ -1031,6 +1099,7 @@ namespace Im.Controllers
             //News
             //Groups_all
             //Person_short ????
+            //Friends Followers
 
 
 
@@ -1123,6 +1192,49 @@ namespace Im.Controllers
                         {
 
                         }
+                        try
+                        {
+                            //заполнение подписчиков думаю не нужно
+                            /*
+                            var lst = res.db.Followers_id.Split(',');
+
+                            for (int b = 0, i = lst.Count() - 2; i >= 0 && b < 5; --i, b++)
+                            {
+
+                                res.Followers.Add((Person_short)Record(lst[i], "Person_short"));
+                            }
+                            var lst2 = res.db.Followers_id.Split(',');
+
+                            for (int b = 0, i = lst2.Count() - 2; i >= 0 && b < 5; --i, b++)
+                            {
+
+                                res.Followers.Add((Person_short)Record(lst2[i], "Person_short"));
+                            }
+                            */
+
+                        }
+                        catch
+                        {
+
+                        }
+                        try
+                        {
+                            //заполнение друзей
+                            var lst = res.db.Friends_id.Split(',');
+                            
+                            for (int b = 0, i = lst.Count() - 2; i >= 0 && b < 5; --i, b++)
+                            {
+
+                                res.Friends.Add((Person_short)Record(lst[i], "Person_short"));
+                            }
+
+
+                        }
+                        catch
+                        {
+
+                        }
+
 
                     }
                     
@@ -1167,6 +1279,32 @@ namespace Im.Controllers
 
                         }
                         */
+                    }
+                    if (bool_fullness == "Friends")
+                    {
+                        var lst = res.db.Friends_id.Split(',');
+                        foreach(var i in lst)
+                        {
+                            if(string.IsNullOrEmpty(i))
+                            res.Friends.Add((Person_short)Record(i, "Person_short"));
+                        }
+
+                    }
+                    if (bool_fullness == "Followers")//мб разделить
+                    {
+                        var lst = res.db.Followers_ignore_id.Split(',');
+                        foreach (var i in lst)
+                        {
+                            if (string.IsNullOrEmpty(i))
+                                res.Followers_ignore.Add((Person_short)Record(i, "Person_short"));
+                        }
+                        var lst2 = res.db.Followers_id.Split(',');
+                        foreach (var i in lst)
+                        {
+                            if (string.IsNullOrEmpty(i))
+                                res.Followers.Add((Person_short)Record(i, "Person_short"));
+                        }
+
                     }
                     if (bool_fullness == "Groups_all")
                     {

@@ -244,6 +244,8 @@ namespace Im.Models
 
         public List<Group_short> Groups { get; set; }
 
+        //админы
+        public List<Person_short> Admins { get; set; }
         public Group_record(Group a)
         {
             db = a;
