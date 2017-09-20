@@ -509,3 +509,81 @@ div.News_right_all {
 div.News_add_block{
     margin-top:50px;
 }
+
+/*Friends*/
+
+div.Friends_left_all_block {
+    display: inline-block;
+    vertical-align: top;
+    width:500px;
+}
+div.Friends_right_all_block {
+    width: 200px;
+    height: 150px;
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 70px;
+}
+div.Friends_left_top_block{
+    height:100px;
+}
+
+div.Friends_one_friend_block {
+    
+    height: 120px;
+    margin-top: 15px;
+    
+}
+div.Friends_one_friend_img {
+    width: 90px;
+    height: 90px;
+    border-radius: 50px;
+    display: inline-block;
+    vertical-align: top;
+}
+div.Friends_one_friend_info_all {
+    display: inline-block;
+    vertical-align: top;
+    width: 90px;
+    height: 100%;
+}
+
+/*Followers_group*/
+
+div.Followers_group_left_all_block {
+    display: inline-block;
+    vertical-align: top;
+    width: 500px;
+}
+
+div.Followers_group_right_all_block {
+    width: 200px;
+    height: 150px;
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 70px;
+}
+
+div.Followers_group_left_top_block {
+    height: 100px;
+}
+
+div.Followers_group_one_friend_block {
+    height: 120px;
+    margin-top: 15px;
+}
+
+div.Followers_group_one_friend_img {
+    width: 90px;
+    height: 90px;
+    border-radius: 50px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+div.Followers_group_one_friend_info_all {
+    display: inline-block;
+    vertical-align: top;
+    width: 90px;
+    height: 100%;
+}

@@ -96,7 +96,7 @@ namespace Im.Controllers
             return View(res);
         }
         
-            public ActionResult Groups_personal(string from,string id)
+            public ActionResult Groups_personal(string id, string from= "Personal_record")
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -215,15 +215,19 @@ namespace Im.Controllers
                 case "Followers":
 
                     res = Group(id, "Followers");
+                    return View(((Group_record)res).Followers);
+                    //ViewBag.Who_display = "Followers";
                     break;
                 case "Admins":
                     res = Group(id, "Admins");
+                    return View(((Group_record)res).Admins);
+                    //ViewBag.Who_display = "Admins";
                     break;
             }
 
             //var res = db.Users.First(x1 => x1.Id == id);
 
-            return View((Group_record)res);
+            return View();
         }
         //TODO 
         public ActionResult Music(string id)
