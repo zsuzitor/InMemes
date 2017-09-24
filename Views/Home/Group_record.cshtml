@@ -204,8 +204,8 @@
                                 <a class="link_standart_for_circle_30_div" href='@Url.Action("Group_record", "Home",new {id = i.Id } )'></a>
                             </div>
                         }
-                        <div>
-                            <p>@Html.ActionLink(i.Name, "Group_record", "Home", new { id = i.Id }, new { @class = "link_standart_for_div" }) </p>
+                        <div  class="Group_record_one_group_info">
+                            @Html.ActionLink(i.Name, "Group_record", "Home", new { id = i.Id }, new { @class = "link_standart_for_div" }) 
                         </div>
                     </div>
                 }
@@ -224,7 +224,7 @@
 
 
 
-        <div class="div_color_white">
+        <div class="Group_record_admins_all_block div_color_white">
             <div>
                 @Html.ActionLink("Администраторы", "Followers_group", "Home", new { what = "Admins", from = "Group_record", id = Model.db.Id }, new { @class = "link_standart_for_div" })
 
@@ -232,24 +232,26 @@
                  </div>
             @foreach (var i in Model.Admins)
             {
-                <div class="">
-                    @if (i.Image != null)
-                    {
-                        <div class="" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.Image) );background-size: cover; ">
-                            <a class="link_standart_for_circle_30_div" href='@Url.Action("Personal_record", "Home",new { id = i.Id } )'></a>
-                        </div>
-                    }
-                    @if (i.Image == null)
-                    {
-                        //background-size: cover;background - size: 60px 60px;
+                <div class="Group_record_one_admin_block">
+                    
+                        @if (i.Image != null)
+                        {
+                            <div class="Group_record_one_admin_img_block" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.Image) );background-size: cover; ">
+                                <a class="link_standart_for_circle_30_div" href='@Url.Action("Personal_record", "Home",new { id = i.Person_id } )'></a>
+                            </div>
+                        }
+                        @if (i.Image == null)
+                        {
+                            //background-size: cover;background - size: 60px 60px;
 
-                        <div class="" style="background: url('/Content/images/H98hxNY4xTo.jpg');background-size: cover;">
-                            <a class="link_standart_for_circle_30_div" href='@Url.Action("Personal_record", "Home",new {id = i.Id } )'></a>
-                        </div>
-                    }
-                    <div>
+                            <div class="Group_record_one_admin_img_block" style="background: url('/Content/images/H98hxNY4xTo.jpg');background-size: cover;">
+                                <a class="link_standart_for_circle_30_div" href='@Url.Action("Personal_record", "Home",new {id = i.Person_id } )'></a>
+                            </div>
+                        }
+                   
+                    <div class="Group_record_one_admin_block_info">
 
-                        <p>@Html.ActionLink(i.Name, "Personal_record", "Home", new { id = i.Id }, new { @class = "link_standart_for_div" }) </p>
+                        @Html.ActionLink(i.Name, "Personal_record", "Home", new { id = i.Id }, new { @class = "link_standart_for_div" }) 
                     </div>
                 </div>
             }

@@ -410,15 +410,39 @@ div.Groups_personal_one_group_info {
 }
 
 /*Group_record*/
-div.Group_record_group_img_block {
+div.Group_record_one_admin_block_info {
+    display: inline-block;
+    vertical-align: top;
+    width: 235px;
+    text-align: center;
+    height: 60px;
+}div.Group_record_one_admin_img_block {
+    border-radius: 30px;
+    display: inline-block;
+    vertical-align: top;
+    width: 60px;
+    height: 60px;
+}div.Group_record_one_admin_block {
+     margin-top:10px;
+}div.Group_record_admins_all_block {
+    margin-top: 20px;
+}div.Group_record_group_img_block {
     border-radius: 30px;
     display: inline-block;
     vertical-align: top;
     /*убрать*/
+
+
     width: 60px;
     height: 60px;
 }
-div.Group_record_one_group {
+div.Group_record_one_group_info {
+    display: inline-block;
+    vertical-align: top;
+    width: 235px;
+    text-align: center;
+    height:60px;
+}div.Group_record_one_group {
     padding-left: 10px;
     padding-top: 5px;
     margin-top: 10px;
@@ -586,4 +610,33 @@ div.Followers_group_one_friend_info_all {
     vertical-align: top;
     width: 90px;
     height: 100%;
+}
+
+
+/*Messages*/
+
+div.Messages_left_block_all {
+    display: inline-block;
+    vertical-align: top;
+    width: 500px;
+}
+div.Messages_right_block_all {
+    width: 200px;
+    height: 150px;
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 70px;
+}
+div.Messages_left_block_top{
+    height:200px;
+}
+div.Messages_one_message_block{
+    height:200px;
+}
+
+div.Messages_one_dialog_img{
+
+}
+div.Messages_one_message_text{
+
 }

@@ -1,4 +1,4 @@
-﻿@model Im.Models.Personal_record
+﻿@model IEnumerable<Im.Models.Person_short>
 
 @{
     ViewBag.Title = "Friends";
@@ -10,7 +10,7 @@
         <div>
 
 
-            @foreach (var i in Model.Friends)
+            @foreach (var i in Model)
             {
 
 

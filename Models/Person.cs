@@ -194,7 +194,7 @@ namespace Im.Models
 
         public class Message_obg_record
     {
-        Message_obg db;
+        public Message_obg db;
         
         public List<Person_short> Person { get; set; }
        
@@ -254,6 +254,7 @@ namespace Im.Models
             Images = new List<byte[]>();
             Main_images = new List<byte[]>();
             Groups = new List<Group_short>();
+            Admins = new List<Person_short>();
         }
 
     }

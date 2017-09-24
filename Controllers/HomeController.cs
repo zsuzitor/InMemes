@@ -91,7 +91,8 @@ namespace Im.Controllers
                  id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             }
             var res = Record(id, "Personal_record");
-            if(id== System.Web.HttpContext.Current.User.Identity.GetUserId())
+            
+            if (id== System.Web.HttpContext.Current.User.Identity.GetUserId())
             ViewBag.My_page = true;
             return View(res);
         }
@@ -120,14 +121,7 @@ namespace Im.Controllers
         {
             var res = (Group_record)Group(id, "Group_record");
             var check_id= System.Web.HttpContext.Current.User.Identity.GetUserId();
-            foreach (var i in res.db.Admins_id.Split(','))
-            {
-
-                if (i == check_id)
-                {
-                    ViewBag.My_page = true;
-                }
-            }
+            
 
 
             return View(res);
@@ -173,12 +167,27 @@ namespace Im.Controllers
             return View(res);
         }
         //TODO 
-        public ActionResult Mesages(string id)
+        public ActionResult Messages(string id)
         {
             //TODO 
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            var pers = Record(check_id, "Messages");
 
-            return View();
+            return View(((Personal_record)pers).Message);
+        }
+        //TODO 
+        public ActionResult Messages_one_dialog(string id)
+        {
+            //TODO 
+            //Message_person_block
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            //var pers = Record(check_id, "Messages");
+
+            //TODO проверять есть ли доступ к этой переписке
+            var res = Message_person_block(id,bool_fullness: "Messages_one_dialog");
+
+
+            return View(res.Messages);
         }
         //TODO 
         public ActionResult Friends(string from, string id,string what)
@@ -197,7 +206,7 @@ namespace Im.Controllers
 
             //var res = db.Users.First(x1 => x1.Id == id);
 
-            return View(res);
+            return View(res.Friends);
         }
         //TODO 
         public ActionResult Followers_group(string from, string id, string what)
@@ -892,7 +901,85 @@ namespace Im.Controllers
            
                 return View("Personal_record", res_page);
         }
-        public Memes_record Memes(string id)
+        
+public Message_obg_record Message_person_block(string id,int start_obg=0, int start_mes = 0, string bool_fullness = "Messages")
+        {
+            //Messages
+            //Messages_one_dialog
+            var res =new Message_obg_record( db.Messages_obg.First(x1 => x1.Id.ToString() == id));
+
+
+
+            try
+            {
+                string[] str = res.db.Person_id.Split(',');
+
+
+
+                for (int b = 0, i = str.Count() - 2 - start_obg; i >= 0 && b < 10; --i, ++b)
+                {
+                    res.Person.Add((Person_short)Record(str[i], "Person_short"));
+
+                }
+
+
+            }
+            catch
+            {
+
+            }
+            if (bool_fullness== "Messages")
+            {
+
+                
+                try
+                {
+                    //db.Messages.First(x1 => x1.Id.ToString() == id)
+                    string[] str = res.db.Messages_id.Split(',');
+
+                        var a = db.Messages.First(x1 => x1.Id.ToString() == str[str.Count() - 2]);
+                        res.Messages.Add(a);
+                    
+
+                }
+                catch
+                {
+
+                }
+            }
+            if (bool_fullness == "Messages_one_dialog")
+            {
+
+                try
+                {
+                    //db.Messages.First(x1 => x1.Id.ToString() == id)
+                    string[] str = res.db.Messages_id.Split(',');
+
+
+                    for (int b = 0, i = str.Count() - 2 - start_mes; i >= 0 && b < 30; --i, ++b)
+                    {
+                        var a = db.Messages.First(x1 => x1.Id.ToString() == str[i]);
+                        res.Messages.Add(a);
+                    }
+
+                }
+                catch
+                {
+
+                }
+            }
+                
+
+            return res;
+
+        }
+        /*public Message Message_person_one(string id)
+        {
+
+            var res = db.Messages.First(x1 => x1.Id.ToString() == id);
+        }
+        */
+            public Memes_record Memes(string id)
         {
             var not_res= db.Memes.First(x1 => x1.Id.ToString() == id);
             ViewBag.like = false;
@@ -956,6 +1043,7 @@ namespace Im.Controllers
             {
                 //TODO надо доделать что бы поля тоже заполнялись как в рекорде
                 res = new Group_record(not_res);
+                string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
                 try
                 {
                     var str = ((Group_record)res).db.Followers_id.Split(',');
@@ -977,6 +1065,15 @@ namespace Im.Controllers
                 try
                 {
                     var str = ((Group_record)res).db.Admins_id.Split(',');
+                    ViewBag.My_page = false ;
+                    foreach (var i in str)
+                    {
+
+                        if (i == check_id)
+                        {
+                            ViewBag.My_page = true;
+                        }
+                    }
                     for (int b = 0, i = str.Count() - 2; i >= 0 && b < 5; --i, b++)
                     {
                         //-СЕЙЧАС
@@ -985,6 +1082,10 @@ namespace Im.Controllers
                         //((Group_record)res).Followers.Add(((Person_short)Record(str[i], "Person_short")));
                         ((Group_record)res).Admins.Add(a);
                     }
+
+
+
+                    
 
 
                 }
@@ -1104,6 +1205,8 @@ namespace Im.Controllers
             //Groups_all
             //Person_short ????
             //Friends Followers
+            //Messages
+            //Messages_one_dialog
 
 
 
@@ -1111,7 +1214,7 @@ namespace Im.Controllers
             //TODO сравнивать id и если одинаковые то и меню слева отправлять иначе нет
             //TODO заполнять все списки и с мемами и тд
             Personal_record res = null;
-            if (id != null)//убрать условие?
+            if (id != null)//убрать условие? проверять есть ли такой человек в базе
             {
                 var res_ap = db.Users.First(x1 => x1.Id == id);
                 res = new Personal_record(res_ap);
@@ -1327,8 +1430,47 @@ namespace Im.Controllers
                         
 
                     }
-                    
+                    if (bool_fullness == "Messages")
+                    {
+                        try
+                        {
+                            List<string> lst = res.db.Message_id.Split(',').ToList();
+                            for (var i = 0; i < lst.Count - 1; ++i)
+                            {
+
+                                res.Message.Add(Message_person_block(lst[i]));
+                            }
+                        }
+                        catch
+                        {
+
+                        }
+
+
                     }
+                    
+                       /* if (bool_fullness == "Messages_one_dialog")
+                    {
+                        try
+                        {
+                            List<string> lst = res.db.Message_id.Split(',').ToList();
+                            for (var i = 0; i < lst.Count - 1; ++i)
+                            {
+
+                                res.Message.Add(Message_person_block(lst[i]));
+                            }
+                        }
+                        catch
+                        {
+
+                        }
+
+
+                    }*/
+
+
+
+                }
                 catch
                 {
 
