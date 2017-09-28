@@ -63,6 +63,7 @@
 {
     @Html.Action("Follow_ajax", "Home", new { from = "Personal_record", id = Model.db.Id })
 }
+@Html.ActionLink("Написать сообщение", "Messages_one_dialog", "Home",new{ person_id=Model.db.Id },new { })
 
             </div>
     </div>

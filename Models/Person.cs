@@ -169,6 +169,7 @@ namespace Im.Models
         public int Id { get; set; }
         public string Message_text { get; set; }
         public string Person_id { get; set; }
+        // public string Person_Name { get; set; }размутить
         public byte[] Image { get; set; }
         public Message()
         {
@@ -176,14 +177,16 @@ namespace Im.Models
             this.Message_text = null;
             this.Person_id = null;
             Image = null;
+            //Person_Name = ""; размутить
         }
 
-            public Message(string Message_text, string Person_id)
+        public Message(string Message_text, string Person_id,string Name)
         {
             Id = -1;
             this.Message_text = Message_text;
             this.Person_id = Person_id;
             Image = null;
+            // Person_Name = Name; размутить
 
         }
 

@@ -176,7 +176,7 @@ namespace Im.Controllers
             return View(((Personal_record)pers).Message);
         }
         //TODO 
-        public ActionResult Messages_one_dialog(string id)
+        public ActionResult Messages_one_dialog(string id,string person_id)
         {
             //TODO 
             //Message_person_block
@@ -184,9 +184,9 @@ namespace Im.Controllers
             //var pers = Record(check_id, "Messages");
 
             //TODO проверять есть ли доступ к этой переписке
-            var res = Message_person_block(id,bool_fullness: "Messages_one_dialog");
+            var res = Message_person_block(id:id, person_id: person_id, bool_fullness: "Messages_one_dialog");
 
-
+            ViewBag.Id_dialog = res.db.Id.ToString();
             return View(res.Messages);
         }
         //TODO 
@@ -680,6 +680,42 @@ namespace Im.Controllers
             }
             return PartialView("Wall_memes");
         }
+
+        //TODO 
+        [HttpPost]
+        public ActionResult Add_new_message(HttpPostedFileBase[] uploadImage, string message_text, string Id_dialog)
+        {
+           var dialog= db.Messages_obg.First(x1=>x1.Id.ToString()== Id_dialog);
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            var pers = (Personal_record)Record(check_id, "DB");
+            if (dialog.Person_id.IndexOf(check_id) != -1)
+            {
+                List<byte[]> photo_byte = Get_photo_post(uploadImage);
+                
+                var mes = new Message(message_text, check_id, pers.db.Name);
+                if (photo_byte != null && photo_byte.Count > 0)
+                {
+                    mes.Image = photo_byte[0];
+                    Img tmp = new Img(photo_byte[0]);
+                    db.Images.Add(tmp);
+                }
+                db.Messages.Add(mes);
+                db.SaveChanges();
+
+                var res = Message_person_block(id: Id_dialog, person_id:null, bool_fullness: "Messages_one_dialog");
+
+                ViewBag.Id_dialog = res.db.Id.ToString();
+                return View("Messages_one_dialog",res.Messages);
+            }
+            else
+            {
+                //взлом?
+            }
+
+            return View();
+
+        }
+
         //TODO 
         [HttpPost]
         public ActionResult Add_new_group(Group a)
@@ -902,13 +938,38 @@ namespace Im.Controllers
                 return View("Personal_record", res_page);
         }
         
-public Message_obg_record Message_person_block(string id,int start_obg=0, int start_mes = 0, string bool_fullness = "Messages")
+public Message_obg_record Message_person_block(string id,string person_id,int start_obg=0, int start_mes = 0, string bool_fullness = "Messages")
         {
             //Messages
             //Messages_one_dialog
-            var res =new Message_obg_record( db.Messages_obg.First(x1 => x1.Id.ToString() == id));
+            Message_obg_record res = null;
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            if (!string.IsNullOrEmpty(id))
+            {
+                 res = new Message_obg_record(db.Messages_obg.First(x1 => x1.Id.ToString() == id));
+            }
+            else
+            {
+                try
+                {
+                     res = new Message_obg_record(db.Messages_obg.First(x1 => x1.Person_id.IndexOf(person_id) != -1));
+                }
+                catch
+                {
+                    var t = new Message_obg() ;
+                    t.Person_id += check_id + "," + person_id + ",";
+                    db.Messages_obg.Add(t);
+                    db.SaveChanges();
+                    var pers = (Personal_record)Record(check_id, "DB");
+                    pers.db.Message_id +=t.Id+",";
+                    db.SaveChanges();
+                    res = new Message_obg_record(t);
+                }
+                
+            }
+            
 
-
+            
 
             try
             {
@@ -1438,7 +1499,7 @@ public Message_obg_record Message_person_block(string id,int start_obg=0, int st
                             for (var i = 0; i < lst.Count - 1; ++i)
                             {
 
-                                res.Message.Add(Message_person_block(lst[i]));
+                                res.Message.Add(Message_person_block(lst[i],person_id:null));
                             }
                         }
                         catch
