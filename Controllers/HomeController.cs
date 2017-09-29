@@ -701,7 +701,9 @@ namespace Im.Controllers
                 }
                 db.Messages.Add(mes);
                 db.SaveChanges();
-
+                dialog.Messages_id += mes.Id + ",";
+                db.SaveChanges();
+                //не уверен что нужно обращаться
                 var res = Message_person_block(id: Id_dialog, person_id:null, bool_fullness: "Messages_one_dialog");
 
                 ViewBag.Id_dialog = res.db.Id.ToString();
@@ -1015,13 +1017,18 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                 {
                     //db.Messages.First(x1 => x1.Id.ToString() == id)
                     string[] str = res.db.Messages_id.Split(',');
-
-
+                    List<Message> temp_mass_message = new List<Message>();
+                    
                     for (int b = 0, i = str.Count() - 2 - start_mes; i >= 0 && b < 30; --i, ++b)
                     {
-                        var a = db.Messages.First(x1 => x1.Id.ToString() == str[i]);
-                        res.Messages.Add(a);
+                        int tmp = Convert.ToInt32(str[i]);
+                        var a = db.Messages.First(x1 => x1.Id == tmp);
+                        temp_mass_message.Add(a);
+                        
                     }
+                    var temp_mass_message_array = temp_mass_message.ToArray().Reverse();
+                   // Array.Reverse(temp_mass_message_array);
+                    res.Messages.AddRange(temp_mass_message_array);
 
                 }
                 catch

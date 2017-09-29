@@ -17,12 +17,12 @@ namespace Im.Models
 
         public Img()
         {
-            Id = -1;
+            Id = 0;
             bytes = null;
         }
         public Img(byte[] a)
         {
-            Id = -1;
+            Id = 0;
             bytes = a;
         }
 
@@ -57,7 +57,7 @@ namespace Im.Models
 
         public Group()
         {
-            Id = -1;
+            Id = 0;
             Name = "";
             Admins_id = "";
             Status = "";
@@ -71,7 +71,7 @@ namespace Im.Models
 
             public Group(string a,string id)
         {
-            Id = -1;
+            Id = 0;
             Name = a;
             Admins_id = id;
             Status = "";
@@ -101,7 +101,7 @@ namespace Im.Models
 
         public Memes()
         {
-            Id = -1;
+            Id = 0;
             this.Source = null;
             this.Source_id = null;
             Description = null;
@@ -114,7 +114,7 @@ namespace Im.Models
         }
         public Memes(string Source, string Source_id)
         {
-            Id = -1;
+            Id = 0;
             this.Source = Source;
             this.Source_id = Source_id;
             Description = null;
@@ -144,7 +144,7 @@ namespace Im.Models
 
         public Message_obg()
         {
-            Id = -1;
+            Id = 0;
             this.Person_id = null;
 
             Messages_id = "";
@@ -173,7 +173,7 @@ namespace Im.Models
         public byte[] Image { get; set; }
         public Message()
         {
-            Id = -1;
+            Id = 0;
             this.Message_text = null;
             this.Person_id = null;
             Image = null;
@@ -182,7 +182,7 @@ namespace Im.Models
 
         public Message(string Message_text, string Person_id,string Name)
         {
-            Id = -1;
+            Id = 0;
             this.Message_text = Message_text;
             this.Person_id = Person_id;
             Image = null;
@@ -378,14 +378,14 @@ namespace Im.Models
 
         public class Person_short: IPage_view
     {
-        public int Id { get; set; }
+        public int Id { get; set; }//убрать вроде
         public string Person_id { get; set; }
         public byte[] Image { get; set; }
         public string Name { get; set; }
 
         public Person_short(string id, byte[] Image, string Name)
         {
-            Id = -1;
+            Id = 0;
             Person_id = id;
             this.Image = Image;
             this.Name = Name;
@@ -443,7 +443,7 @@ namespace Im.Models
         }
             public Group_short(string Status, string Group_id, int Count_followers, byte[] Image, string Name)
         {
-            Id = -1;
+            Id = 0;
             this.Status = Status;
             this.Group_id_s = Group_id;
             this.Count_followers = Count_followers;
