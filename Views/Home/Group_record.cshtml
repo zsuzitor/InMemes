@@ -123,7 +123,7 @@
 
             <div class="Group_record_followers_block div_color_white">
                 <div>
-                    @Html.ActionLink("Подписчики", "Followers_group", "Home", new { what= "Followers", from = "Group_record", id = Model.db.Id }, new { @class = "link_standart_for_div" })
+                    @Html.ActionLink("Подписчики:"+((int)ViewBag.Count_followers), "Followers_group", "Home", new { what= "Followers", from = "Group_record", id = Model.db.Id }, new { @class = "link_standart_for_div" })
                 </div>
                 <div>
 

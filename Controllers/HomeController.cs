@@ -254,7 +254,14 @@ namespace Im.Controllers
 
             return View();
         }
-        
+        //TODO 
+        public ActionResult Delete(string what,string id)
+        {
+            //TODO 
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+
+            return View();
+        }
         //TODO 
         public ActionResult Edit_group_record(string id)
         {
@@ -310,8 +317,9 @@ namespace Im.Controllers
                         {
                             mem.db.Liked_id += check_id + ",";
                             ViewBag.like = true;
+                            ViewBag.count_like += 1;
 
-                            
+
 
                         }
                         else
@@ -323,6 +331,7 @@ namespace Im.Controllers
                                 mem.db.Liked_id +=i +",";
                             }
                             ViewBag.like = false;
+                            ViewBag.count_like -= 1;
                         }
                         db.SaveChanges();
 
@@ -361,6 +370,7 @@ namespace Im.Controllers
         {
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             var res = Memes(id_mem);
+            ViewBag.from = from;
             return PartialView(res);
         }
 
@@ -380,6 +390,7 @@ namespace Im.Controllers
         [ChildActionOnly]
         public ActionResult Wall_memes(string from,string id,int start=0)
         {
+            ViewBag.from = from;
            var res = Wall_memes_function(from, id, start);
             return PartialView(res.Reverse());
 
@@ -931,7 +942,9 @@ namespace Im.Controllers
                         res_page = (IPage_view)pers;
                         //res.db = res_db;
 
+                        return View("Group_record",(Group_record)Group(id));
 
+                        //сейчас
                         return View("Group_record", res_page);
                     }
                     break;
@@ -1066,9 +1079,10 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
 
             }
 
-            
+            var mass_liked = not_res.Liked_id.Split(',');
+            ViewBag.count_like =  mass_liked.Count() > 1 ? mass_liked.Count() - 1 : 0;
             //проверка на лайк
-            foreach (var i in not_res.Liked_id.Split(','))
+            foreach (var i in mass_liked)
             {
                 if (!string.IsNullOrEmpty(i))
                 {
@@ -1077,6 +1091,9 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                     
                 }
             }
+
+            var mass_repost = not_res.Repost_id.Split(',');
+            ViewBag.count_repost = mass_repost.Count() > 1 ? mass_repost.Count() - 1 : 0;
             //проверка на репост
             foreach (var i in not_res.Repost_id.Split(','))
             {
@@ -1102,7 +1119,7 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
             //Wall
             //Group_short
             //Followers  Admins
-
+            ViewBag.My_page = false;
             IPage_view res = null;
             var not_res= db.Groups.First(x1 => x1.Id.ToString() == id);
 
@@ -1115,6 +1132,8 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                 try
                 {
                     var str = ((Group_record)res).db.Followers_id.Split(',');
+                    ViewBag.Count_followers = str.Count() > 1 ? str.Count() - 1 : 0;
+                    
                     for (int b = 0, i = str.Count() - 2; i >= 0 && b < 5; --i, b++)
                     {
                         //-СЕЙЧАС
@@ -1207,7 +1226,8 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
             {
                 res = new Group_record(not_res);
                 var lst = not_res.Followers_id.Split(',');
-                foreach(var i in lst)
+                ViewBag.Count_followers = lst.Count() > 1 ? lst.Count() - 1 : 0;
+                foreach (var i in lst)
                 {
                     if (string.IsNullOrEmpty(i))
                     {
@@ -1254,6 +1274,9 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
             }
                 if (bool_fullness == "Group_short"){
                 res = new Group_short(not_res);
+                var count = not_res.Followers_id.Split(',').Count();
+                ViewBag.Count_followers = count > 1 ? count - 1 : 0;
+                ((Group_short)res).Count_followers = ViewBag.Count_followers;
             }
             if (bool_fullness == "DB")
             {
@@ -1565,6 +1588,17 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
 
             public List<byte[]> Get_photo_post(HttpPostedFileBase[] uploadImage)
         {
+
+            /* сохранение картинок как файл ...
+              HttpPostedFileBase image = Request.Files["fileInput"];
+            
+            if (image != null && image.ContentLength > 0 && !string.IsNullOrEmpty(image.FileName))
+            {
+                string fileName = image.FileName;
+                image.SaveAs(Path.Combine(Server.MapPath("Images"), fileName));
+            }
+             
+             * */
             List<byte[]> res = new List<byte[]>();
             if (uploadImage != null)
             {

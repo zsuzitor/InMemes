@@ -58,11 +58,20 @@
     }
     <div class="div_color_white Messages_one_dialog_message_form">
 
+        @{ 
+
+            /*<form  action="@Url.Action("Add_new_message","Home")" method="POST" enctype="multipart/form-data">
+            <input id="fileInput" name="fileInput" type="file" />
+            @Html.Editor("message_text", new { })
+            <input type="submit" value="Upload file"  />
+        </form>*/
+        }
         
+
             @using (Html.BeginForm("Add_new_message", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 @Html.Hidden("Id_dialog", (string)ViewBag.Id_dialog)
-                
+
                 @Html.Editor("message_text", new { })
                 <input type="file" name="uploadImage[0]" />
                 <input type="submit" class="submit" value="Отправить сообщение" />

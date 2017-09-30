@@ -204,6 +204,7 @@
                     
                     <div class="Personal_record_group_info_block">
                         <p>@Html.ActionLink(@i.Name, "Group_record", "Home",new {id=i.Id },new { }) </p>
+                        <p>подписоты: @((int)ViewBag.Count_followers) </p>
                         <p>@i.Status</p>
                     </div>
                 </div>

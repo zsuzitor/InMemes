@@ -22,6 +22,8 @@
     </div>
 
     <div class="Groups_personal_block_list_group">
+
+
 @foreach (var i in Model)
 {
     <div class="div_color_white Groups_personal_one_group_block">
@@ -65,6 +67,7 @@
         
         <div  class="Groups_personal_one_group_info">
             <p>@Html.ActionLink(i.Name, "Group_record","Home",new { id = i.Id },new { })</p>
+            <p>подписоты: @((int)ViewBag.Count_followers) </p>
             <p>@i.Status</p>
         </div>
     </div>

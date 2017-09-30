@@ -76,14 +76,14 @@ div.div_color_white{
 
 
 div.Memes_under_block_small {
-    width: 70px;
+    width: 115px;
     height: 30px;
     display: inline-block;
     vertical-align: top;
     margin-left: 20px;
 }
 div.Memes_under_block_small_true {
-    width: 70px;
+    width: 115px;
     height: 30px;
     display: inline-block;
     vertical-align: top;
@@ -93,7 +93,36 @@ div.Memes_under_block_small_true {
 div.Memes_partial_under_all_block{
     height:45px;
 }
+div.memes_partial_options_mem {
+    width: 30px;
+    height: 30px;
+    
+         position: absolute;
+        top:0px;
+        left:400px;
+        font-size:20pt;
+    
+}
+ div.memes_partial_options_mem:hover {
+    cursor: pointer;
+}
+/*div.memes_partial_options_mem_open {
+    margin-top: 15px;
+    width: 50px;
+    height: 30px;
+    float: right;
+    visibility:hidden;
+background-color: black;
+}div.memes_partial_options_mem:hover .memes_partial_options_mem_open {
+        visibility: visible;
+        background-color: green;
+    }
 
+*/
+    
+div.memes_partial_one_mem_block {
+    position:relative;
+}
 /*main_header*/
 div.main_header {
     position: absolute;
@@ -102,6 +131,7 @@ div.main_header {
     background-color: #4169E1;
     width: 100%;
     margin-top: -50px;
+    z-index:100;
 }
 div.main_header_r_l {
     float: right;

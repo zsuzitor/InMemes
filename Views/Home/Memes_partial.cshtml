@@ -13,15 +13,19 @@
     }
     if ((bool)ViewBag.repost)
     {
-        Memes_under_block_small_like_name = "Memes_under_block_small_true";
+        Memes_under_block_small_repost_name = "Memes_under_block_small_true";
     }
 }
 
 
 
 
-<div class="div_color_white">
+<div class="div_color_white memes_partial_one_mem_block">
+    <p>@Html.ActionLink(Model.db.Source, "","Home",new {id=Model.db.Source_id },new { })</p>
     <p>@Model.db.Description</p>
+    <p>@Model.db.Birthday</p>
+    <div class="memes_partial_options_mem">...</div>
+    <div class="memes_partial_options_mem_open"></div>
     @if (Model.db.Image != null)
     {
         <div class="Wall_memes_one_mem_img">
@@ -44,7 +48,7 @@
 
 
         <div class=@Memes_under_block_small_like_name>
-        @Ajax.ActionLink("Лайков:"+ Model.db.Liked_id.Split(',').Count(), "Action_memes", "Home",
+        @Ajax.ActionLink("Лайков:"+ ((int)ViewBag.count_like).ToString(), "Action_memes", "Home",
 new { id=Model.db.Id, action_m = "like" },
 new AjaxOptions { UpdateTargetId = string.Concat("Wall_memes_mem_bock_id_", Model.db.Id) }, new { @class = "link_standart_for_div" })
             @{ 
@@ -60,7 +64,7 @@ new AjaxOptions { UpdateTargetId = string.Concat("Wall_memes_mem_bock_id_", Mode
         
         Коменты</div>
         <div class=@Memes_under_block_small_repost_name>
-        @Ajax.ActionLink("Репостов:" + Model.db.Repost_id.Split(',').Count(), "Action_memes", "Home",
+        @Ajax.ActionLink("Репостов:" + ((int)ViewBag.count_repost).ToString(), "Action_memes", "Home",
 new { id = Model.db.Id, action_m = "repost" },
 new AjaxOptions { UpdateTargetId = string.Concat("Wall_memes_mem_bock_id_", Model.db.Id) }, new { @class = "link_standart_for_div" })
 
