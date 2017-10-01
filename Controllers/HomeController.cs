@@ -59,9 +59,12 @@ namespace Im.Controllers
                 if (string.IsNullOrEmpty(id))
                     throw new Exception();
                 
-                    ViewBag.My_page = true;
+                   // ViewBag.My_page = true;
                 loginned = true;
+
+                
                 res = (Personal_record)Record(id, "Personal_record");
+                
             }
             catch
             {
@@ -70,6 +73,7 @@ namespace Im.Controllers
             }
             if (loginned)
             {
+                
                 return View("Personal_record",res);
             }
             else
@@ -92,8 +96,8 @@ namespace Im.Controllers
             }
             var res = Record(id, "Personal_record");
             
-            if (id== System.Web.HttpContext.Current.User.Identity.GetUserId())
-            ViewBag.My_page = true;
+            //if (id== System.Web.HttpContext.Current.User.Identity.GetUserId())
+            //ViewBag.My_page = true;
             return View(res);
         }
         
@@ -782,7 +786,7 @@ namespace Im.Controllers
             {
                 string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
                 res_page  = Record(check_id, "Personal_record");
-                ViewBag.My_page = true;
+                //ViewBag.My_page = true;
                 db.Images.Add(lst2[0]);
                 db.SaveChanges();
                 
@@ -825,7 +829,7 @@ namespace Im.Controllers
                     {
                         if (id == check_id)
                         {
-                            ViewBag.My_page = true;
+                            //ViewBag.My_page = true;
                             var pers = (Personal_record)Record(id, "Personal_record");
                             res_db = new Memes(string.Concat(pers.db.Name, " ", pers.db.Surname), id)
                             {
@@ -1119,7 +1123,7 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
             //Wall
             //Group_short
             //Followers  Admins
-            ViewBag.My_page = false;
+            //ViewBag.My_page = false;
             IPage_view res = null;
             var not_res= db.Groups.First(x1 => x1.Id.ToString() == id);
 
@@ -1152,7 +1156,7 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                 try
                 {
                     var str = ((Group_record)res).db.Admins_id.Split(',');
-                    ViewBag.My_page = false ;
+                    //ViewBag.My_page = false ;
                     foreach (var i in str)
                     {
 
@@ -1298,13 +1302,20 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
             //Friends Followers
             //Messages
             //Messages_one_dialog
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+
+            
+            //ViewBag.My_page = false;
+            if (id == check_id)
+                ViewBag.My_page = true;
 
 
 
 
-            //TODO сравнивать id и если одинаковые то и меню слева отправлять иначе нет
-            //TODO заполнять все списки и с мемами и тд
-            Personal_record res = null;
+
+                //TODO сравнивать id и если одинаковые то и меню слева отправлять иначе нет
+                //TODO заполнять все списки и с мемами и тд
+                Personal_record res = null;
             if (id != null)//убрать условие? проверять есть ли такой человек в базе
             {
                 var res_ap = db.Users.First(x1 => x1.Id == id);
@@ -1670,7 +1681,7 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                 default://"News"
                     string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
                     pers = Record(check_id, "News", start);
-                    res = ((Personal_record)pers).db.Wall_id.Split(',');
+                    res = ((Personal_record)pers).db.News_id.Split(',');
                     if (start == 0)
                         if (res.Count() == 0)
                             ViewBag.Count = 0;
