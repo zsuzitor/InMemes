@@ -14,16 +14,22 @@ namespace Im.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public byte[] bytes { get; set; }
+        public DateTime Birthday { get; set; }
+        public string Albums { get; set; }
 
         public Img()
         {
             Id = 0;
             bytes = null;
+            Birthday = DateTime.Now;
+            Albums = "";
         }
         public Img(byte[] a)
         {
             Id = 0;
             bytes = a;
+            Birthday = DateTime.Now;
+            Albums = "";
         }
 
     }
@@ -36,51 +42,37 @@ namespace Im.Models
         public string Status { get; set; }
         public DateTime Birthday { get; set; }
         public byte[] Image { get; set; }
-        // заявки 
-        public string Followers_id { get; set; }//id не принятых(отвергнутых) друзей
-
-        //стена 
-        public string Wall_id { get; set; }//id записей
-
-        //фото //
-        public string Images_id { get; set; }//id фото
+        public bool Open_group { get; set; }
+        public bool Add_memes_private { get; set; }
+        public int Wall_count { get; set; }
 
 
-        //авы
-        public string Main_images_id { get; set; }//id фото
-
-        //группы
-        public string Groups_id { get; set; }
-        //админы
-        public string Admins_id { get; set; }
 
 
         public Group()
         {
             Id = 0;
             Name = "";
-            Admins_id = "";
+            Wall_count = 0;
             Status = "";
             Birthday = DateTime.Now;
-            Followers_id = "";
-            Wall_id = "";
-            Images_id = "";
-            Main_images_id = "";
-            Groups_id = "";
+            
+            
+            Open_group = true;
+            Add_memes_private = true;
+
         }
 
             public Group(string a,string id)
         {
             Id = 0;
             Name = a;
-            Admins_id = id;
+            Wall_count = 0;
             Status = "";
             Birthday = DateTime.Now;
-            Followers_id = "";
-            Wall_id = "";
-            Images_id = "";
-            Main_images_id = "";
-            Groups_id = "";
+            
+            Open_group = true;
+            Add_memes_private = true;
 
         }
 
@@ -91,25 +83,23 @@ namespace Im.Models
         public int Id { get; set; }
         public string Description { get; set; }
         public string Source { get; set; }
+        public string Source_type { get; set; }
         public string Source_id { get; set; }
         public byte[] Image { get; set; }
-        public string Images_id { get; set; }//id фото
-
-        public string Liked_id { get; set; }//id кто лайкнул
-        public string Repost_id { get; set; }//id кто репостнул
+        
+        
         public DateTime Birthday { get; set; }
 
         public Memes()
         {
             Id = 0;
             this.Source = null;
+            this.Source_type = null;
             this.Source_id = null;
             Description = null;
             Image = null;
-            Images_id = null;
-
-            Liked_id = "";
-            Repost_id = "";
+            
+            
             Birthday = DateTime.Now;
         }
         public Memes(string Source, string Source_id)
@@ -117,12 +107,10 @@ namespace Im.Models
             Id = 0;
             this.Source = Source;
             this.Source_id = Source_id;
+            Source_type = null;
             Description = null;
             Image = null;
-            Images_id = null;
-
-            Liked_id = "";
-            Repost_id = "";
+            
             Birthday = DateTime.Now;
 
 
@@ -137,7 +125,7 @@ namespace Im.Models
         public int Id { get; set; }
         public string Person_id { get; set; }
         
-        public string Messages_id { get; set; }//id
+       
         
         public byte[] Image { get; set; }
         public int New_message_count { get; set; }
@@ -147,7 +135,7 @@ namespace Im.Models
             Id = 0;
             this.Person_id = null;
 
-            Messages_id = "";
+           
 
             Image = null;
             New_message_count = 0;
@@ -157,7 +145,7 @@ namespace Im.Models
             Id = -1;
             this.Person_id = Person_id;
             
-            Messages_id = "";
+           
             
             Image = null;
             New_message_count = 0;
@@ -169,8 +157,9 @@ namespace Im.Models
         public int Id { get; set; }
         public string Message_text { get; set; }
         public string Person_id { get; set; }
-        // public string Person_Name { get; set; }размутить
+         public string Person_Name { get; set; }//размутить
         public byte[] Image { get; set; }
+        public DateTime Birthday { get; set; }
         public Message()
         {
             Id = 0;
@@ -186,8 +175,8 @@ namespace Im.Models
             this.Message_text = Message_text;
             this.Person_id = Person_id;
             Image = null;
-            // Person_Name = Name; размутить
-
+             Person_Name = Name; //размутить
+            Birthday = DateTime.Now;
         }
 
     }
@@ -233,6 +222,7 @@ namespace Im.Models
         // заявки 
 
         public List<Person_short> Followers { get; set; }
+        public List<Person_short> Friends { get; set; }
         //стена 
 
         public List<Memes_record> Wall { get; set; }
@@ -365,27 +355,19 @@ namespace Im.Models
     
 
 
-    
-
-
-
-
-
-
-
 
 
 
         public class Person_short: IPage_view
     {
-        public int Id { get; set; }//убрать вроде
+        
         public string Person_id { get; set; }
         public byte[] Image { get; set; }
         public string Name { get; set; }
 
         public Person_short(string id, byte[] Image, string Name)
         {
-            Id = 0;
+            
             Person_id = id;
             this.Image = Image;
             this.Name = Name;
@@ -424,28 +406,29 @@ namespace Im.Models
         public class Group_short: IPage_view
     {
         public int Id { get; set; }
-        public string Group_id_s { get; set; }
+        //public List<string> Group_id { get; set; }
+        
         public int Count_followers { get; set; }
         public byte[] Image { get; set; }
         public string Name { get; set; }
         public string Status { get; set; }
 
-        public Group_short(Group a)
+        public Group_short(Group a,int Count_followers,IEnumerable<string> Group_id)
         {
             Id = a.Id;
             this.Status = a.Status;
-            this.Group_id_s = "";
-            this.Count_followers = a.Followers_id.Split(',').Count()-1;
+            //this.Group_id = Group_id.ToList();
+            this.Count_followers = Count_followers;
             this.Image = a.Image;
             this.Name = a.Name;
 
 
         }
-            public Group_short(string Status, string Group_id, int Count_followers, byte[] Image, string Name)
+            public Group_short(int id,string Status, IEnumerable<string> Group_id, int Count_followers, byte[] Image, string Name)
         {
-            Id = 0;
+            Id = id;
             this.Status = Status;
-            this.Group_id_s = Group_id;
+            //this.Group_id = Group_id.ToList();
             this.Count_followers = Count_followers;
             this.Image = Image;
             this.Name = Name;
@@ -453,5 +436,60 @@ namespace Im.Models
 
         }
     }
-   
+
+
+
+
+
+    public class Relationship_string_string
+    {
+        public int Id { get; set; }
+        public string Something_one_id { get; set; }//"главное" если связь не между людьми то засовывать сюда
+        public string Something_two_id { get; set; }
+        
+        public Relationship_string_string(string a,string b)
+        {
+            Something_one_id = a;
+            Something_two_id = b;
+        }
+    }
+    public class Relationship_with_admin_group
+    {
+        public int Id { get; set; }
+        public string Something_one_id { get; set; }//"главное" если связь не между людьми то засовывать сюда
+        public string Something_two_id { get; set; }
+        public bool Admin_group { get; set; }
+        public Relationship_with_admin_group(string a, string b,bool c)
+        {
+            Something_one_id = a;
+            Something_two_id = b;
+            Admin_group = c;
+        }
+    }
+    public class Relationship_with_memes
+    {
+        public int Id { get; set; }
+        public string Something_one_id { get; set; }//"главное" если связь не между людьми то засовывать сюда
+        public string Something_two_id { get; set; }
+        public bool News { get; set; }
+        public Relationship_with_memes(string a, string b, bool c)
+        {
+            Something_one_id = a;
+            Something_two_id = b;
+            News = c;
+        }
+    }
+    public class Relationship_with_images
+    {
+        public int Id { get; set; }
+        public string Something_one_id { get; set; }//"главное" если связь не между людьми то засовывать сюда
+        public string Something_two_id { get; set; }
+        public bool Main { get; set; }
+        public Relationship_with_images(string a, string b, bool c)
+        {
+            Something_one_id = a;
+            Something_two_id = b;
+            Main = c;
+        }
+    }
 }

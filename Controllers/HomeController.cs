@@ -273,15 +273,16 @@ namespace Im.Controllers
             //
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             var res = (Group_record)Group(id,"DB");
-            foreach(var i in res.db.Admins_id.Split(','))
+            var admins = db.Friends_connected.Where(x1 => x1.Something_one_id == id && x1.Admin_group).ToList();
+            foreach(var i in admins)
             {
 
-                if (i == check_id)
+                if (i.Something_two_id == check_id)
                 {
                     return View(res);
                 }
             }
-            res = (Group_record)Group(id, "Group_record");
+             res = (Group_record)Group(id, "Group_record");
             return View("Group_record", res);
         }
         //TODO 
@@ -303,23 +304,23 @@ namespace Im.Controllers
             {
                 case "like":
                     {
-                        var mass_liked = mem.db.Liked_id.Split(',');
-                        List<string> mass_liked_1 = new List<string>();
+                        //int id_int = Convert.ToInt32(id);
+                        var mass_liked  = db.Liked_connected.Where(x1=>x1.Something_one_id== id).ToList() ;
+                        
                         bool liked = false;
                         
                             foreach (var i in mass_liked)
                             {
-                                if (!string.IsNullOrEmpty(i))
+                                if (!string.IsNullOrEmpty(i.Something_two_id))
                                 {
-                                if (i == check_id)
+                                if (i.Something_two_id == check_id)
                                     liked = true;
-                                else
-                                    mass_liked_1.Add(i);
+                                
                                 }
                             }
                         if (!liked)
                         {
-                            mem.db.Liked_id += check_id + ",";
+                            db.Liked_connected.Add(new Relationship_string_string(id,check_id));
                             ViewBag.like = true;
                             ViewBag.count_like += 1;
 
@@ -329,11 +330,8 @@ namespace Im.Controllers
                         else
                         {
                             //уже лайкнул
-                            mem.db.Liked_id ="";
-                            foreach(var i in mass_liked_1)
-                            {
-                                mem.db.Liked_id +=i +",";
-                            }
+                            db.Liked_connected.Remove(db.Liked_connected.First(x1=>x1.Something_one_id==id&&x1.Something_two_id==check_id));
+
                             ViewBag.like = false;
                             ViewBag.count_like -= 1;
                         }
@@ -345,15 +343,17 @@ namespace Im.Controllers
                 case "repost":
                     {
                         var pers =(Personal_record) Record(check_id, "DB");
-                        pers.db.Wall_id += mem.db.Id+",";
+                        
+                        db.Wall_memes_connected.Add(new Relationship_with_memes(id,check_id,false));
                         bool fl = false;
-                        foreach(var i in mem.db.Repost_id.Split(','))
+                        var repost = db.Repost_connected.Where(x1=>x1.Something_one_id==id).ToList();
+                        foreach(var i in repost)
                         {
-                            if (i == check_id)
+                            if (i.Something_two_id == check_id)
                                 fl = true;
                         }
                         if (!fl)
-                            mem.db.Repost_id += check_id + ",";
+                            db.Repost_connected.Add(new Relationship_string_string(id,check_id));
 
                         db.SaveChanges();
 
@@ -449,28 +449,32 @@ namespace Im.Controllers
                 var pers_peop = Record(check_id, "DB");
                 try
                 {
-                    var tmp = ((Group_record)pers).db.Followers_id.Split(',').First(x1 => x1 == check_id);
+                    var tmp = db.Followers_connected.First(x1=>x1.Something_one_id==id&&x1.Something_two_id== check_id).Something_two_id;
+                    //var tmp = ((Group_record)pers).db.Followers_id.Split(',').First(x1 => x1 == check_id);
                     if (tmp == null)
                         throw new Exception();
                     if (click)
                     {
                         //нужно отписать от группы
                         
-                        var mass_peop = ((Personal_record)pers_peop).db.Groups_id.Split(',');
-                        var mass = ((Group_record)pers).db.Followers_id.Split(',');
+                        //var mass_peop = ((Personal_record)pers_peop).db.Groups_id.Split(',');
                         
-                        ((Group_record)pers).db.Followers_id = "";
-                        for (int i=0;i< mass.Count() - 1; ++i)
-                        {
-                            if (mass[i] != check_id)
-                                ((Group_record)pers).db.Followers_id+= mass[i]+",";
-                        }
-                        ((Personal_record)pers_peop).db.Groups_id = "";
-                        for (int i = 0; i < mass_peop.Count() - 1; ++i)
-                        {
-                            if (mass_peop[i] != id)
-                                ((Personal_record)pers_peop).db.Groups_id += mass_peop[i] + ",";
-                        }
+                        
+                        //var mass = ((Group_record)pers).db.Followers_id.Split(',');
+
+                        //((Group_record)pers).db.Followers_id = "";
+                        
+                        //не нужно вроде
+                        //var mass_peop = db.Groups_connected.Where(x1 => x1.Something_two_id == check_id).ToList();
+
+                        db.Groups_connected.Remove(db.Groups_connected.First(x1 => x1.Something_two_id == check_id && x1.Something_one_id == id));
+                        //не нужно вроде
+                        //var mass = db.Friends_connected.Where(x1 => x1.Something_one_id == id).ToList();
+
+                        db.Friends_connected.Remove(db.Friends_connected.First(x1 => x1.Something_two_id == check_id && x1.Something_one_id == id));
+                        db.Followers_connected.Remove(db.Followers_connected.First(x1 => x1.Something_two_id == check_id && x1.Something_one_id == id));
+                        db.Followers_ignore_connected.Remove(db.Followers_ignore_connected.First(x1 => x1.Something_two_id == check_id && x1.Something_one_id == id));
+                        ((Personal_record)pers_peop).db.Groups_count -= 1;
                         db.SaveChanges();
                         ViewBag.follow = false;
                         ViewBag.message = "Подписаться";
@@ -488,9 +492,11 @@ namespace Im.Controllers
                     if (click)
                     {
                         //нужно подписать на группу
-                        ((Group_record)pers).db.Followers_id += check_id + ",";
+                        //((Group_record)pers).db.Followers_id += check_id + ",";
+                        db.Friends_connected.Add(new Relationship_with_admin_group(id, check_id, false));
+                        db.Groups_connected.Add(new Relationship_string_string(id,check_id));
                         ((Personal_record)pers_peop).db.Groups_count += 1;
-                        ((Personal_record)pers_peop).db.Groups_id +=id +",";
+                        //((Personal_record)pers_peop).db.Groups_id +=id +",";
                         db.SaveChanges();
                         ViewBag.follow = true;
                         ViewBag.message = "Отписаться";
@@ -511,28 +517,37 @@ namespace Im.Controllers
 
                 try
                 {
-                    var tmp = ((Personal_record)pers).db.Followers_id.Split(',').First(x1 => x1 == check_id);
+                    //var tmp = ((Personal_record)pers).db.Followers_id.Split(',').First(x1 => x1 == check_id);
+                    var tmp = db.Followers_connected.First(x1 =>x1.Something_one_id==id&& x1.Something_two_id == check_id).Something_two_id;
                     if (tmp == null)
                         throw new Exception();
                     if (click)
                     {
                         //нужно отписать от человека
 
-                        var mass = ((Personal_record)pers).db.Followers_id.Split(',');
-                        var mass_peop = ((Personal_record)pers_peop).db.Friends_id.Split(',');
-                        ((Personal_record)pers).db.Followers_id = "";
-                        for (int i = 0; i < mass.Count() - 1; ++i)
+                        db.Followers_connected.Remove(db.Followers_connected.First(x1 => x1.Something_two_id == check_id && x1.Something_one_id == id));
+                        //не нужно вроде
+                        //var mass = db.Friends_connected.Where(x1 => x1.Something_one_id == id).ToList();
+                        try
                         {
-                            if (mass[i] != check_id)
-                                ((Personal_record)pers).db.Followers_id += mass[i] + ",";
+                            db.Friends_connected.Remove(db.Friends_connected.First(x1 => x1.Something_two_id == check_id && x1.Something_one_id == id));
+                            ((Personal_record)pers_peop).db.Friends_count -= 1;
                         }
+                        catch { }
+                        try
+                        {
+                            db.Followers_connected.Remove(db.Followers_connected.First(x1 => x1.Something_two_id == check_id && x1.Something_one_id == id));
+                            ((Personal_record)pers_peop).db.Followers_count -= 1;
+                        }
+                        catch { }
+                        try
+                        {
+                            db.Followers_ignore_connected.Remove(db.Followers_ignore_connected.First(x1 => x1.Something_two_id == check_id && x1.Something_one_id == id));
+                            ((Personal_record)pers_peop).db.Followers_ignore_count -= 1;
+                        }
+                        catch { }
+                        
 
-                        ((Personal_record)pers_peop).db.Friends_id = "";
-                        for (int i = 0; i < mass_peop.Count() - 1; ++i)
-                        {
-                            if (mass_peop[i] != id)
-                                ((Personal_record)pers_peop).db.Friends_id += mass_peop[i] + ",";
-                        }
                         db.SaveChanges();
 
                         ViewBag.follow = false;
@@ -551,13 +566,11 @@ namespace Im.Controllers
                     if (click)
                     {
                         //нужно подписать на человека
-                        ((Personal_record)pers).db.Followers_id += check_id + ",";
+
+                        db.Followers_connected.Add(new Relationship_string_string(id, check_id));
                         
+                        ((Personal_record)pers).db.Followers_count -= 1;
 
-
-
-                        ((Personal_record)pers_peop).db.Friends_count += 1;
-                        ((Personal_record)pers_peop).db.Friends_id += id + ",";
                         db.SaveChanges();
 
                         ViewBag.follow = true;
@@ -716,7 +729,8 @@ namespace Im.Controllers
                 }
                 db.Messages.Add(mes);
                 db.SaveChanges();
-                dialog.Messages_id += mes.Id + ",";
+                db.Messages_one_dialog_connected.Add(new Relationship_string_string(dialog.Id.ToString(), mes.Id.ToString()));
+                //dialog.Messages_id += mes.Id + ",";
                 db.SaveChanges();
                 //не уверен что нужно обращаться
                 var res = Message_person_block(id: Id_dialog, person_id:null, bool_fullness: "Messages_one_dialog");
@@ -755,13 +769,13 @@ namespace Im.Controllers
                     string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
                     var pers = (Personal_record)Record(check_id, "DB");
                     
-                    a.Admins_id = check_id+",";
-                    a.Followers_id = check_id + ",";
                     
                     db.Groups.Add(a);
                     db.SaveChanges();
+                    db.Friends_connected.Add(new Relationship_with_admin_group(a.Id.ToString(),check_id,true));
+                    db.Groups_connected.Add(new Relationship_string_string(a.Id.ToString(), check_id));
                     pers.db.Groups_count += 1;
-                    pers.db.Groups_id += a.Id + ",";
+                    
                     db.SaveChanges();
 
                     ViewBag.add_success = "Группа создана";
@@ -785,25 +799,18 @@ namespace Im.Controllers
             if (from == "person")
             {
                 string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
-                res_page  = Record(check_id, "Personal_record");
+                res_page  = Record(check_id, "DB");
                 //ViewBag.My_page = true;
                 db.Images.Add(lst2[0]);
                 db.SaveChanges();
                 
 
                 ((Personal_record)res_page).db.Images_count += 1;
-                ((Personal_record)res_page).db.Images_id += lst2[0].Id + ",";
-                ((Personal_record)res_page).Images.Insert(0, lst1[0]);
-                if (for_what == "main_img")
-                {
-                    ((Personal_record)res_page).db.Main_images_id += lst2[0].Id + ",";
-                    ((Personal_record)res_page).Main_images.Insert(0, lst1[0]);
-                }
-
+                db.Images_connected.Add(new Relationship_with_images(lst2[0].Id.ToString(),check_id, for_what == "main_img"?true:false));
 
                 db.SaveChanges();
-                
 
+                res_page = Record(check_id, "Personal_record");
             }
             if (from == "group")
             {
@@ -830,7 +837,7 @@ namespace Im.Controllers
                         if (id == check_id)
                         {
                             //ViewBag.My_page = true;
-                            var pers = (Personal_record)Record(id, "Personal_record");
+                            var pers = (Personal_record)Record(id, "DB");
                             res_db = new Memes(string.Concat(pers.db.Name, " ", pers.db.Surname), id)
                             {
                                 Description = Description_mem
@@ -840,6 +847,8 @@ namespace Im.Controllers
                             {
                                 res_db.Image = photo_byte[0];
                             }
+                            
+                            db.Memes.Add(res_db);
                             if (photo_byte.Count > 1)
                             {
                                 foreach (var i in photo_byte)
@@ -848,45 +857,63 @@ namespace Im.Controllers
                                     Img tmp = new Img(i);
                                     db.Images.Add(tmp);
                                     db.SaveChanges();
-                                    res_db.Images_id += tmp.Id + ",";
+                                    db.Images_connected.Add(new Relationship_with_images(res_db.Id.ToString(), tmp.Id.ToString(), false));
+                                    
                                 }
                             }
-                            db.Memes.Add(res_db);
                             db.SaveChanges();
                             //???
                             //res.db = res_db;
                             //pers.Wall.Add(res);
-
-                            pers.db.Wall_id += res_db.Id + ",";
+                            //var memes = new Relationship_with_memes(res_db.Id.ToString(), pers.db.Id.ToString(), false);
+                            db.Wall_memes_connected.Add(new Relationship_with_memes(res_db.Id.ToString(), pers.db.Id.ToString(), false));
+                            
                             pers.db.Wall_count += 1;
 
                             db.SaveChanges();
                             //раскидать друзьям подписчикам
                             {
-                                var mass_fr = pers.db.Friends_id.Split(',');
-                                foreach(var i in mass_fr)
+                                // var mass_fr = pers.db.Friends_id.Split(',');
+                                //TODO еще и всем фоловерам отправлять
                                 {
-                                    if (!string.IsNullOrEmpty(i))
+                                    var mass_fr = db.Friends_connected.Where(x1 => x1.Something_one_id == check_id || x1.Something_two_id == check_id).ToList();
+                                    foreach (var i in mass_fr)
                                     {
-                                        var rec = Record(i, "DB");
-                                        ((Personal_record)rec).db.News_id += res_db.Id + ",";
-                                    }
-                                    
+                                        if (i.Something_one_id == check_id)
+                                        {
+                                            db.Wall_memes_connected.Add(new Relationship_with_memes(res_db.Id.ToString(), i.Something_two_id, true));
+                                        }
+                                        else
+                                        {
+                                            db.Wall_memes_connected.Add(new Relationship_with_memes(res_db.Id.ToString(), i.Something_one_id, true));
+                                        }
 
-                                }
-                                var mass_follow = pers.db.Followers_ignore_id.Split(',');
-                                foreach (var i in mass_fr)
-                                {
-                                    if (!string.IsNullOrEmpty(i))
-                                    {
-                                        var rec = Record(i, "DB");
-                                        ((Personal_record)rec).db.News_id += res_db.Id + ",";
+
                                     }
                                 }
+                                {
+                                    var mass_fr = db.Followers_connected.Where(x1 => x1.Something_one_id == check_id).ToList();
+                                    foreach (var i in mass_fr)
+                                    {
+
+                                        db.Wall_memes_connected.Add(new Relationship_with_memes(res_db.Id.ToString(), i.Something_two_id, true));
+
+                                    }
+                                }
+                                {
+                                    var mass_fr = db.Followers_ignore_connected.Where(x1 => x1.Something_one_id == check_id ).ToList();
+                                    foreach (var i in mass_fr)
+                                    {
+                                        db.Wall_memes_connected.Add(new Relationship_with_memes(res_db.Id.ToString(), i.Something_two_id, true));
+                                    }
+                                }
+                                
+
+
                                 db.SaveChanges();
                             }
 
-                            res_page = (IPage_view)pers;
+                            res_page = Record(id, "Personal_record"); ;
                             //res.db = res_db;
                         }
                     }
@@ -915,7 +942,9 @@ namespace Im.Controllers
                                 Img tmp = new Img(i);
                                 db.Images.Add(tmp);
                                 db.SaveChanges();
-                                res_db.Images_id += tmp.Id + ",";
+                                db.Images_connected.Add(new Relationship_with_images(res_db.Id.ToString(), tmp.Id.ToString(), false));
+
+                                
                             }
                         }
                         db.Memes.Add(res_db);
@@ -924,24 +953,26 @@ namespace Im.Controllers
                         //res.db = res_db;
                         //pers.Wall.Add(res);
 
+                        db.Wall_memes_connected.Add(new Relationship_with_memes(res_db.Id.ToString(), pers.db.Id.ToString(), false));
 
-                        pers.db.Wall_id += res_db.Id + ",";
+                        pers.db.Wall_count += 1;
+
                         db.SaveChanges();
 
                         //раскидать друзьям подписчикам
                         {
-                            var mass_follow = pers.db.Followers_id.Split(',');
-                            foreach (var i in mass_follow)
+                            var mass_fr = db.Friends_connected.Where(x1 => x1.Something_one_id == id ).ToList();
+                            foreach (var i in mass_fr)
                             {
-                                if (!string.IsNullOrEmpty(i))
-                                {
-                                    var rec = Record(i, "DB");
-                                    ((Personal_record)rec).db.News_id += res_db.Id + ",";
-                                }
+                                
+                                    db.Wall_memes_connected.Add(new Relationship_with_memes(res_db.Id.ToString(), i.Something_two_id, true));
+                                
+
+
                             }
-                            
-                            db.SaveChanges();
                         }
+                        db.SaveChanges();
+                       
 
                         res_page = (IPage_view)pers;
                         //res.db = res_db;
@@ -954,7 +985,7 @@ namespace Im.Controllers
                     break;
             }
            
-                return View("Personal_record", res_page);
+                return View("Personal_record", Record(((Personal_record)res_page).db.Id));
         }
         
 public Message_obg_record Message_person_block(string id,string person_id,int start_obg=0, int start_mes = 0, string bool_fullness = "Messages")
@@ -966,12 +997,14 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
             if (!string.IsNullOrEmpty(id))
             {
                  res = new Message_obg_record(db.Messages_obg.First(x1 => x1.Id.ToString() == id));
+                //не уверен TODO заполнение перед отправкой
             }
             else
             {
                 try
                 {
                      res = new Message_obg_record(db.Messages_obg.First(x1 => x1.Person_id.IndexOf(person_id) != -1));
+                    //не уверен  TODO заполнение перед отправкой
                 }
                 catch
                 {
@@ -979,8 +1012,9 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                     t.Person_id += check_id + "," + person_id + ",";
                     db.Messages_obg.Add(t);
                     db.SaveChanges();
-                    var pers = (Personal_record)Record(check_id, "DB");
-                    pers.db.Message_id +=t.Id+",";
+                    id = t.Id.ToString();
+                    db.Messages_dialog_person_connected.Add(new Relationship_string_string( t.Id.ToString(), check_id));
+                    db.Messages_dialog_person_connected.Add(new Relationship_string_string(t.Id.ToString(), person_id));
                     db.SaveChanges();
                     res = new Message_obg_record(t);
                 }
@@ -1015,9 +1049,11 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                 try
                 {
                     //db.Messages.First(x1 => x1.Id.ToString() == id)
-                    string[] str = res.db.Messages_id.Split(',');
-
-                        var a = db.Messages.First(x1 => x1.Id.ToString() == str[str.Count() - 2]);
+                    //var str = db.Messages_one_dialog_connected.Where(x1 => x1.Something_one_id == id).ToList();
+                    var str = db.Messages_one_dialog_connected.Where(x1 => x1.Something_one_id == id).Last();
+                    //string[] str = res.db.Messages_id.Split(',');
+                    int tmp =Convert.ToInt32( str.Something_two_id);
+                    var a = db.Messages.First(x1 => x1.Id == tmp);
                         res.Messages.Add(a);
                     
 
@@ -1033,19 +1069,18 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                 try
                 {
                     //db.Messages.First(x1 => x1.Id.ToString() == id)
-                    string[] str = res.db.Messages_id.Split(',');
+                    var str = db.Messages_one_dialog_connected.Where(x1 => x1.Something_one_id == id).Reverse().Take(30).Reverse().ToList();
                     List<Message> temp_mass_message = new List<Message>();
-                    
-                    for (int b = 0, i = str.Count() - 2 - start_mes; i >= 0 && b < 30; --i, ++b)
+                    foreach(var i in str)
                     {
-                        int tmp = Convert.ToInt32(str[i]);
+                        int tmp = Convert.ToInt32(i.Something_two_id);
                         var a = db.Messages.First(x1 => x1.Id == tmp);
                         temp_mass_message.Add(a);
-                        
                     }
-                    var temp_mass_message_array = temp_mass_message.ToArray().Reverse();
+                    
+                    //var temp_mass_message_array = temp_mass_message.ToArray().Reverse();
                    // Array.Reverse(temp_mass_message_array);
-                    res.Messages.AddRange(temp_mass_message_array);
+                    res.Messages.AddRange(temp_mass_message);
 
                 }
                 catch
@@ -1070,40 +1105,48 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
             ViewBag.like = false;
             ViewBag.repost = false;
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            string id_mem = not_res.Id.ToString();
             Memes_record res=new Memes_record(not_res);
             try
             {
-                for (int i = 0; i < res.db.Images_id.Count() - 2; ++i)
+                
+                var mass=db.Images_connected.Where(x1 => x1.Something_one_id == id_mem);
+                foreach(var i in mass)
                 {
-                    res.Images.Add((db.Images.First(x1 => x1.Id == res.db.Images_id[0])).bytes);
+                    int id_img =Convert.ToInt32( i.Something_two_id.ToString());
+                    res.Images.Add((db.Images.First(x1 => x1.Id == id_img).bytes));
                 }
+                
             }
             catch
             {
 
             }
 
-            var mass_liked = not_res.Liked_id.Split(',');
-            ViewBag.count_like =  mass_liked.Count() > 1 ? mass_liked.Count() - 1 : 0;
+            //var mass_liked = not_res.Liked_id.Split(',');
+            var mass_liked = db.Liked_connected.Where(x1=>x1.Something_one_id== id_mem).ToList();
+            //ViewBag.count_like =  mass_liked.Count() > 1 ? mass_liked.Count() - 1 : 0;
+            ViewBag.count_like = mass_liked.Count;
             //проверка на лайк
             foreach (var i in mass_liked)
             {
-                if (!string.IsNullOrEmpty(i))
+                if (!string.IsNullOrEmpty(i.Something_two_id))
                 {
-                    if (i == check_id)
+                    if (i.Something_two_id == check_id)
                         ViewBag.like = true;
                     
                 }
             }
 
-            var mass_repost = not_res.Repost_id.Split(',');
-            ViewBag.count_repost = mass_repost.Count() > 1 ? mass_repost.Count() - 1 : 0;
+            //var mass_repost = not_res.Repost_id.Split(',');
+            var mass_repost = db.Repost_connected.Where(x1 => x1.Something_one_id== id_mem).ToList();
+            ViewBag.count_repost = mass_repost.Count;
             //проверка на репост
-            foreach (var i in not_res.Repost_id.Split(','))
+            foreach (var i in mass_repost)
             {
-                if (!string.IsNullOrEmpty(i))
+                if (!string.IsNullOrEmpty(i.Something_two_id))
                 {
-                    if (i == check_id)
+                    if (i.Something_two_id == check_id)
                         ViewBag.repost = true;
 
                 }
@@ -1126,7 +1169,7 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
             //ViewBag.My_page = false;
             IPage_view res = null;
             var not_res= db.Groups.First(x1 => x1.Id.ToString() == id);
-
+            
 
             if (bool_fullness == "Group_record")
             {
@@ -1135,17 +1178,17 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                 string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
                 try
                 {
-                    var str = ((Group_record)res).db.Followers_id.Split(',');
-                    ViewBag.Count_followers = str.Count() > 1 ? str.Count() - 1 : 0;
-                    
-                    for (int b = 0, i = str.Count() - 2; i >= 0 && b < 5; --i, b++)
+                    //var str = ((Group_record)res).db.Followers_id.Split(',');
+                    var str = db.Friends_connected.Where(x1 => x1.Something_one_id== id).ToList();
+                    ViewBag.Count_followers = str.Count;
+                     str.Reverse();
+                    str = str.Take(6).ToList();
+                    foreach(var i in str)
                     {
-                        //-СЕЙЧАС
-                        var a = ((Person_short)Record(str[i], "Person_short"));
-
-                        //((Group_record)res).Followers.Add(((Person_short)Record(str[i], "Person_short")));
+                        var a = ((Person_short)Record(i.Something_two_id, "Person_short"));
                         ((Group_record)res).Followers.Add(a);
                     }
+                    
                         
                     
                 }
@@ -1155,29 +1198,24 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                 }
                 try
                 {
-                    var str = ((Group_record)res).db.Admins_id.Split(',');
+                    //var str = ((Group_record)res).db.Admins_id.Split(',');
+                    var str = db.Friends_connected.Where(x1 => x1.Something_one_id == id&&x1.Admin_group).ToList();
                     //ViewBag.My_page = false ;
                     foreach (var i in str)
                     {
 
-                        if (i == check_id)
+                        if (i.Something_two_id == check_id)
                         {
                             ViewBag.My_page = true;
                         }
                     }
-                    for (int b = 0, i = str.Count() - 2; i >= 0 && b < 5; --i, b++)
+                    str = str.Take(5).ToList();
+                    foreach(var i in str)
                     {
-                        //-СЕЙЧАС
-                        var a = ((Person_short)Record(str[i], "Person_short"));
-
-                        //((Group_record)res).Followers.Add(((Person_short)Record(str[i], "Person_short")));
+                        var a = ((Person_short)Record(i.Something_two_id, "Person_short"));
                         ((Group_record)res).Admins.Add(a);
                     }
-
-
-
-                    
-
+  
 
                 }
                 catch
@@ -1187,11 +1225,13 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
 
                 try
                 {
-                    var str = ((Group_record)res).db.Images_id.Split(',');
-                    for (int b = 0, i = str.Count() - 2; i >= 0 && b < 5; --i, b++)
+                    //var str = ((Group_record)res).db.Images_id.Split(',');
+                    var str = db.Images_connected.Where(x1 => x1.Something_one_id == id).Reverse().Take(5);
+                    foreach(var i in str)
                     {
-                        ((Group_record)res).Images.Add(db.Images.First(x1=>x1.Id.ToString()== str[i]).bytes);
+                        ((Group_record)res).Images.Add(db.Images.First(x1 => x1.Id.ToString() == i.Something_two_id).bytes);
                     }
+                    
 
 
                 }
@@ -1201,9 +1241,10 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                 }
                 try
                 {
-                    var str = ((Group_record)res).db.Main_images_id.Split(',');
-                    
-                        ((Group_record)res).Main_images.Add(db.Images.First(x1 => x1.Id.ToString() == str[str.Count() - 2]).bytes);
+                    //var str = ((Group_record)res).db.Main_images_id.Split(',');
+                    var str = db.Images_connected.Where(x1 => x1.Something_one_id == id&&x1.Main).Last();
+
+                        ((Group_record)res).Main_images.Add(db.Images.First(x1 => x1.Id.ToString() == str.Something_two_id).bytes);
                     
 
                 }
@@ -1213,12 +1254,14 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                 }
                 try
                 {
-                    
-                        var str = ((Group_record)res).db.Groups_id.Split(',');
-                    for (int b = 0, i = str.Count() - 2; i >= 0 && b < 5; --i, b++)
+
+                    //var str = ((Group_record)res).db.Groups_id.Split(',');
+                    var str = db.Groups_connected.Where(x1=>x1.Something_one_id==id).Take(5);
+                    foreach(var i in str)
                     {
-                        ((Group_record)res).Groups.Add((Group_short)Group(str[i], "Group_short"));
+                        ((Group_record)res).Groups.Add((Group_short)Group(i.Something_two_id, "Group_short"));
                     }
+                    
                 }
                 catch
                 {
@@ -1229,13 +1272,15 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
             if (bool_fullness == "Followers")
             {
                 res = new Group_record(not_res);
-                var lst = not_res.Followers_id.Split(',');
-                ViewBag.Count_followers = lst.Count() > 1 ? lst.Count() - 1 : 0;
+
+                //var lst = not_res.Followers_id.Split(',');
+                var lst = db.Friends_connected.Where(x1=>x1.Something_one_id==id);
+                ViewBag.Count_followers = lst.Count();
                 foreach (var i in lst)
                 {
-                    if (string.IsNullOrEmpty(i))
+                    if (string.IsNullOrEmpty(i.Something_two_id))
                     {
-                        ((Group_record)res).Followers.Add((Person_short)Record(i, "Person_short"));
+                        ((Group_record)res).Followers.Add((Person_short)Record(i.Something_two_id, "Person_short"));
                     }
                     
                 }
@@ -1243,12 +1288,13 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
             if (bool_fullness == "Admins")
             {
                 res = new Group_record(not_res);
-                var lst = not_res.Admins_id.Split(',');
+                //var lst = not_res.Admins_id.Split(',');
+                var lst = db.Friends_connected.Where(x1 => x1.Something_one_id == id && x1.Admin_group);
                 foreach (var i in lst)
                 {
-                    if (string.IsNullOrEmpty(i))
+                    if (string.IsNullOrEmpty(i.Something_two_id))
                     {
-                        ((Group_record)res).Admins.Add((Person_short)Record(i, "Person_short"));
+                        ((Group_record)res).Admins.Add((Person_short)Record(i.Something_two_id, "Person_short"));
                     }
 
                 }
@@ -1277,10 +1323,12 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
 
             }
                 if (bool_fullness == "Group_short"){
-                res = new Group_short(not_res);
-                var count = not_res.Followers_id.Split(',').Count();
-                ViewBag.Count_followers = count > 1 ? count - 1 : 0;
-                ((Group_short)res).Count_followers = ViewBag.Count_followers;
+                var count_fl = db.Friends_connected.Where(x1 => x1.Something_one_id == id).Count();
+                //TODO мб тут не null я хз че туда надо
+                res = new Group_short(not_res, count_fl,null);
+                
+                ViewBag.Count_followers = count_fl;
+                //((Group_short)res).Count_followers = ViewBag.Count_followers;
             }
             if (bool_fullness == "DB")
             {
@@ -1333,10 +1381,11 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                         byte[] a_b_tmp = null;
                         try
                         {
-                            var img = res.db.Main_images_id.Split(',');
-                            int id_tmp = Convert.ToInt32(img[img.Count() - 2]);
+                            //var img = res.db.Main_images_id.Split(',');
+                            var img = db.Images_connected.Where(x1 => x1.Something_two_id == id&&x1.Main).Last();
+                            int id_tmp = Convert.ToInt32(img.Something_one_id);
 
-                            var a_b123_tmp = db.Images.First(x1 => x1.Id == id_tmp);
+                            //var a_b123_tmp = db.Images.First(x1 => x1.Id == id_tmp);
 
 
                              a_b_tmp = db.Images.First(x1 => x1.Id == id_tmp).bytes;
@@ -1355,10 +1404,11 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                     {
                         try
                         {
-                            var main_img = res_ap.Main_images_id.Split(',');
-                            int id_tmp = Convert.ToInt32(main_img[main_img.Count() - 2]);
+                            //var main_img = res_ap.Main_images_id.Split(',');
+                            var main_img = db.Images_connected.Where(x1 => x1.Something_two_id == id && x1.Main).Last();
+                            int id_tmp = Convert.ToInt32(main_img.Something_one_id);
 
-                            var a_b123_tmp = db.Images.First(x1 => x1.Id == id_tmp);
+                            //var a_b123_tmp = db.Images.First(x1 => x1.Id == id_tmp);
                            
 
                             var a_b_tmp = db.Images.First(x1 => x1.Id == id_tmp).bytes;
@@ -1373,13 +1423,15 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                         try
                         {
                             //ФОТО, потом под 1 засунуть мб
-                            var not_main_img = res_ap.Images_id.Split(',');
+                            //var not_main_img = res_ap.Images_id.Split(',');
+                            var not_main_img = db.Images_connected.Where(x1 => x1.Something_two_id == id).Reverse().Take(5);
 
-                            for (int b = 0, i = not_main_img.Count() - 2; i >= 0 && b < 5; --i, b++)
+                            foreach(var i in not_main_img)
                             {
-                                int id_tmp = Convert.ToInt32(not_main_img[i]);
+                                int id_tmp = Convert.ToInt32(i.Something_one_id);
                                 res.Images.Add(db.Images.First(x1 => x1.Id == id_tmp).bytes);
                             }
+                            
                         }
                         catch
                         {
@@ -1388,12 +1440,13 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                         try
                         {
                             //заполнение групп
-                            List<string> gr = res.db.Groups_id.Split(',').ToList();
-                            for (int b = 0, i = gr.Count() - 2; i >= 0 && b < 5; --i, b++)
+                            //List<string> gr = res.db.Groups_id.Split(',').ToList();
+                            var gr = db.Groups_connected.Where(x1 => x1.Something_two_id == id).Take(5);
+                            foreach(var i in gr)
                             {
-
-                                res.Groups.Add((Group_short)Group(gr[i], "Group_short"));
+                                res.Groups.Add((Group_short)Group(i.Something_one_id, "Group_short"));
                             }
+                            
                                 
 
                         }
@@ -1429,14 +1482,17 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                         try
                         {
                             //заполнение друзей
-                            var lst = res.db.Friends_id.Split(',');
-                            
-                            for (int b = 0, i = lst.Count() - 2; i >= 0 && b < 5; --i, b++)
+                            //var lst = res.db.Friends_id.Split(',');
+                            var lst = db.Friends_connected.Where(x1 => x1.Something_one_id == id|| x1.Something_two_id == id).Take(5);
+
+                            foreach(var i in lst)
                             {
-
-                                res.Friends.Add((Person_short)Record(lst[i], "Person_short"));
+                                if(i.Something_one_id!=id)
+                                res.Friends.Add((Person_short)Record(i.Something_one_id, "Person_short"));
+                                else
+                                    res.Friends.Add((Person_short)Record(i.Something_two_id, "Person_short"));
                             }
-
+                            
 
                         }
                         catch
@@ -1454,76 +1510,89 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                         /*
                         try
                         {
-                            var str_mem_id = res.db.Wall_id.Split(',');
-                            for (int b = 0, i = str_mem_id.Count() - 2-start; i > 0 && b < 10; ++b, --i)
+                            //var tmp_mem = new List<Memes_record>();
+                           var tmp = db.Wall_memes_connected.Where(x1 => x1.Something_two_id == id && !x1.News).Reverse().Skip(start).Take(10).ToList();
+                            foreach(var i in tmp)
                             {
-                                string id_mem = str_mem_id[i];
-                                var mem_tmp = db.Memes.First(x1 => x1.Id.ToString() == id_mem);
+                                //res.Wall.Add(Memes(i.Something_one_id));
+                                var mem_tmp = db.Memes.First(x1 => x1.Id.ToString() == i.Something_one_id);
                                 res.Wall.Add(new Memes_record(mem_tmp));
                             }
+                           
                         }
-                        catch
-                        {
-
-                        }
+                        catch { }
                         */
                         
                     }
                     //мемы новости
                     if (bool_fullness == "News")
                     {
+
                         /*
                         try
                         {
-                            var str_mem_id = res.db.News_id.Split(',');
-                            for (int b = 0, i = str_mem_id.Count() - 2-start; i > 0 && b < 10; ++b, ++i)
+                            //var tmp_mem = new List<Memes_record>();
+                            var tmp = db.Wall_memes_connected.Where(x1 => x1.Something_two_id == id && x1.News).Reverse().Skip(start).Take(10).ToList();
+                            foreach (var i in tmp)
                             {
-                                string id_mem = str_mem_id[i];
-                                var mem_tmp = db.Memes.First(x1 => x1.Id.ToString() == id_mem);
+                                //res.News.Add(Memes(i.Something_one_id));
+                                var mem_tmp = db.Memes.First(x1 => x1.Id.ToString() == i.Something_one_id);
                                 res.News.Add(new Memes_record(mem_tmp));
                             }
-                        }
-                        catch
-                        {
 
                         }
+                        catch { }
                         */
+                        
                     }
                     if (bool_fullness == "Friends")
                     {
-                        var lst = res.db.Friends_id.Split(',');
-                        foreach(var i in lst)
+                        var lst = db.Friends_connected.Where(x1 => x1.Something_one_id == id || x1.Something_two_id == id);
+
+                        foreach (var i in lst)
                         {
-                            if(string.IsNullOrEmpty(i))
-                            res.Friends.Add((Person_short)Record(i, "Person_short"));
+                            if (i.Something_one_id != id)
+                                res.Friends.Add((Person_short)Record(i.Something_one_id, "Person_short"));
+                            else
+                                res.Friends.Add((Person_short)Record(i.Something_two_id, "Person_short"));
                         }
 
                     }
                     if (bool_fullness == "Followers")//мб разделить
                     {
-                        var lst = res.db.Followers_ignore_id.Split(',');
-                        foreach (var i in lst)
                         {
-                            if (string.IsNullOrEmpty(i))
-                                res.Followers_ignore.Add((Person_short)Record(i, "Person_short"));
+                            var lst = db.Followers_ignore_connected.Where(x1 => x1.Something_one_id == id);
+
+                            foreach (var i in lst)
+                            {
+
+                                res.Followers_ignore.Add((Person_short)Record(i.Something_one_id, "Person_short"));
+
+                            }
                         }
-                        var lst2 = res.db.Followers_id.Split(',');
-                        foreach (var i in lst)
                         {
-                            if (string.IsNullOrEmpty(i))
-                                res.Followers.Add((Person_short)Record(i, "Person_short"));
+                            var lst = db.Followers_connected.Where(x1 => x1.Something_one_id == id);
+
+                            foreach (var i in lst)
+                            {
+
+                                res.Followers.Add((Person_short)Record(i.Something_one_id, "Person_short"));
+
+                            }
                         }
+ 
 
                     }
                     if (bool_fullness == "Groups_all")
                     {
                         try
                         {
-                            List<string> lst = res.db.Groups_id.Split(',').ToList();
-                            for (var i = 0; i < lst.Count - 1; ++i)
+                            var lst = db.Groups_connected.Where(x1 => x1.Something_two_id == id);
+                            foreach(var i in lst)
                             {
-                                res.Groups.Add(((Group_short)Group(lst[i], "Group_short")));
+                                res.Groups.Add(((Group_short)Group(i.Something_one_id, "Group_short")));
                             }
+                            
                         }
                         catch
                         {
@@ -1536,12 +1605,13 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                     {
                         try
                         {
-                            List<string> lst = res.db.Message_id.Split(',').ToList();
-                            for (var i = 0; i < lst.Count - 1; ++i)
-                            {
+                            var lst = db.Messages_dialog_person_connected.Where(x1 => x1.Something_two_id == id);
 
-                                res.Message.Add(Message_person_block(lst[i],person_id:null));
+                            foreach(var i in lst)
+                            {
+                                res.Message.Add(Message_person_block(i.Something_one_id, person_id: null));
                             }
+                            
                         }
                         catch
                         {
@@ -1659,11 +1729,29 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
             IPage_view pers = null;
             IEnumerable<string> res = null;
             ViewBag.start = start;
+            List<string> not_res = new List<string>();
             switch (from)
             {
                 case "Personal_record":
-                    pers = Record(id, "Wall", start);
-                    res = ((Personal_record)pers).db.Wall_id.Split(',');
+                    // pers = Record(id, "Wall", start);
+                    
+                    try
+                    {
+                        //var tmp_mem = new List<Memes_record>();
+                        var tmp = db.Wall_memes_connected.Where(x1 => x1.Something_two_id == id && !x1.News).Reverse().Skip(start).Take(10).ToList();
+                        
+                        foreach (var i in tmp)
+                        {
+                            not_res.Add(i.Something_one_id);
+                        }
+
+                    }
+                    catch { }
+                    res = not_res;
+
+                    
+
+                    //TODO хз нужно ли
                     if (start == 0)
                         if (res.Count() == 0)
                             ViewBag.Count = 0;
@@ -1673,15 +1761,46 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                     break;
 
                 case "Group_record":
-                    pers = Group(id, "Wall", start);
-                    res = ((Group_record)pers).db.Wall_id.Split(','); 
+                    //pers = Group(id, "Wall", start);
+
+                    try
+                    {
+                        //var tmp_mem = new List<Memes_record>();
+                        var tmp = db.Wall_memes_connected.Where(x1 => x1.Something_two_id == id && !x1.News).Reverse().Skip(start).Take(10).ToList();
+                        foreach (var i in tmp)
+                        {
+                            not_res.Add(i.Something_one_id);
+                        }
+
+                    }
+                    catch { }
+                    res = not_res;
+
+
+
+                    
                     return res;
                     break;
 
                 default://"News"
                     string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
-                    pers = Record(check_id, "News", start);
-                    res = ((Personal_record)pers).db.News_id.Split(',');
+                    //pers = Record(check_id, "News", start);
+                    try
+                    {
+                        //var tmp_mem = new List<Memes_record>();
+                        var tmp = db.Wall_memes_connected.Where(x1 => x1.Something_two_id == check_id && x1.News).Reverse().Skip(start).Take(10).ToList();
+                        foreach (var i in tmp)
+                        {
+                            not_res.Add(i.Something_one_id);
+                        }
+
+                    }
+                    catch { }
+                    res = not_res;
+
+
+
+                    //TODO хз нужно ли
                     if (start == 0)
                         if (res.Count() == 0)
                             ViewBag.Count = 0;
