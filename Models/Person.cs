@@ -441,16 +441,119 @@ namespace Im.Models
 
 
 
-    public class Relationship_string_string
+    public abstract class Relationship_string_string
     {
         public int Id { get; set; }
         public string Something_one_id { get; set; }//"главное" если связь не между людьми то засовывать сюда
         public string Something_two_id { get; set; }
-        
+        public Relationship_string_string()
+        {
+            Something_one_id = "";
+            Something_two_id = "";
+        }
         public Relationship_string_string(string a,string b)
         {
             Something_one_id = a;
             Something_two_id = b;
+        }
+    }
+    public  class Relationship_string_string_Followers_connected : Relationship_string_string
+    {
+
+        public Relationship_string_string_Followers_connected() : base()
+        {
+        }
+            public Relationship_string_string_Followers_connected(string a, string b) : base(a, b)
+        {
+
+        }
+    }
+    public class Relationship_string_string_Followers_ignore_connected : Relationship_string_string
+    {
+
+        public Relationship_string_string_Followers_ignore_connected() : base()
+        {
+        }
+        public Relationship_string_string_Followers_ignore_connected(string a, string b) : base(a, b)
+        {
+
+        }
+    }
+    public class Relationship_string_string_Family_connected : Relationship_string_string
+    {
+
+        public Relationship_string_string_Family_connected() : base()
+        {
+        }
+        public Relationship_string_string_Family_connected(string a, string b) : base(a, b)
+        {
+
+        }
+    }
+    public class Relationship_string_string_Groups_connected : Relationship_string_string
+    {
+
+        public Relationship_string_string_Groups_connected() : base()
+        {
+        }
+        public Relationship_string_string_Groups_connected(string a, string b) : base(a, b)
+        {
+
+        }
+    }
+    public class Relationship_string_string_Liked_connected : Relationship_string_string
+    {
+
+        public Relationship_string_string_Liked_connected() : base()
+        {
+        }
+        public Relationship_string_string_Liked_connected(string a, string b) : base(a, b)
+        {
+
+        }
+    }
+    public class Relationship_string_string_Repost_connected : Relationship_string_string
+    {
+
+        public Relationship_string_string_Repost_connected() : base()
+        {
+        }
+        public Relationship_string_string_Repost_connected(string a, string b) : base(a, b)
+        {
+
+        }
+    }
+    public class Relationship_string_string_Messages_one_dialog_connected : Relationship_string_string
+    {
+
+        public Relationship_string_string_Messages_one_dialog_connected() : base()
+        {
+        }
+        public Relationship_string_string_Messages_one_dialog_connected(string a, string b) : base(a, b)
+        {
+
+        }
+    }
+    public class Relationship_string_string_Messages_dialog_person_connected : Relationship_string_string
+    {
+
+        public Relationship_string_string_Messages_dialog_person_connected() : base()
+        {
+        }
+        public Relationship_string_string_Messages_dialog_person_connected(string a, string b) : base(a, b)
+        {
+
+        }
+    }
+    public class Relationship_string_string_Black_list_connected : Relationship_string_string
+    {
+
+        public Relationship_string_string_Black_list_connected() : base()
+        {
+        }
+        public Relationship_string_string_Black_list_connected(string a, string b) : base(a, b)
+        {
+
         }
     }
     public class Relationship_with_admin_group
@@ -459,6 +562,12 @@ namespace Im.Models
         public string Something_one_id { get; set; }//"главное" если связь не между людьми то засовывать сюда
         public string Something_two_id { get; set; }
         public bool Admin_group { get; set; }
+        public Relationship_with_admin_group()
+        {
+            Something_one_id = "";
+            Something_two_id = "";
+            Admin_group = false;
+        }
         public Relationship_with_admin_group(string a, string b,bool c)
         {
             Something_one_id = a;
@@ -472,6 +581,12 @@ namespace Im.Models
         public string Something_one_id { get; set; }//"главное" если связь не между людьми то засовывать сюда
         public string Something_two_id { get; set; }
         public bool News { get; set; }
+        public Relationship_with_memes()
+        {
+            Something_one_id = "";
+            Something_two_id = "";
+            News = false;
+        }
         public Relationship_with_memes(string a, string b, bool c)
         {
             Something_one_id = a;
@@ -485,6 +600,12 @@ namespace Im.Models
         public string Something_one_id { get; set; }//"главное" если связь не между людьми то засовывать сюда
         public string Something_two_id { get; set; }
         public bool Main { get; set; }
+        public Relationship_with_images()
+        {
+            Something_one_id = "";
+            Something_two_id = "";
+            Main = false;
+        }
         public Relationship_with_images(string a, string b, bool c)
         {
             Something_one_id = a;

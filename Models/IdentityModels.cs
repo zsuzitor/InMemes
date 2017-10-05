@@ -137,15 +137,15 @@ namespace Im.Models
         public DbSet<Message> Messages { get; set; }
         //Relationship_string_string  Relationship_with_admin_group Relationship_with_memes Relationship_with_images
         //
-        public DbSet<Relationship_string_string> Followers_connected { get; set; }
-        public DbSet<Relationship_string_string> Followers_ignore_connected { get; set; }
-        public DbSet<Relationship_string_string> Family_connected { get; set; }
-        public DbSet<Relationship_string_string> Groups_connected { get; set; }
-        public DbSet<Relationship_string_string> Liked_connected { get; set; }
-        public DbSet<Relationship_string_string> Repost_connected { get; set; }
-        public DbSet<Relationship_string_string> Messages_one_dialog_connected { get; set; }
-        public DbSet<Relationship_string_string> Messages_dialog_person_connected { get; set; }
-        public DbSet<Relationship_string_string> Black_list_connected { get; set; }
+        public DbSet<Relationship_string_string_Followers_connected> Followers_connected { get; set; }
+        public DbSet<Relationship_string_string_Followers_ignore_connected> Followers_ignore_connected { get; set; }
+        public DbSet<Relationship_string_string_Family_connected> Family_connected { get; set; }
+        public DbSet<Relationship_string_string_Groups_connected> Groups_connected { get; set; }
+        public DbSet<Relationship_string_string_Liked_connected> Liked_connected { get; set; }
+        public DbSet<Relationship_string_string_Repost_connected> Repost_connected { get; set; }
+        public DbSet<Relationship_string_string_Messages_one_dialog_connected> Messages_one_dialog_connected { get; set; }
+        public DbSet<Relationship_string_string_Messages_dialog_person_connected> Messages_dialog_person_connected { get; set; }
+        public DbSet<Relationship_string_string_Black_list_connected> Black_list_connected { get; set; }
         public DbSet<Relationship_with_admin_group> Friends_connected { get; set; }
         public DbSet<Relationship_with_memes> Wall_memes_connected { get; set; }
         public DbSet<Relationship_with_images> Images_connected { get; set; }

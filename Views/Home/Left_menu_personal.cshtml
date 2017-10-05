@@ -27,6 +27,40 @@
         return false;
     }
 
+
+
+    
+
+    $(function () {
+        $(window).scroll(function () {
+            
+            //var b = $("#Layout_left_menu_id");
+            var b = document.getElementById("Layout_left_menu_id");
+            //b.style.top = parseInt(100) + 20 + 'px';
+            var c = b.getBoundingClientRect();
+            //alert(document.body.scrollTop);
+            if (c.bottom < 0) {
+                //alert("выше");
+                //var g = document.body.scrollTop;
+               
+                //alert(c.bottom);
+                var str = pageYOffset - b.offsetWidth;
+                //alert(str);
+                b.style.top = parseInt(str) + 'px';
+                //b.top = str;
+                //alert(b.style.top);
+
+            }
+            if (c.top > 50) {
+                var str= 60 + pageYOffset;
+                b.style.top = str + 'px';
+            }
+            
+        });
+    });
+
+
+
 </script>
 @if (list!=null)
 {

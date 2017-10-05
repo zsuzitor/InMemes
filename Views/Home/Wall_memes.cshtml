@@ -22,7 +22,7 @@
         if (!string.IsNullOrEmpty(i))
         {
     <li>
-        <div id=@string.Concat("Wall_memes_mem_bock_id_",i)>
+        <div id=@string.Concat("Wall_memes_mem_block_id_",i)>
             @Html.Action("Memes_partial", "Home", new { from = ViewBag.from, id_mem = i })
         </div>
     </li>}

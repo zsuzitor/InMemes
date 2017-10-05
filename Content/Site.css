@@ -93,17 +93,28 @@ div.Memes_under_block_small_true {
 div.Memes_partial_under_all_block{
     height:45px;
 }
-div.memes_partial_options_mem {
+/*div.memes_partial_options_mem {
     width: 30px;
     height: 30px;
     
          position: absolute;
         top:0px;
-        left:400px;
+        float:right;
         font-size:20pt;
     
+}*/
+div.memes_partial_options_mem {
+    font-size: 20pt;
 }
- div.memes_partial_options_mem:hover {
+    div .memes_partial_options_mem_all {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    vertical-align: top;
+    float:right;
+   
+}
+    div .memes_partial_options_mem:hover {
     cursor: pointer;
 }
 /*div.memes_partial_options_mem_open {
@@ -119,9 +130,12 @@ background-color: black;
     }
 
 */
-    
-div.memes_partial_one_mem_block {
-    position:relative;
+div.memes_partial_one_mem_block_left_name {
+    display: inline-block;
+    vertical-align: top;
+    width: 80%;
+}div.memes_partial_one_mem_block {
+    position: relative;
 }
 /*main_header*/
 div.main_header {
@@ -182,8 +196,10 @@ div.Left_menu_personal_up_block {
 div .Layout_left_menu {
     /*СЮДА*/
     width: 200px;
-    position: fixed;
-    height: 1000px;
+    position: absolute;
+    /*
+        top:100px;
+        position: fixed;*/
 }
 div.Layout_left_menu_up {
     background-color: aqua;
@@ -513,7 +529,7 @@ div.Group_record_photo_block {
 }
 div.Group_record_right_all_block {
     margin-left:40px;
-    height: 500px;
+    
     width: 300px;
     
     display: inline-block;
