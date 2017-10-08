@@ -9,8 +9,48 @@
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/scripts/jquery-3.1.1.js")
     @Scripts.Render("~/scripts/jquery.unobtrusive-ajax.js")
+
+
+
+   
+
+
 </head>
+
 <body>
+    <script>
+        
+         $(function () {
+             $(window).scroll(function () {
+                 
+                 var b = $(".Layout_all_block_left");
+                 var height_window = $(window).height();
+                 var top_block = $(".Layout_all_block_left").offset().top - $(window).scrollTop();
+                 var bot_block = $(".Layout_all_block_left").offset().top + $(".Layout_all_block_left").height() - $(window).scrollTop();
+                 
+                 if ($(".Layout_all_block_left").height() < (height_window - 60 - $(".Layout_footer").height())) {
+                     var block = $(".Layout_all_block_left");
+                     var str = 60 + pageYOffset;
+                     block.offset({ top: str, left: block.offset().left });
+                 }
+                 else {
+                     var lvl = height_window  - $(".Layout_footer").height()-40;//если расширять то не правильно  в конце проверку что бы не заходил на футер и все
+                     
+                     if (bot_block < lvl) {
+                         var block = $(".Layout_all_block_left");
+                         var res = $(window).scrollTop() + $(window).height() - $(".Layout_footer").height() - block.height() - 10 -40;
+                         block.offset({ top: res, left: block.offset().left });
+                     }
+                     if (top_block > 60) {
+                         var block = $(".Layout_all_block_left");
+                         var res = $(window).scrollTop() + 60;
+                         block.offset({ top: res, left: block.offset().left });
+                     }
+                 }
+             });
+         });
+    </script>
+
     <div class="main_header">
         <div class="main_header_home">
             @Html.ActionLink("InMemes", "Index", "Home", new { }, new { @class = "link_standart_for_div" })
@@ -47,8 +87,9 @@
 
         </div>
     </div>
-    <hr />
-    <footer>
+    
+    <footer class="Layout_footer">
+        <hr />
         <p>@DateTime.Now</p>
     </footer>
 

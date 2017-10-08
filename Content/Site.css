@@ -24,9 +24,9 @@ textarea {
     max-width: 280px;
 }
 
-
-
-.link_standart_for_div {
+div.Layout_all_block_left {
+    /*transition :1s;*/
+}.link_standart_for_div {
     display: block; /* Ссылка как блочный элемент */
     text-align: center; /* Выравнивание по центру */
     height: 100%; /* Высота на весь слой */
@@ -247,6 +247,8 @@ div.Personal_record_group_img_block {
     margin-top: 10px;
 }div.Personal_record_friend_all_block {
     margin-top: 30px;
+    /*УБРАТЬ*/
+    
 }
 div.Personal_record_one_friend_img {
     width: 100px;
@@ -385,6 +387,7 @@ div.Edit_personal_record_info_load_ajax_osn_left_block {
     display: inline-block;
     vertical-align: top;
     width: 400px;
+    min-height:300px;
     
     background-color:white;
 }
