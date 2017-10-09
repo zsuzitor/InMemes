@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Im.Models.Img>
+@{
+    ViewBag.Title = "Albums";
+}
+
+<div>
+    <div>
+        
+    </div>
+    <div>
+        <div>
+            
+
+
+        </div>
+        @foreach (var i in (List<Im.Models.Img>)ViewBag.Albums)
+        {
+            <div>
+                <div class="" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.bytes) );background-size: cover; ">
+                    <a class="link_standart_for_div" href='@Url.Action("Album_photo", "Home",new { album_name=i.Albums,id_user=ViewBag.id_user } )'></a>
+                </div>
+                @if (@i.Albums == "")
+                {
+                    <p>Все Альбомы</p>
+                }
+                @if (@i.Albums != "")
+                {
+                    <p>@i.Albums</p>
+                }
+               
+            </div>
+        }
+    </div>
+    <div>
+       @Html.Action("Album_photo", "Home",new { album_name="", id_user= ViewBag.id_user })
+    </div>
+</div>
+

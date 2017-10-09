@@ -25,7 +25,7 @@
         {
     <li>
         <div id=@string.Concat("Wall_memes_mem_block_id_",i)>
-            @Html.Action("Memes_partial", "Home", new { from = ViewBag.from, id_mem = i })
+            @Html.Action("Memes_partial", "Home", new { from = ViewBag.from,from_id= ViewBag.from_id , id_mem = i })
         </div>
     </li>}
 

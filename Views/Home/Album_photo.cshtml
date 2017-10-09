@@ -1,0 +1,11 @@
+﻿@model IEnumerable<Im.Models.Img>
+<div>
+
+
+    @foreach (var i in Model)
+    {
+        <div class="" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.bytes) );background-size: cover; ">
+            <a class="link_standart_for_div" href='@Url.Action("Record_photo_page", "Home",new {id=i.Id  } )'></a>
+        </div>
+    }
+</div>

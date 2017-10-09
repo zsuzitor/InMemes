@@ -30,8 +30,11 @@
         <p>@Model.db.Description</p>
         <p>@Model.db.Birthday</p>
     </div>
-    <div class="memes_partial_options_mem_all"><div class="memes_partial_options_mem">...</div>
-<div class="memes_partial_options_mem_open"></div></div>
+    <div class="memes_partial_options_mem_all"><div class="memes_partial_options_mem">
+        @Html.ActionLink("X", "Delete", "Home",new { what= "memes", from= ViewBag.from, from_id= ViewBag.from_id , id =Model.db.Id, },new { })</div>
+<div class="memes_partial_options_mem_open">
+    
+    </div></div>
     
     @if (Model.db.Image != null)
     {
