@@ -165,19 +165,25 @@ namespace Im.Controllers
             return View();
         }
         //TODO
-        public ActionResult Album_photo(string album_name,string id_user)
+        public ActionResult Album_photo(string id_user, string album_name = "")
         {
+            id_user = string.IsNullOrEmpty(id_user) ?  System.Web.HttpContext.Current.User.Identity.GetUserId() : id_user;
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
-            var list_photo_all_id = db.Images_connected.Where(x1 => x1.Something_two_id == check_id);
+            var list_photo_all_id = db.Images_connected.Where(x1 => x1.Something_two_id == check_id).ToList();
             var res = new List<Img>();
-
+            ViewBag.Album_name = string.IsNullOrEmpty( album_name)? "Все Альбомы": album_name;
             foreach (var i in list_photo_all_id)
             {
                 
                 int int_id = Convert.ToInt32(i.Something_one_id);
-                var image = db.Images.First(x1 => x1.Id == int_id);
-                if(image.Albums== album_name)
-                res.Add(image);
+                try
+                {
+                    var image = db.Images.First(x1 => x1.Id == int_id&&( string.IsNullOrEmpty(album_name)?true:x1.Albums==album_name));
+                    //if (image.Albums == album_name)
+                        res.Add(image);
+                }
+                catch { }
+                
                 
 
             }
@@ -192,9 +198,10 @@ namespace Im.Controllers
         public ActionResult Albums(string id)
         {
             //TODO 
-            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
-            ViewBag.id_user = check_id;
-            var list_photo_all_id = db.Images_connected.Where(x1 => x1.Something_two_id == check_id);
+            id=string.IsNullOrEmpty(id) ?  System.Web.HttpContext.Current.User.Identity.GetUserId() : id;
+            //string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            ViewBag.id_user = id;
+            var list_photo_all_id = db.Images_connected.Where(x1 => x1.Something_two_id == id).ToList();
             var albums= new List<Img>();
            // var res = new List<Img>();
 
@@ -214,7 +221,7 @@ namespace Im.Controllers
                 
             }
             //res.Reverse();
-            ViewBag.Albums = albums;
+            //ViewBag.Albums = albums;
 
             return View(albums);
         }
@@ -1183,11 +1190,11 @@ namespace Im.Controllers
             return PartialView("Add_new_group_ajax");
         }
         [HttpPost]
-        public ActionResult Add_new_image(HttpPostedFileBase[] uploadImage, string for_what,string from)
+        public ActionResult Add_new_image(HttpPostedFileBase[] uploadImage, string for_what,string from,string Album_name="")
         {
             IPage_view res_page = null;
             var lst1 = Get_photo_post(uploadImage);
-            var lst2 = Get_photo_post(lst1);
+            var lst2 = Get_photo_post(lst1, Album_name);
             //ViewBag.My_page = false;
             if (from == "person")
             {
@@ -2073,12 +2080,12 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
 
             return res;
         }
-        public List<Img> Get_photo_post(IEnumerable<byte[]> Images)
+        public List<Img> Get_photo_post(IEnumerable<byte[]> Images,string Album_name)
         {
             List<Img> res = new List<Img>();
             foreach(var i in Images)
             {
-                res.Add(new Img(i));
+                res.Add(new Img(i) { Albums= Album_name });
             }
             return res;
         }

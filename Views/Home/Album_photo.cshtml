@@ -1,11 +1,40 @@
 ﻿@model IEnumerable<Im.Models.Img>
 <div>
+    <h1 style="text-align: center;">Текущий альбом:  @ViewBag.Album_name</h1>
+
+    <div class="div_color_white">
+        <p>Добавление в текущий альбом</p>
+
+        <div class="div_color_white">
+            @using (Html.BeginForm("Add_new_image", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.Hidden("from", "person")
+                @Html.Hidden("for_what", "not_main_img")
+                @Html.Hidden("Album_name", (string)ViewBag.Album_name)
+                <div class="Albums_load_img_up_block">
+                    <p>картинка</p>
+
+                    <input type="file" name="uploadImage[0]" />
+                </div>
+
+                    
+                    <div class="Albums_load_img_up_block_input">
+                        <p>Готово?</p><input type="submit" class="submit" value="Добавить" />
+                    </div>
+
+            }
+        </div>
+    </div>
+    <hr />
+
 
 
     @foreach (var i in Model)
     {
-        <div class="" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.bytes) );background-size: cover; ">
-            <a class="link_standart_for_div" href='@Url.Action("Record_photo_page", "Home",new {id=i.Id  } )'></a>
+        <div class="Album_photo_one_img_block_padding ">
+            <div class="Album_photo_one_img_block" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.bytes) );background-size: cover; ">
+                <a class="link_standart_for_div" href='@Url.Action("Record_photo_page", "Home",new {id=i.Id  } )'></a>
+            </div>
         </div>
     }
-</div>
+        </div>

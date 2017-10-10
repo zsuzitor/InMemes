@@ -5,33 +5,66 @@
 
 <div>
     <div>
-        
+        <div class="div_color_white"> 
+            <p>Создание нового альбома</p>
+            <p>Предупреждение: альбом без картинок удаляется</p>
+            <div class="div_color_white">
+            @using (Html.BeginForm("Add_new_image", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.Hidden("from", "person")
+                @Html.Hidden("for_what", "not_main_img")
+                <div class="Albums_load_img_up_block"><p>картинка</p>
+
+<input type="file" name="uploadImage[0]" /></div>
+                
+                <div class="Albums_load_img_name_album_up_block"><p>название альбома</p>
+@Html.Editor("Album_name", new { })</div>
+            <div class="Albums_load_img_up_block_input">
+            <p>Готово?</p><input type="submit" class="submit" value="Создать" /></div>
+
+            }</div>
+        </div>
+
     </div>
-    <div>
+    <div class="div_color_white">
         <div>
             
 
-
+            <h1>Ваши альбомы</h1>
         </div>
-        @foreach (var i in (List<Im.Models.Img>)ViewBag.Albums)
-        {
-            <div>
-                <div class="" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.bytes) );background-size: cover; ">
-                    <a class="link_standart_for_div" href='@Url.Action("Album_photo", "Home",new { album_name=i.Albums,id_user=ViewBag.id_user } )'></a>
+        @foreach (var i in Model)
+        {//(List<Im.Models.Img>)ViewBag.Albums
+         //<a class="link_standart_for_div" href='@Url.Action("Album_photo", "Home",new { album_name=i.Albums,id_user=ViewBag.id_user } )'></a>
+            <div class="Albums_one_album_block">
+                <div class="Albums_one_album_main_img_block" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.bytes) );background-size: cover; ">
+                    @Ajax.ActionLink(" ", "Album_photo", "Home",new { album_name=i.Albums, id_user = ViewBag.id_user }, new AjaxOptions { UpdateTargetId = "Albums_photo_one_album_block" }, new { @class = "link_standart_for_div" })
+                    
                 </div>
                 @if (@i.Albums == "")
                 {
-                    <p>Все Альбомы</p>
+                    <div class="Albums_one_album_name">
+                        @Ajax.ActionLink("Все Альбомы", "Album_photo", "Home", new { album_name = i.Albums, id_user = ViewBag.id_user }, new AjaxOptions { UpdateTargetId = "Albums_photo_one_album_block" }, new { @class = "link_standart_for_div" })
+                    </div>
+                    
                 }
                 @if (@i.Albums != "")
                 {
-                    <p>@i.Albums</p>
+                    <div class="Albums_one_album_name">
+                        @Ajax.ActionLink(@i.Albums, "Album_photo", "Home", new { album_name = i.Albums, id_user = ViewBag.id_user }, new AjaxOptions { UpdateTargetId = "Albums_photo_one_album_block" }, new { @class = "link_standart_for_div" })
+                    </div>
+                    
                 }
                
             </div>
         }
     </div>
-    <div>
+    
+    <hr/>
+    
+    <div id="Albums_photo_one_album_block"class="div_color_white">
+
+
+
        @Html.Action("Album_photo", "Home",new { album_name="", id_user= ViewBag.id_user })
     </div>
 </div>
