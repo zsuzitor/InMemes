@@ -143,26 +143,63 @@ namespace Im.Controllers
         }
 
         //TODO 
-        public ActionResult Record_photo_page(string from, string id)
+        public ActionResult Record_photo_page(string from, string id_image,string album_name)
         {
+            //что то типо параметров поиска хз пока что
             //TODO закидывать фото юзеру и проверять что бы его фото отдавать продумать мб вообще не нужно
             //смотреть че как и фото отображать
-            if (string.IsNullOrEmpty(id))
-            {
-                id = System.Web.HttpContext.Current.User.Identity.GetUserId();
-            }
-            IPage_view res = null;
+            //TODO надо соседние фото определить что бы листать можно было
+            //TODO список альбомов польователя??? пока что так
+            var check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
 
-            switch (from)
+
+
+            Img res = null;
+            if (!string.IsNullOrEmpty(id_image))
             {
-                case "Personal_record":
-                    res = Record(id, "Groups_all");
-                    break;
-                case "Group_record":
-                    break;
+                //TODO альбомы исправить на что то лучше иб при отдельном запросе мб хранить просто в списке
+
+                var list_photo_all_id = db.Images_connected.Where(x1 => x1.Something_two_id == check_id).ToList();
+                var albums = new List<Img>();
+                // var res = new List<Img>();
+
+                foreach (var i in list_photo_all_id)
+                {
+                    int int_id = Convert.ToInt32(i.Something_one_id);
+                    var image = db.Images.First(x1 => x1.Id == int_id);
+                    //res.Add(image);
+                    try
+                    {
+                        albums.First(x1 => x1.Albums == image.Albums);
+                    }
+                    catch
+                    {
+                        albums.Add(image);
+                    }
+
+                }
+                ViewBag.Albums = albums;
+
+
+
+
+
+
+                int int_id_image = Convert.ToInt32(id_image);
+                 res = db.Images.First(x1 => x1.Id == int_id_image);
+                var list_like = db.Liked_connected.Where(x1 => x1.Something_one_id == id_image);
+                ViewBag.Count_like = list_like.Count();
+                ViewBag.Like_list = list_like.Take(5);
+                //+репост
             }
+            else
+            {
+
+            }
+
+
             //
-            return View();
+            return PartialView(res);
         }
         //TODO
         public ActionResult Album_photo(string id_user, string album_name = "")

@@ -73,31 +73,34 @@
             
         
     </div>
-    <div id="Left_menu_personal_up_block_id" class="Left_menu_personal_up_block" onclick="return up()">
-        <div class="Left_menu_personal_up_block_inscription">
-            <h1>^</h1><p>НАВЕРХ</p>
-        </div>
-    </div>
-    <div class="Layout_all_l_b">
+    <div id="Record_photo_page_one_photo_block_id">
         
+    </div>
+        <div id="Left_menu_personal_up_block_id" class="Left_menu_personal_up_block" onclick="return up()">
+            <div class="Left_menu_personal_up_block_inscription">
+                <h1>^</h1><p>НАВЕРХ</p>
+            </div>
+        </div>
+        <div class="Layout_all_l_b">
+
             @Html.Action("Left_menu_personal", "Home", new { })
-        
-        <div class="Layout_body">
-            @RenderBody()
 
+            <div class="Layout_body">
+                @RenderBody()
+
+            </div>
         </div>
-    </div>
-    
-    <footer class="Layout_footer">
-        <hr />
-        <p>@DateTime.Now</p>
-    </footer>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    
-        
-    
-    @RenderSection("scripts", required: false)
+        <footer class="Layout_footer">
+            <hr />
+            <p>@DateTime.Now</p>
+        </footer>
+
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+
+
+
+        @RenderSection("scripts", required: false)
 </body>
 </html>

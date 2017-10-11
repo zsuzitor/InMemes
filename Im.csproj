@@ -282,6 +282,7 @@
     <Content Include="Views\Home\Messages_one_dialog.cshtml" />
     <Content Include="Views\Home\Albums.cshtml" />
     <Content Include="Views\Home\Album_photo.cshtml" />
+    <Content Include="Views\Home\Record_photo_page.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
