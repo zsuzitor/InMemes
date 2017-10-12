@@ -270,9 +270,9 @@ namespace Im.Models
         //стена 
         public List<Memes_record> Wall { get; set; }
         //фото //
-        public List<byte[]> Images { get; set; }
+        public List<Img> Images { get; set; }
         //авы
-        public List<byte[]> Main_images { get; set; }
+        public List<Img> Main_images { get; set; }
         //группы
         public List<Group_short> Groups { get; set; }
         public List<Person_short> Black_list { get; set; }
@@ -290,8 +290,8 @@ namespace Im.Models
             Message = new List<Message_obg_record>();
             News = new List<Memes_record>();
             Wall = new List<Memes_record>();
-            Images = new List<byte[]>();
-            Main_images = new List<byte[]>();
+            Images = new List<Img>();
+            Main_images = new List<Img>();
             Groups = new List<Group_short>();
             Black_list = new List<Person_short>();
         }
@@ -322,8 +322,8 @@ namespace Im.Models
             Message = new List<Message_obg_record>();
             News = new List<Memes_record>();
             Wall = new List<Memes_record>();
-            Images = new List<byte[]>();
-            Main_images = new List<byte[]>();
+            Images = new List<Img>();
+            Main_images = new List<Img>();
             Groups = new List<Group_short>();
             Black_list = new List<Person_short>();
         }

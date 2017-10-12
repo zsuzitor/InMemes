@@ -32,6 +32,7 @@
                      var block = $(".Layout_all_block_left");
                      var str = 60 + pageYOffset;
                      block.offset({ top: str, left: block.offset().left });
+                    
                  }
                  else {
                      var lvl = height_window  - $(".Layout_footer").height()-40;//если расширять то не правильно  в конце проверку что бы не заходил на футер и все
@@ -40,18 +41,25 @@
                          var block = $(".Layout_all_block_left");
                          var res = $(window).scrollTop() + $(window).height() - $(".Layout_footer").height() - block.height() - 10 -40;
                          block.offset({ top: res, left: block.offset().left });
+                         
                      }
                      if (top_block > 60) {
                          var block = $(".Layout_all_block_left");
                          var res = $(window).scrollTop() + 60;
                          block.offset({ top: res, left: block.offset().left });
+                        
                      }
                  }
+                 //var test = $("#Record_photo_page_one_photo_block_id");
+                 //test.offset({ top: test.offset().top, left: test.offset().left });
              });
          });
     </script>
-
+    
     <div class="main_header">
+        <div id="Record_photo_page_one_photo_block_id">
+
+        </div>
         <div class="main_header_home">
             @Html.ActionLink("InMemes", "Index", "Home", new { }, new { @class = "link_standart_for_div" })
         </div>
@@ -73,9 +81,7 @@
             
         
     </div>
-    <div id="Record_photo_page_one_photo_block_id">
-        
-    </div>
+    
         <div id="Left_menu_personal_up_block_id" class="Left_menu_personal_up_block" onclick="return up()">
             <div class="Left_menu_personal_up_block_inscription">
                 <h1>^</h1><p>НАВЕРХ</p>
@@ -90,7 +96,7 @@
 
             </div>
         </div>
-
+    
         <footer class="Layout_footer">
             <hr />
             <p>@DateTime.Now</p>

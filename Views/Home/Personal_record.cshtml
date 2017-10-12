@@ -31,45 +31,77 @@
 </script>
 <div  class="Personal_record_body_left_block Layout_all_block_left">
     <div class="Personal_record_main_img_lvl_1_div">
-        <div class="Personal_record_main_img_div">
-           @if (Model.Main_images.Count > 0)
-           {
-            @Html.Raw(string.Concat("<img  class='Personal_record_main_img'  id ='Personal_record_main_img_id'", " src=\"data:image/jpeg;base64,"
-, Convert.ToBase64String(Model.Main_images[0]), "\" />"))
-           }
+
+
+        @{
+            /*<div class="Personal_record_main_img_div" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(Model.Main_images[0].bytes) );background-size: cover; ">
+                @Ajax.ActionLink(" ", "Record_photo_page", "Home", new { id_image = Model.Main_images[0].Id }, new AjaxOptions { UpdateTargetId = "Record_photo_page_one_photo_block_id" }, new { @class = "link_standart_for_div" })
+
+
+            </div>*/
+
+        }
+       
+
+        
+
+            @if (Model.Main_images.Count > 0)
+            {
+                <div class="Personal_record_main_img_div" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(Model.Main_images[0].bytes) ) no-repeat;background-size: cover;">
+                    @Ajax.ActionLink(" ", "Record_photo_page", "Home", new { id_image = Model.Main_images[0].Id }, new AjaxOptions { UpdateTargetId = "Record_photo_page_one_photo_block_id" }, new { @class = "link_standart_for_div" })
+
+
+                </div>
+            }
             @if (Model.Main_images.Count == 0)
             {
-                <img src="~/Content/images/H98hxNY4xTo.jpg" />
+                <div class="Personal_record_main_img_div">
+                    <img src="~/Content/images/H98hxNY4xTo.jpg" />
+                </div>
+            }
+        
+            @{
+                /*<div class="Personal_record_main_img_div">
+                        @if (Model.Main_images.Count > 0)
+                        {
+                            @Html.Raw(string.Concat("<img  class='Personal_record_main_img'  id ='Personal_record_main_img_id'", " src=\"data:image/jpeg;base64,"
+    , Convert.ToBase64String(Model.Main_images[0].bytes), "\" />"))
+                        }
+                        @if (Model.Main_images.Count == 0)
+                        {
+                            <img src="~/Content/images/H98hxNY4xTo.jpg" />
+                        }
+
+
+
+
+                    </div>*/
             }
 
+            <div class="Personal_record_edit_under_main_img">
+                <div>
+                    @using (Html.BeginForm("Add_new_image", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.Hidden("from", "person")
+                        @Html.Hidden("for_what", "main_img")
 
-             
-            
-        </div>
-        <div class="Personal_record_edit_under_main_img">
-            <div>
-                @using (Html.BeginForm("Add_new_image", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        <input type="file" name="uploadImage[0]" />
+                            <input type="submit" class="submit" value="Поделиться" />
+                    }
+                </div>
+                @if (ViewBag.My_page != null && (bool)ViewBag.My_page)
                 {
-                    @Html.Hidden("from", "person")
-                    @Html.Hidden("for_what", "main_img")
+                    @Html.ActionLink("Редактировать", "Edit_personal_record", "Home", new { }, new { @class = "link_standart_for_div" })
 
-                    <input type="file" name="uploadImage[0]" />
-                    <input type="submit" class="submit" value="Поделиться" />
                 }
-            </div>
-            @if (ViewBag.My_page!=null&&(bool)ViewBag.My_page)
-            {
-                @Html.ActionLink("Редактировать", "Edit_personal_record", "Home", new { }, new { @class = "link_standart_for_div" })
-
-            }
-@if (!(bool)ViewBag.My_page)
-{
-    @Html.Action("Follow_ajax", "Home", new { from = "Personal_record", id = Model.db.Id })
-}
-@Html.ActionLink("Написать сообщение", "Messages_one_dialog", "Home",new{ person_id=Model.db.Id },new { })
+                @if (!(bool)ViewBag.My_page)
+                {
+                    @Html.Action("Follow_ajax", "Home", new { from = "Personal_record", id = Model.db.Id })
+                }
+                @Html.ActionLink("Написать сообщение", "Messages_one_dialog", "Home", new { person_id = Model.db.Id }, new { })
 
             </div>
-    </div>
+        </div>
 
     <div class="div_color_white Personal_record_friend_all_block">
         @Html.ActionLink("Друзья", "Friends", "Home", new { what = "Friends", from = "Personal_record", id = Model.db.Id }, new { })
@@ -297,7 +329,7 @@
  {
     <div  class='Personal_record_not_main_img_small'>
         @Html.Raw(string.Concat("<img", " src=\"data:image/jpeg;base64,"
-, Convert.ToBase64String(Model.Images[i]), "\" />"))
+, Convert.ToBase64String(Model.Images[i].bytes), "\" />"))
     </div>
  }
 

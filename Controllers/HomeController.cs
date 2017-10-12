@@ -143,22 +143,26 @@ namespace Im.Controllers
         }
 
         //TODO 
-        public ActionResult Record_photo_page(string from, string id_image,string album_name)
+        public ActionResult Record_photo_page( string id_image)//string from,,string album_name
         {
             //что то типо параметров поиска хз пока что
             //TODO закидывать фото юзеру и проверять что бы его фото отдавать продумать мб вообще не нужно
             //смотреть че как и фото отображать
             //TODO надо соседние фото определить что бы листать можно было
             //TODO список альбомов польователя??? пока что так
-            var check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+
+
+            //TODO Record_photo_page  проверить сейчас альбомы null или устые возвращает + добавить ViewBag.Preview_img_id и  ViewBag.Next_img_id
+
+        var check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
 
 
 
             Img res = null;
             if (!string.IsNullOrEmpty(id_image))
             {
-                //TODO альбомы исправить на что то лучше иб при отдельном запросе мб хранить просто в списке
 
+                //TODO альбомы исправить на что то лучше иб при отдельном запросе мб хранить просто в списке
                 var list_photo_all_id = db.Images_connected.Where(x1 => x1.Something_two_id == check_id).ToList();
                 var albums = new List<Img>();
                 // var res = new List<Img>();
@@ -1871,7 +1875,7 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                             //var a_b123_tmp = db.Images.First(x1 => x1.Id == id_tmp);
                            
 
-                            var a_b_tmp = db.Images.First(x1 => x1.Id == id_tmp).bytes;
+                            var a_b_tmp = db.Images.First(x1 => x1.Id == id_tmp);//.bytes
 
 
                             res.Main_images.Add(a_b_tmp);
@@ -1889,7 +1893,7 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                             foreach (var i in not_main_img.Take(5))
                             {
                                 int id_tmp = Convert.ToInt32(i.Something_one_id);
-                                res.Images.Add(db.Images.First(x1 => x1.Id == id_tmp).bytes);
+                                res.Images.Add(db.Images.First(x1 => x1.Id == id_tmp));//.bytes
                             }
                             
                         }
