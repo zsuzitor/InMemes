@@ -143,7 +143,7 @@ namespace Im.Controllers
         }
 
         //TODO 
-        public ActionResult Record_photo_page( string id_image)//string from,,string album_name
+        public ActionResult Record_photo_page( string id_image, string album_name)//string from,,string album_name
         {
             //что то типо параметров поиска хз пока что
             //TODO закидывать фото юзеру и проверять что бы его фото отдавать продумать мб вообще не нужно
@@ -153,48 +153,67 @@ namespace Im.Controllers
 
 
             //TODO Record_photo_page  проверить сейчас альбомы null или устые возвращает + добавить ViewBag.Preview_img_id и  ViewBag.Next_img_id
-
-        var check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
-
+            //ViewBag.Preview_img_id и  ViewBag.Next_img_id
+            var check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            var list_album = new List<Img>();
 
 
             Img res = null;
             if (!string.IsNullOrEmpty(id_image))
             {
+                int int_id_image = Convert.ToInt32(id_image);
+                res = db.Images.First(x1 => x1.Id == int_id_image);
+                var list_like = db.Liked_connected.Where(x1 => x1.Something_one_id == id_image);
+                ViewBag.Count_like = list_like.Count();
+                ViewBag.Like_list = list_like.Take(5);
+                //+репост
 
-                //TODO альбомы исправить на что то лучше иб при отдельном запросе мб хранить просто в списке
-                var list_photo_all_id = db.Images_connected.Where(x1 => x1.Something_two_id == check_id).ToList();
-                var albums = new List<Img>();
+
+
+
+                {
+
+
+                    //TODO альбомы исправить на что то лучше иб при отдельном запросе мб хранить просто в списке
+                    var list_photo_all_id = db.Images_connected.Where(x1 => x1.Something_two_id == check_id).ToList();
+                var albums = new List<string>();
                 // var res = new List<Img>();
 
                 foreach (var i in list_photo_all_id)
                 {
                     int int_id = Convert.ToInt32(i.Something_one_id);
                     var image = db.Images.First(x1 => x1.Id == int_id);
+                        if ( (string.IsNullOrEmpty(album_name) ?true: image.Albums == res.Albums))//мб сравнивать с album_name
+                            list_album.Add(image);
                     //res.Add(image);
                     try
                     {
-                        albums.First(x1 => x1.Albums == image.Albums);
+                        albums.First(x1 => x1 == image.Albums);
                     }
                     catch
                     {
-                        albums.Add(image);
+                        albums.Add(image.Albums);
                     }
 
                 }
                 ViewBag.Albums = albums;
+                }
+ for(var i=0;i< list_album.Count; ++i)
+                {
 
-
-
-
-
-
-                int int_id_image = Convert.ToInt32(id_image);
-                 res = db.Images.First(x1 => x1.Id == int_id_image);
-                var list_like = db.Liked_connected.Where(x1 => x1.Something_one_id == id_image);
-                ViewBag.Count_like = list_like.Count();
-                ViewBag.Like_list = list_like.Take(5);
-                //+репост
+                    if (list_album[i].Id == res.Id)
+                    {
+                        if (i > 0)
+                            ViewBag.Preview_img_id = list_album[i - 1].Id;
+                        else
+                            ViewBag.Preview_img_id = list_album[list_album.Count-1].Id;
+                        if(i< list_album.Count-1)
+                            ViewBag.Next_img_id= list_album[i + 1].Id;
+                        else
+                            ViewBag.Next_img_id = list_album[0].Id;
+                    }
+                }
+               
             }
             else
             {
@@ -1684,7 +1703,7 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                     foreach (var i in str.Take(5))
                     {
                         int int_id_img = Convert.ToInt32(i.Something_two_id);
-                        ((Group_record)res).Images.Add(db.Images.First(x1 => x1.Id == int_id_img).bytes);
+                        ((Group_record)res).Images.Add(db.Images.First(x1 => x1.Id == int_id_img));
                     }
                     
 
@@ -1700,7 +1719,7 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                     var str = db.Images_connected.Where(x1 => x1.Something_one_id == id&&x1.Main).ToList().Last();
                     //var str = db.Images_connected.Where(x1 => x1.Something_one_id == id && x1.Main).Reverse().First();
                     int int_id_img = Convert.ToInt32(str.Something_two_id);
-                    ((Group_record)res).Main_images.Add(db.Images.First(x1 => x1.Id == int_id_img).bytes);
+                    ((Group_record)res).Main_images.Add(db.Images.First(x1 => x1.Id == int_id_img));
                     
 
                 }

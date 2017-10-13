@@ -228,11 +228,11 @@ namespace Im.Models
         public List<Memes_record> Wall { get; set; }
         //фото //
 
-        public List<byte[]> Images { get; set; }
+        public List<Img> Images { get; set; }
 
         //авы
 
-        public List<byte[]> Main_images { get; set; }
+        public List<Img> Main_images { get; set; }
         //группы
 
         public List<Group_short> Groups { get; set; }
@@ -244,8 +244,8 @@ namespace Im.Models
             db = a;
             Followers = new List<Person_short>();
             Wall = new List<Memes_record>();
-            Images = new List<byte[]>();
-            Main_images = new List<byte[]>();
+            Images = new List<Img>();
+            Main_images = new List<Img>();
             Groups = new List<Group_short>();
             Admins = new List<Person_short>();
         }

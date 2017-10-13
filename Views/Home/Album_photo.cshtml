@@ -32,8 +32,10 @@
     @foreach (var i in Model)
     {
         <div class="Album_photo_one_img_block_padding ">
+
             <div class="Album_photo_one_img_block" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.bytes) );background-size: cover; ">
-                <a class="link_standart_for_div" href='@Url.Action("Record_photo_page", "Home",new {id=i.Id  } )'></a>
+               @Ajax.ActionLink(" ", "Record_photo_page", "Home", new { id_image = i.Id, album_name=i.Albums }, new AjaxOptions { UpdateTargetId = "Record_photo_page_one_photo_block_id" }, new { @class = "link_standart_for_div" })
+
             </div>
         </div>
     }

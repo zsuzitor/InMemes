@@ -808,19 +808,21 @@ div#Record_photo_page_one_photo_block_id {
    
 }
 div.Record_photo_page_one_photo_block_inside {
-    margin-left: 450px;
+    /*margin-left: 450px;*/
+    top:400px;
+    left:350px;
+    position: absolute;
     width: 800px;
     height: 500px;
     border: solid black 2px;
-    background-color:white;
-   
+    background-color: white;
 }
 div.Record_photo_page_one_photo_block_inside_lvl_exit {
     width: 4000px;
     height: 4000px;
     
     background: rgba(0, 0, 0, 0.3);
-    padding-top: 400px;
+    
 }
 div.Record_photo_page_photo {
     width: 500px;
@@ -829,7 +831,7 @@ div.Record_photo_page_photo {
     display: inline-block;
     vertical-align: top;
 }
-div.Record_photo_page_prev_next_button :hover {
+div.Record_photo_page_prev_next_button :hover .link_standart_for_button_prev_next_photo {
     /*visibility: visible;*/
 }
 div.Record_photo_page_prev_next_button {
@@ -843,16 +845,23 @@ div.Record_photo_page_prev_next_button {
     cursor: pointer;
     position: absolute;
 }
-    .link_standart_for_button_prev_next_photo {
-        display: block; /* Ссылка как блочный элемент */
-        text-align: center; /* Выравнивание по центру */
-        height: 100%; /* Высота на весь слой */
-        color: black; /* Цвет ссылки */
-        text-decoration: none;
-    }
-div.Record_photo_page_next_sub {
-    margin-left:-20px;
+.link_standart_for_button_prev_next_photo:hover {
+    color: blue;
+    /*visibility: visible;*/
 }
+.link_standart_for_button_prev_next_photo {
+    text-decoration: none;
+    display: block; /* Ссылка как блочный элемент */
+    text-align: center; /* Выравнивание по центру */
+    height: 100%; /* Высота на весь слой */
+    color: black; /* Цвет ссылки */
+    /*visibility: hidden;*/
+}
+.link_standart_for_button_prev_next_photo:hover {
+    text-decoration: none;
+} div .Record_photo_page_next_sub {
+        margin-left: -20px;
+    }
 div.Record_photo_page_right_info_block {
     width: 280px;
     height: 400px;

@@ -45,10 +45,12 @@
 
                 @for (int i = 0; i < Model.Images.Count; ++i)
                 {
-                    <div class='Group_record_not_main_img_small'>
-                        @Html.Raw(string.Concat("<img", " src=\"data:image/jpeg;base64,"
-, Convert.ToBase64String(Model.Images[i]), "\" />"))
+                    <div class="Group_record_not_main_img_small" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(Model.Images[i].bytes) ) no-repeat;background-size: cover;">
+                        @Ajax.ActionLink(" ", "Record_photo_page", "Home", new { id_image = Model.Images[i].Id }, new AjaxOptions { UpdateTargetId = "Record_photo_page_one_photo_block_id" }, new { @class = "link_standart_for_div" })
                     </div>
+
+
+                    
                 }
 
 
@@ -102,8 +104,13 @@
         <div>
             @if (Model.Main_images.Count > 0)
             {
-                @Html.Raw(string.Concat("<img  class=''  id =''", " src=\"data:image/jpeg;base64,"
-, Convert.ToBase64String(Model.Main_images[0]), "\" />"))
+                
+                    //класс поменять сейчас просто что бы отображалось
+                
+                <div class="Group_record_not_main_img_small" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(Model.Main_images[0].bytes) ) no-repeat;background-size: cover;">
+                    @Ajax.ActionLink(" ", "Record_photo_page", "Home", new { id_image = Model.Main_images[0].Id }, new AjaxOptions { UpdateTargetId = "Record_photo_page_one_photo_block_id" }, new { @class = "link_standart_for_div" })
+                </div>
+
             }
             @if (Model.Main_images.Count == 0)
             {
