@@ -6,8 +6,9 @@
         UpdateTargetId = "Edit_personal_record_info_load_ajax_main_div_id",
         Url = Url.Action("Change_pers_rec")
 
-       
+
     };
+    
 }
 <div class="Edit_personal_record_info_load_ajax_osn_left_block">
     @if (ViewBag.save_chenges != null)
@@ -69,8 +70,44 @@
                         
                     </div>
                     <div class="Edit_personal_record_info_load_ajax_div_str_1">
+                        @{ 
+                            string[] menu_lift_mass = ViewBag.Left_menu.Split(',');
+                        }
                         @Html.Label("Настройки меню слева:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
-                        @Html.EditorFor(x1 => x1.Menu_left)
+
+                       
+                        @for (int i = 0; i < menu_lift_mass.Count(); ++i)
+                        {
+                            //if (i % 2 == 0)
+                            //{
+                            using (@Ajax.BeginForm(new AjaxOptions
+                            {
+                                UpdateTargetId = "Layout_Left_menu_personal_block",
+                                Url = Url.Action("Change_left_menu","Home"),
+                                InsertionMode = InsertionMode.Replace
+
+                            }))
+                            {
+                                //<label class = "edit_text" name = "edit_text" id="edit_text">@menu_lift_mass[i]</label>
+                                @Html.Label(menu_lift_mass[i], new { @class = "Edit_personal_record_info_load_ajax_label_left" })
+                                //@Html.Editor("edit_text",new { })
+                                @Html.Hidden("edit_text", menu_lift_mass[i])
+                                <input type="submit" class="submit" value="вкл/выкл" />
+                            }
+                            ++i;
+                            /*using (Html.BeginForm("", "Home"))
+                            {
+
+                                @Html.Label( menu_lift_mass[i], new { @class = "Edit_personal_record_info_load_ajax_label_left" ,name= "edit_text"})
+                                <input type="submit" class="submit" value="вкл/выкл" />
+                            }*/
+
+                            //@Html.Label(menu_lift_mass[i])
+                            //}
+
+                        }
+                        
+                       
                     </div>
                 </div>
                 break;

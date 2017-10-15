@@ -286,35 +286,54 @@
         <div class="Personal_record_num">
             
                 <div class="Personal_record_num_div_small_block">
-                    @{ 
-<p  class="Personal_record_num_p_big">@Model.db.Friends_count</p>
-                        <p class="Personal_record_num_p_small">Друзей</p>
-                    }
+                    <a href=@Url.Action("Friends","Home") class="link_standart_for_div">
+                        <div class="Personal_record_num_div_small_block_lvl_1">
+                            <p class="Personal_record_num_p_big">@Model.db.Friends_count</p>
+                            <p class="Personal_record_num_p_small">Друзей</p>
+                        </div>
+                    </a>
+                        
+                    
+
+                </div>
+
+
+                <div class="Personal_record_num_div_small_block">
+                    <a href=@Url.Action("Friends","Home") class="link_standart_for_div">
+                        <div class="Personal_record_num_div_small_block_lvl_1">
+                            <p class="Personal_record_num_p_big">@Model.db.Followers_ignore_count</p>
+                            <p class="Personal_record_num_p_small">Подписчиков</p>
+                        </div>
+                    </a>
 
                 </div>
                 <div class="Personal_record_num_div_small_block">
-                    @{
-<p class="Personal_record_num_p_big">@Model.db.Followers_ignore_count</p>
-                        <p class="Personal_record_num_p_small">Подписчиков</p>
-                    }
+
+                    <a href=@Url.Action("Albums", "Home") class="link_standart_for_div">
+                        <div class="Personal_record_num_div_small_block_lvl_1">
+                            <p class="Personal_record_num_p_big">@Model.db.Images_count</p>
+                            <p class="Personal_record_num_p_small">Фотографий</p>
+                        </div>
+                    </a>
+
+                    
                 </div>
                 <div class="Personal_record_num_div_small_block">
-                    @{
-<p class="Personal_record_num_p_big">@Model.db.Images_count</p>
-                        <p class="Personal_record_num_p_small">Фотографий</p>
-                    }
+                    <a href=@Url.Action("Personal_record", "Home") class="link_standart_for_div">
+                        <div class="Personal_record_num_div_small_block_lvl_1">
+                            <p class="Personal_record_num_p_big">0</p>
+                            <p class="Personal_record_num_p_small">что то</p>
+                        </div>
+                    </a>
+                    
                 </div>
                 <div class="Personal_record_num_div_small_block">
-                    @{
-                        <p class="Personal_record_num_p_big">0</p>
-                        <p class="Personal_record_num_p_small">что то</p>
-                    }
-                </div>
-                <div class="Personal_record_num_div_small_block">
-                    @{
-                        <p class="Personal_record_num_p_big">0</p>
-                        <p class="Personal_record_num_p_small">что то</p>
-                    }
+                    <a href=@Url.Action("Personal_record", "Home") class="link_standart_for_div">
+                        <div class="Personal_record_num_div_small_block_lvl_1">
+                            <p class="Personal_record_num_p_big">0</p>
+                            <p class="Personal_record_num_p_small">что то</p>
+                        </div>
+                    </a>
                 </div>
 
         </div>

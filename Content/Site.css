@@ -198,11 +198,17 @@ div.Left_menu_personal_up_block {
     visibility:hidden;
 }
 /*Layout*/
-div .Layout_left_menu {
-    /*СЮДА*/
+#Layout_Left_menu_personal_block {
     width: 200px;
     position: absolute;
+}
+div .Layout_left_menu {
+    /*СЮДА*/
     /*
+        width: 200px;
+        position: absolute;
+
+
         top:100px;
         position: fixed;*/
 }
@@ -324,13 +330,22 @@ div.Personal_record_num {
     text-align:center;
 }
 .Personal_record_num_div_small_block {
-   display:inline-block;
-   vertical-align:top;
-   width:82px;
-   height:50px;
-   border:1px solid black;
+    display: inline-block;
+    vertical-align: top;
+    width: 82px;
+    height: 50px;
+    border: 1px solid black;
+    position: relative;
+    z-index: 2;
 }
-.Personal_record_num_p_big {
+div.Personal_record_num_div_small_block_lvl_1 {
+    z-index:1;
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+}.Personal_record_num_p_big {
     font-size: 14pt;
     color: darkcyan;
     margin: 0;

@@ -88,8 +88,10 @@
             </div>
         </div>
         <div class="Layout_all_l_b">
-
-            @Html.Action("Left_menu_personal", "Home", new { })
+            <div id="Layout_Left_menu_personal_block">
+                @Html.Action("Left_menu_personal", "Home", new { })
+            </div>
+            
 
             <div class="Layout_body">
                 @RenderBody()

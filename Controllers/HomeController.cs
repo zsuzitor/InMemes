@@ -97,7 +97,7 @@ namespace Im.Controllers
 
             
         }
-
+       
         public ActionResult Personal_record(string id)
         {
            // ViewBag.My_page = false;
@@ -812,8 +812,73 @@ namespace Im.Controllers
             ViewBag.from_id = from_id;
             return PartialView(res);
         }
+        [HttpPost]
+        public ActionResult Change_left_menu(string edit_text)
+        {
+            string Base_Menu_left = "Моя Cтраница,Personal_record,Новости,News,Сообщения,Messages,Группы,Groups_personal,Друзья,Friends,Фотографии,Albums,Музыка,Music,Видео,Video";
+            
+//
 
+            //изменение
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            var pers = (Personal_record)Record(check_id, "info_person");
+            
+            if(pers.db.Menu_left.IndexOf(edit_text)!=-1)
+            {
+                //уже есть надо удалить
+                string[] pers_menu_left = pers.db.Menu_left.Split(',');
+                //List<string> res = new List<string>();
+                pers.db.Menu_left = "";
+                for (int i=0;i< pers_menu_left.Count();++i)
+                {
+                    if (pers_menu_left[i]!= edit_text)
+                    {
+                        if (!string.IsNullOrEmpty(pers_menu_left[i]))
+                        {
+                            //res.Add(pers_menu_left[i]);
+                            //res.Add(pers_menu_left[++i]);
+                            pers.db.Menu_left += pers_menu_left[i] + "," + pers_menu_left[++i] + ",";
+                        }
+                        
+                    }
+                    else
+                    {
+                        ++i;
+                    }
+                        
+                }
+                db.SaveChanges();
+            }
+            else
+            {
+                //нет надо добавить
+                string[] Base_Menu_leftmass = Base_Menu_left.Split(',');
+                string res_str="";
+                for(int i=0;i< Base_Menu_leftmass.Count(); ++i)
+                {
+                    if (!string.IsNullOrEmpty(Base_Menu_leftmass[i]))
+                    {
+                        if(pers.db.Menu_left.IndexOf(Base_Menu_leftmass[i])!=-1&& pers.db.Menu_left.IndexOf(Base_Menu_leftmass[i+1]) != -1){
+                            res_str += Base_Menu_leftmass[i]+","+ Base_Menu_leftmass[i+1]+",";
+                        }
+                        if(Base_Menu_leftmass[i]== edit_text)
+                        {
+                            res_str += Base_Menu_leftmass[i] + "," + Base_Menu_leftmass[i + 1] + ",";
 
+                        }
+                    }
+                    ++i;
+                }
+                pers.db.Menu_left = res_str;
+                db.SaveChanges();
+            }
+            
+            
+            if (pers != null)
+                ViewBag.list_str = pers.db.Menu_left;
+            ViewBag.id = check_id;
+            return PartialView("Left_menu_personal");
+        }
 
         [ChildActionOnly]
         public ActionResult Left_menu_personal()
@@ -1049,6 +1114,7 @@ namespace Im.Controllers
 
                 return PartialView();
         }
+        
         public ActionResult Edit_personal_record_info_load_ajax(string obg)
         {
             ViewBag.click = obg;
@@ -1056,6 +1122,8 @@ namespace Im.Controllers
                 ViewBag.click = "Основное";
             
             ViewBag.list_menu = new string[] { "Основное", "Контакты", "Интересы", "Образование", "Карьера", "Военная служба", "Жизненная позиция" };
+            ViewBag.Left_menu =  "Моя Cтраница,Personal_record,Новости,News,Сообщения,Messages,Группы,Groups_personal,Друзья,Friends,Фотографии,Albums,Музыка,Music,Видео,Video";
+
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             var pers = Record(check_id, "Personal_record");
 
