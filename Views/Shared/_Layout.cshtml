@@ -63,6 +63,9 @@
         <div class="main_header_home">
             @Html.ActionLink("InMemes", "Index", "Home", new { }, new { @class = "link_standart_for_div" })
         </div>
+        <div class="main_header_search">
+            @Html.ActionLink("Поиск", "Search_main", "Home",new { },new {@class= "link_standart_for_div" })
+        </div>
         @Html.Partial("_LoginPartial")
             @{
 /*

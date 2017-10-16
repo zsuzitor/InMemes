@@ -175,10 +175,15 @@ div.main_header_r_l_but:hover{
     cursor:pointer;
     background-color:aliceblue;
 }
-
+div.main_header_search {
+    width: 60px;
+    height:100%;
+    display: inline-block;
+    vertical-align: top;
+    border:solid black 2px;
+}
 /*Left_menu_personal*/
 div.Left_menu_personal_up_block {
-   
     padding-top: 150px;
     width: 120px;
     transition: 1s;
@@ -891,3 +896,23 @@ div.Record_photo_page_action{
     background-color:black;
     height:20px;
 }
+
+/*Search_main*/
+div.Search_main_load_ajax_osn_left_block {
+    display: inline-block;
+    vertical-align: top;
+    width: 400px;
+    min-height: 300px;
+    background-color: white;
+}
+
+div.Search_main_load_ajax_osn_right_block {
+    display: inline-block;
+    vertical-align: top;
+    width: 200px;
+    height: 300px;
+    background-color: white;
+    margin-left: 20px;
+    position: fixed;
+}
+

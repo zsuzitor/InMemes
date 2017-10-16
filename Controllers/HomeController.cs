@@ -97,7 +97,22 @@ namespace Im.Controllers
 
             
         }
-       
+        public ActionResult Search_main(string text)
+        {
+            //TODO сейчас поиск только по людям
+            List<Person_short> res = new List<Person_short>();
+            try
+            {
+                var pers = db.Users.First(x1 => (x1.Name.IndexOf(text) != -1) || (x1.Surname.IndexOf(text) != -1));
+                res.Add((Person_short)Record(pers.Id, "Person_short"));
+            }
+            catch { }
+            ViewBag.person_list = res;
+
+
+
+            return View();
+        }
         public ActionResult Personal_record(string id)
         {
            // ViewBag.My_page = false;
@@ -327,9 +342,22 @@ namespace Im.Controllers
                 id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             }
             Personal_record res = null;
-
-            
+            switch (what)
+            {
+                case "Followers_ignore":
+                    res = (Personal_record)Record(id, "Followers_ignore");
+                    return View(res.Followers_ignore);
+                    break;
+                case "Followers":
+                    res = (Personal_record)Record(id, "Followers");
+                    return View(res.Followers);
+                    break;
+                default :
                     res = (Personal_record)Record(id, "Friends");
+                    return View(res.Friends);
+                    break;
+            }
+                
                     
 
             //var res = db.Users.First(x1 => x1.Id == id);
@@ -729,13 +757,22 @@ namespace Im.Controllers
             return View();
         }
         //TODO 
-        public ActionResult Action_image(string id, string action_m)
+        public ActionResult Action_image(string id, string action_m,string obg="")
         {
             //TODO 
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
 
             switch (action_m)
             {
+                case "change_album":
+                    {
+                        //TODO сейчас кто угодно может сменить альбом
+                        int int_id = Convert.ToInt32(id);
+                        var img=db.Images.First(x1 => x1.Id == int_id);
+                        img.Albums = obg;
+                        db.SaveChanges();
+                    }
+                    break;
                 case "like":
                     {
                         Like_something(id);
@@ -1094,7 +1131,7 @@ namespace Im.Controllers
 
                         db.Followers_connected.Add(new Relationship_string_string_Followers_connected(id, check_id));
                         
-                        ((Personal_record)pers).db.Followers_count -= 1;
+                        ((Personal_record)pers).db.Followers_count += 1;
 
                         db.SaveChanges();
 
@@ -1895,18 +1932,18 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
             //Messages_one_dialog
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
 
-            
-            //ViewBag.My_page = false;
+
+            /*ViewBag.My_page = false;
             if (id == check_id)
-                ViewBag.My_page = true;
+                ViewBag.My_page = true;*/
 
 
 
 
 
-                //TODO сравнивать id и если одинаковые то и меню слева отправлять иначе нет
-                //TODO заполнять все списки и с мемами и тд
-                Personal_record res = null;
+            //TODO сравнивать id и если одинаковые то и меню слева отправлять иначе нет
+            //TODO заполнять все списки и с мемами и тд
+            Personal_record res = null;
             if (id != null)//убрать условие? проверять есть ли такой человек в базе
             {
                 var res_ap = db.Users.First(x1 => x1.Id == id);
@@ -1918,6 +1955,9 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                     if (bool_fullness == "DB")
                     {
                         //просто с бд инфу отправлять выше сделано
+                        ViewBag.My_page = false;
+                        if (id == check_id)
+                            ViewBag.My_page = true;
                     }
                     if (bool_fullness == "Person_short")
                     {
@@ -1946,6 +1986,9 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                         //АВА
                         if (bool_fullness == "Personal_record")
                     {
+                        ViewBag.My_page = false;
+                        if (id == check_id)
+                            ViewBag.My_page = true;
                         try
                         {
 
@@ -2058,6 +2101,9 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                     //мемы стена
                     if (bool_fullness == "Wall")
                     {
+                        ViewBag.My_page = false;
+                        if (id == check_id)
+                            ViewBag.My_page = true;
                         /*
                         try
                         {
@@ -2073,12 +2119,14 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                         }
                         catch { }
                         */
-                        
+
                     }
                     //мемы новости
                     if (bool_fullness == "News")
                     {
-
+                        ViewBag.My_page = false;
+                        if (id == check_id)
+                            ViewBag.My_page = true;
                         /*
                         try
                         {
@@ -2094,10 +2142,13 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                         }
                         catch { }
                         */
-                        
+
                     }
                     if (bool_fullness == "Friends")
                     {
+                        ViewBag.My_page = false;
+                        if (id == check_id)
+                            ViewBag.My_page = true;
                         var lst = db.Friends_connected.Where(x1 => x1.Something_one_id == id || x1.Something_two_id == id).ToList();
 
                         foreach (var i in lst)
@@ -2109,10 +2160,12 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                         }
 
                     }
-                    if (bool_fullness == "Followers")//мб разделить
+                    if (bool_fullness == "Followers_ignore")//мб разделить
                     {
-                        {
-                            var lst = db.Followers_ignore_connected.Where(x1 => x1.Something_one_id == id).ToList();
+                        ViewBag.My_page = false;
+                        if (id == check_id)
+                            ViewBag.My_page = true;
+                        var lst = db.Followers_ignore_connected.Where(x1 => x1.Something_one_id == id).ToList();
 
                             foreach (var i in lst)
                             {
@@ -2120,21 +2173,26 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                                 res.Followers_ignore.Add((Person_short)Record(i.Something_one_id, "Person_short"));
 
                             }
-                        }
-                        {
-                            var lst = db.Followers_connected.Where(x1 => x1.Something_one_id == id).ToList();
-
-                            foreach (var i in lst)
-                            {
-
-                                res.Followers.Add((Person_short)Record(i.Something_one_id, "Person_short"));
-
-                            }
-                        }
+                        
+                        
  
 
                     }
-                    if (bool_fullness == "Groups_all")
+                    if (bool_fullness == "Followers")//мб разделить
+                    {
+                        ViewBag.My_page = false;
+                        if (id == check_id)
+                            ViewBag.My_page = true;
+                        var lst = db.Followers_connected.Where(x1 => x1.Something_one_id == id).ToList();
+
+                        foreach (var i in lst)
+                        {
+
+                            res.Followers.Add((Person_short)Record(i.Something_one_id, "Person_short"));
+
+                        }
+                    }
+                        if (bool_fullness == "Groups_all")
                     {
                         try
                         {
@@ -2154,6 +2212,9 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                     }
                     if (bool_fullness == "Messages")
                     {
+                        ViewBag.My_page = false;
+                        if (id == check_id)
+                            ViewBag.My_page = true;
                         try
                         {
                             var lst = db.Messages_dialog_person_connected.Where(x1 => x1.Something_two_id == id).ToList();
@@ -2327,6 +2388,12 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                     try
                     {
                         //var tmp_mem = new List<Memes_record>();
+                        {
+
+                            //СЕЙЧАС
+                            var tmp1 = db.Wall_memes_connected.Where(x1=>true).ToList();
+                            int a = 0;
+                        }
                         var tmp = db.Wall_memes_connected.Where(x1 => x1.Something_two_id == id && !x1.News).ToList();
                         tmp.Reverse();
                        // tmp = tmp.Skip(start).Take(10).ToList();

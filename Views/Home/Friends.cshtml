@@ -43,8 +43,15 @@
     </div>
 
     <div  class="Friends_right_all_block div_color_white">
-        
-       
+        <div>
+            @Html.ActionLink("Друзья", "Friends", "Home", new {  }, new {@class= "link_standart_for_div" })
+        </div>
+        <div>
+            @Html.ActionLink("Игнор", "Friends", "Home", new { what = "Followers_ignore" }, new { @class = "link_standart_for_div" })
+        </div>
+        <div>
+            @Html.ActionLink("Повисшие", "Friends", "Home", new { what = "Followers" }, new { @class = "link_standart_for_div" })
+        </div>
     </div>
 
 

@@ -94,7 +94,7 @@
                     @Html.ActionLink("Редактировать", "Edit_personal_record", "Home", new { }, new { @class = "link_standart_for_div" })
 
                 }
-                @if (!(bool)ViewBag.My_page)
+                @if (ViewBag.My_page != null && !(bool)ViewBag.My_page)
                 {
                     @Html.Action("Follow_ajax", "Home", new { from = "Personal_record", id = Model.db.Id })
                 }

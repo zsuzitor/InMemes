@@ -21,7 +21,16 @@
 
                 </div>
                 <div class="Record_photo_page_right_info_block">
-                    <div>@Html.DropDownList("Record_photo_page_drop_list_album", new SelectList(ViewBag.Albums), "Изменить альбом")
+                    <div>
+                        @using (Html.BeginForm("Action_image", "Home"))
+                        {
+                            @Html.Hidden("id", Model.Id)
+                            @Html.Hidden("action_m", "change_album")
+                            
+                            @Html.DropDownList("obg", new SelectList(ViewBag.Albums), "Изменить альбом")
+                            <input type="submit" class="submit" value="Поделиться" />
+                        }
+                        
                     </div>
                     <div><div class="Record_photo_page_action"></div>
                     <div  class="Record_photo_page_action"></div>
