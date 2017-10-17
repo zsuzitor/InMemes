@@ -352,6 +352,10 @@ namespace Im.Controllers
                     res = (Personal_record)Record(id, "Followers");
                     return View(res.Followers);
                     break;
+                case "Send_follow":
+                    res = (Personal_record)Record(id, "Send_follow");
+                    return View(res.Followers);
+                    break;
                 default :
                     res = (Personal_record)Record(id, "Friends");
                     return View(res.Friends);
@@ -1080,34 +1084,71 @@ namespace Im.Controllers
                 try
                 {
                     //var tmp = ((Personal_record)pers).db.Followers_id.Split(',').First(x1 => x1 == check_id);
-                    var tmp = db.Followers_connected.First(x1 =>x1.Something_one_id==id&& x1.Something_two_id == check_id).Something_two_id;
-                    if (tmp == null)
+                    int flag_srch = 0;
+                    try
+                    {
+                        var tmp = db.Followers_connected.First(x1 => x1.Something_one_id == id && x1.Something_two_id == check_id).Something_two_id;
+                        flag_srch = 1;
+                    }
+                    catch {
+                        try
+                        {
+                            var tmp = db.Followers_ignore_connected.First(x1 => x1.Something_one_id == id && x1.Something_two_id == check_id).Something_two_id;
+                            flag_srch = 2;
+                        }
+                        catch {
+                            try
+                            {
+                                var tmp = db.Friends_connected.First(x1 => (x1.Something_one_id == id && x1.Something_two_id == check_id)||(x1.Something_one_id == check_id && x1.Something_two_id ==id )).Something_two_id;
+                                flag_srch = 3;
+                            }
+                            catch { }
+                        }
+                    }
+                    
+                    
+                if (flag_srch== 0)
                         throw new Exception();
                     if (click)
                     {
                         //нужно отписать от человека
 
-                        db.Followers_connected.Remove(db.Followers_connected.First(x1 => x1.Something_two_id == check_id && x1.Something_one_id == id));
+                        //db.Followers_connected.Remove(db.Followers_connected.First(x1 => x1.Something_two_id == check_id && x1.Something_one_id == id));
                         //не нужно вроде
                         //var mass = db.Friends_connected.Where(x1 => x1.Something_one_id == id).ToList();
-                        try
-                        {
-                            db.Friends_connected.Remove(db.Friends_connected.First(x1 => x1.Something_two_id == check_id && x1.Something_one_id == id));
-                            ((Personal_record)pers_peop).db.Friends_count -= 1;
+                        switch (flag_srch) {
+                            case 1:
+                                try
+                                {
+                                    db.Followers_connected.Remove(db.Followers_connected.First(x1 => x1.Something_two_id == check_id && x1.Something_one_id == id));
+                                    ((Personal_record)pers_peop).db.Followers_count -= 1;
+                                }
+                                catch { }
+                                break;
+                            case 2:
+                                try
+                                {
+                                    db.Followers_ignore_connected.Remove(db.Followers_ignore_connected.First(x1 => x1.Something_two_id == check_id && x1.Something_one_id == id));
+                                    ((Personal_record)pers_peop).db.Followers_ignore_count -= 1;
+                                }
+                                catch { }
+                                break;
+
+                            case 3:
+                                try
+                                {
+                                    db.Friends_connected.Remove(db.Friends_connected.First(x1 => (x1.Something_two_id == check_id && x1.Something_one_id == id)||(x1.Something_two_id ==id  && x1.Something_one_id == check_id)));
+                                    db.Followers_ignore_connected.Add(new Relationship_string_string_Followers_ignore_connected(check_id, id));
+
+                                    ((Personal_record)pers_peop).db.Friends_count -= 1;
+                                }
+                                catch { }
+                                break;
                         }
-                        catch { }
-                        try
-                        {
-                            db.Followers_connected.Remove(db.Followers_connected.First(x1 => x1.Something_two_id == check_id && x1.Something_one_id == id));
-                            ((Personal_record)pers_peop).db.Followers_count -= 1;
-                        }
-                        catch { }
-                        try
-                        {
-                            db.Followers_ignore_connected.Remove(db.Followers_ignore_connected.First(x1 => x1.Something_two_id == check_id && x1.Something_one_id == id));
-                            ((Personal_record)pers_peop).db.Followers_ignore_count -= 1;
-                        }
-                        catch { }
+
+                        
+                        
+                        
                         
 
                         db.SaveChanges();
@@ -1128,10 +1169,43 @@ namespace Im.Controllers
                     if (click)
                     {
                         //нужно подписать на человека
+                        int flag_srch = 0;
+                        try
+                        {
+                            var tmp = db.Followers_connected.First(x1 => x1.Something_one_id == check_id && x1.Something_two_id ==id ).Something_two_id;
+                            flag_srch = 1;
+                        }
+                        catch
+                        {
+                            try
+                            {
+                                var tmp = db.Followers_ignore_connected.First(x1 => x1.Something_one_id == check_id && x1.Something_two_id == id).Something_two_id;
+                                flag_srch = 2;
+                            }
+                            catch
+                            {
+                                
+                            }
+                        }
+                        if (flag_srch != 0)
+                        {
+                            db.Friends_connected.Add(new Relationship_with_admin_group(id, check_id));
+                            if (flag_srch == 1)
+                                db.Followers_connected.Remove(db.Followers_connected.First(x1 => x1.Something_one_id == check_id && x1.Something_two_id == id));
 
-                        db.Followers_connected.Add(new Relationship_string_string_Followers_connected(id, check_id));
+                            if (flag_srch == 2)
+                                db.Followers_ignore_connected.Remove(db.Followers_ignore_connected.First(x1 => x1.Something_one_id == check_id && x1.Something_two_id == id));
+
+                        }
+
+                        else
+                        {
+                            db.Followers_connected.Add(new Relationship_string_string_Followers_connected(id, check_id));
+                            ((Personal_record)pers).db.Followers_count += 1;
+                        }
                         
-                        ((Personal_record)pers).db.Followers_count += 1;
+                        
+                        
 
                         db.SaveChanges();
 
@@ -2077,7 +2151,7 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                         {
                             //заполнение друзей
                             //var lst = res.db.Friends_id.Split(',');
-                            var lst = db.Friends_connected.Where(x1 => x1.Something_one_id == id|| x1.Something_two_id == id).Take(5).ToList();
+                            var lst = db.Friends_connected.Where(x1 => x1.Something_one_id == id|| x1.Something_two_id == id).Take(6).ToList();
 
                             foreach(var i in lst)
                             {
@@ -2170,7 +2244,7 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                             foreach (var i in lst)
                             {
 
-                                res.Followers_ignore.Add((Person_short)Record(i.Something_one_id, "Person_short"));
+                                res.Followers_ignore.Add((Person_short)Record(i.Something_two_id, "Person_short"));
 
                             }
                         
@@ -2178,13 +2252,36 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
  
 
                     }
+                    
                     if (bool_fullness == "Followers")//мб разделить
                     {
                         ViewBag.My_page = false;
                         if (id == check_id)
                             ViewBag.My_page = true;
                         var lst = db.Followers_connected.Where(x1 => x1.Something_one_id == id).ToList();
+                        //сейчас
+                        var tmp = db.Followers_connected.ToList();
 
+                        foreach (var i in lst)
+                        {
+
+                            res.Followers.Add((Person_short)Record(i.Something_two_id, "Person_short"));
+
+                        }
+                    }
+                    if (bool_fullness == "Send_follow")//мб разделить
+                    {
+                        ViewBag.My_page = false;
+                        if (id == check_id)
+                            ViewBag.My_page = true;
+                        var lst1 = db.Followers_connected.Where(x1 => x1.Something_two_id == id).ToList();
+                        var lst2 = db.Followers_ignore_connected.Where(x1 => x1.Something_two_id == id).ToList();
+                        List<Relationship_string_string_Followers_connected> lst = new List<Relationship_string_string_Followers_connected>();
+                        lst.AddRange(lst1);
+                        foreach(var i in lst2)
+                        {
+                            lst.Add(new Relationship_string_string_Followers_connected(i.Something_one_id,i.Something_two_id));
+                        }
                         foreach (var i in lst)
                         {
 
@@ -2192,7 +2289,7 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
 
                         }
                     }
-                        if (bool_fullness == "Groups_all")
+                    if (bool_fullness == "Groups_all")
                     {
                         try
                         {

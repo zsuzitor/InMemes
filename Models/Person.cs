@@ -568,7 +568,7 @@ namespace Im.Models
             Something_two_id = "";
             Admin_group = false;
         }
-        public Relationship_with_admin_group(string a, string b,bool c)
+        public Relationship_with_admin_group(string a, string b,bool c=false)
         {
             Something_one_id = a;
             Something_two_id = b;

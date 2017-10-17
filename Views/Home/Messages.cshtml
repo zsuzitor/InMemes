@@ -18,27 +18,73 @@
                 <div class="Messages_one_message_block">
                     
 
+                    <div class="Messages_one_dialog_left">
 
 
-                    @if (i.db.Image != null)
-                    {
-                        <div class="Messages_one_dialog_img" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.db.Image) );background-size: cover; ">
-                            <a class="" href='@Url.Action("Messages_one_dialog", "Home",new { id = i.db.Id } )'></a>
+
+                        @if (i.db.Image != null)
+                        {
+                            <div class="Messages_one_dialog_img" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.db.Image) );background-size: cover; ">
+                                <a class="" href='@Url.Action("Messages_one_dialog", "Home",new { id = i.db.Id } )'></a>
+                            </div>
+                        }
+                        @if (i.db.Image == null)
+                        {
+
+
+                            <div class="Messages_one_dialog_img" style="background: url('/Content/images/H98hxNY4xTo.jpg');background-size: cover;">
+                                <a class="link_standart_for_circle_30_div" href='@Url.Action("Messages_one_dialog", "Home",new {id = i.db.Id } )'></a>
+                            </div>
+                        }
+                        <div>
+                            @if (i.Person.Count < 3)
+                            {
+                                <p class="long_text_wrap">@i.Person[0].Name</p>
+                                <p class="long_text_wrap">@i.Person[1].Name</p>
+                            }
                         </div>
-                    }
-                    @if (i.db.Image == null)
-                    {
-
-
-                        <div class="Messages_one_dialog_img" style="background: url('/Content/images/H98hxNY4xTo.jpg');background-size: cover;">
-                            <a class="" href='@Url.Action("Messages_one_dialog", "Home",new {id = i.db.Id } )'></a>
-                        </div>
-                    }
-
-                    <div class="Messages_one_message_text">
-                        
-                       @i.Messages[0].Message_text
                     </div>
+                    <div class="Messages_one_dialog_right">
+                        
+                            @foreach (var i1 in i.Person)
+                            {
+
+                                <div class="Messages_one_dialog_one_person_short_block">
+                                    <a class="link_standart_for_div" href='@Url.Action("Personal_record", "Home",new {id = i1.Person_id} )'>
+                                        <div class="Messages_one_dialog_one_person_short">
+                                            @if (i1.Image != null)
+                    {
+                                                <div class="Messages_one_dialog_one_person_short_photo" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i1.Image) );background-size: cover; ">
+
+                                                </div>
+
+                                            }
+                                            @if (i1.Image == null)
+                    {
+
+                                                <div class="Messages_one_dialog_one_person_short_photo" style="background: url('/Content/images/H98hxNY4xTo.jpg');background-size: cover;">
+
+                                                </div>
+
+                                            }
+
+                                            
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+
+                                
+                        <div class="Messages_one_message_text">
+                            <a  class="link_standart_for_div" href='@Url.Action("Messages_one_dialog", "Home",new { id = i.db.Id } )'>
+                                <div  class="Messages_one_message_text_text">
+                                    @i.Messages[0].Message_text
+                                </div>
+                            </a>
+                            
+                        </div>
+                    </div>
+                    
 
 
 
@@ -48,7 +94,7 @@
         </div>
 
     </div>
-    <div class="Messages_right_block_all"></div>
+    <div class="Messages_right_block_all div_color_white"></div>
 
 
 
