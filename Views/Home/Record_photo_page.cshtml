@@ -1,5 +1,13 @@
 ﻿@model Im.Models.Img
+@{ 
+    AjaxOptions ajaxOpts = new AjaxOptions
+    {
+        UpdateTargetId = "Record_photo_page_one_photo_block_id",
+        Url = Url.Action("Action_image"),
+        InsertionMode = InsertionMode.Replace
 
+    };
+}
 
 
 
@@ -22,14 +30,29 @@
                 </div>
                 <div class="Record_photo_page_right_info_block">
                     <div>
-                        @using (Html.BeginForm("Action_image", "Home"))
+
+                        
+                        @using (@Ajax.BeginForm(ajaxOpts))
+                        {
+
+                            @Html.Hidden("id", Model.Id)
+                            @Html.Hidden("action_m", "change_album")
+
+                            @Html.DropDownList("obg", new SelectList(ViewBag.Albums), "Изменить альбом")
+                            <input type="submit" class="submit" value="изменить" />
+                        }
+
+                        @{ 
+                            /*@using (Html.BeginForm("Action_image", "Home"))
                         {
                             @Html.Hidden("id", Model.Id)
                             @Html.Hidden("action_m", "change_album")
-                            
+
                             @Html.DropDownList("obg", new SelectList(ViewBag.Albums), "Изменить альбом")
-                            <input type="submit" class="submit" value="Поделиться" />
+                            <input type="submit" class="submit" value="изменить" />
+                        }*/
                         }
+                        
                         
                     </div>
                     <div><div class="Record_photo_page_action"></div>
@@ -39,8 +62,8 @@
                 </div>
             </div>
         </div>
-        
-    }
+
+                            }
 
 
 

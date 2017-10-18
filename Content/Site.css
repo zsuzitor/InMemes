@@ -234,13 +234,27 @@ div.Layout_all_l_b {
 }
 
 /*Personal_record*/
-div.Personal_record_one_group {
-    padding-left: 10px;
-    padding-top: 5px;
-    margin-top: 10px;
-    height: 100px;
-    
+div.Personal_record_open_message {
+    border:solid 1px black;
+    margin-top:10px;
+height:50px;
+background-color:gold;
+transition:2s;
+font-weight:900;
+width:346px;
+position:relative;
 }
+    div.Personal_record_open_message:hover {
+        background-color: lightgrey;
+        transition: 2s;
+        width: 80%;
+        margin-left:10%;
+    }div.Personal_record_one_group {
+        padding-left: 10px;
+        padding-top: 5px;
+        margin-top: 10px;
+        height: 100px;
+    }
 div.Personal_record_group_info_block {
     
     width: 270px;
@@ -290,7 +304,7 @@ div.Personal_record_one_friend_block {
 }
 div.Personal_record_main_img_lvl_1_div {
     width: 350px;
-    height: 500px;
+    max-height: 800px;
     background-color: white;
     padding-top: 25px;
     padding-left: 25px;
@@ -315,6 +329,7 @@ div.Personal_record_edit_under_main_img{
     background-color:white;
     border:solid 2px;
     margin-top:20px;
+    margin-left:-25px;
 }
 div.Personal_record_main_info_1{
     
@@ -579,9 +594,10 @@ div.Group_record_wall_all{
 }
 
 /*Follow_ajax*/
-.Follow_ajax_main_div{
-    height:50px;
-    background-color:aqua;
+.Follow_ajax_main_div {
+    height: 30px;
+    background-color: aqua;
+    border: solid 1px black;
 }
     .Follow_ajax_main_div:hover {
         background-color:antiquewhite;

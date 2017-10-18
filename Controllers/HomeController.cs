@@ -324,6 +324,7 @@ namespace Im.Controllers
             //TODO 
             //Message_person_block
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            ViewBag.My_id = check_id;
             //var pers = Record(check_id, "Messages");
 
             //TODO проверять есть ли доступ к этой переписке
@@ -794,9 +795,10 @@ namespace Im.Controllers
             }
 
 
-            var mem = Memes(id);
-
-            return PartialView("Memes_partial", mem);
+            //var mem = Memes(id);
+            return RedirectToAction("Record_photo_page", "Home", new { id_image = id, album_name = ""  });
+            //return Record_photo_page(id,null);
+            //return PartialView("Memes_partial", mem);
         }
                         //TODO 
         public ActionResult Action_memes(string id,string action_m)
@@ -1642,10 +1644,22 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
             }
             else
             {
+                
+
+                
                 try
                 {
-                     res = new Message_obg_record(db.Messages_obg.First(x1 => x1.Person_id.IndexOf(person_id) != -1));
-                    //не уверен  TODO заполнение перед отправкой
+                    if (person_id == check_id)
+                    {
+                        
+                        res = new Message_obg_record(db.Messages_obg.First(x1 => x1.Person_id.IndexOf(check_id + "," + check_id)!=-1));
+
+                    }
+                    else
+                    {
+                        res = new Message_obg_record(db.Messages_obg.First(x1 => (x1.Person_id.IndexOf(person_id) != -1) && (x1.Person_id.IndexOf(check_id) != -1)));
+                        //не уверен  TODO заполнение перед отправкой
+                    }
                 }
                 catch
                 {
@@ -1655,6 +1669,7 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                     db.SaveChanges();
                     id = t.Id.ToString();
                     db.Messages_dialog_person_connected.Add(new Relationship_string_string_Messages_dialog_person_connected( t.Id.ToString(), check_id));
+                    if(person_id != check_id)
                     db.Messages_dialog_person_connected.Add(new Relationship_string_string_Messages_dialog_person_connected(t.Id.ToString(), person_id));
                     db.SaveChanges();
                     res = new Message_obg_record(t);
@@ -2309,11 +2324,13 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                     }
                     if (bool_fullness == "Messages")
                     {
+                        //можео просто тру оставить
                         ViewBag.My_page = false;
                         if (id == check_id)
                             ViewBag.My_page = true;
                         try
                         {
+                            //var tmp=db.Messages_dialog_person_connected.ToList();
                             var lst = db.Messages_dialog_person_connected.Where(x1 => x1.Something_two_id == id).ToList();
 
                             foreach(var i in lst)
