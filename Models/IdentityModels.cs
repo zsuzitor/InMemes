@@ -135,10 +135,13 @@ namespace Im.Models
         public DbSet<Memes> Memes { get; set; }
         public DbSet<Message_obg> Messages_obg { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Album> Albums { get; set; }
+        public DbSet<Stiker> Stikers { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         //Relationship_string_string  Relationship_with_admin_group Relationship_with_memes Relationship_with_images
         //
         public DbSet<Relationship_string_string_Followers_connected> Followers_connected { get; set; }
-        public DbSet<Relationship_string_string_Followers_ignore_connected> Followers_ignore_connected { get; set; }
+       // public DbSet<Relationship_string_string_Followers_ignore_connected> Followers_ignore_connected { get; set; }
         public DbSet<Relationship_string_string_Family_connected> Family_connected { get; set; }
         public DbSet<Relationship_string_string_Groups_connected> Groups_connected { get; set; }
         public DbSet<Relationship_string_string_Liked_connected> Liked_connected { get; set; }
