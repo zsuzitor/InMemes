@@ -151,7 +151,7 @@ namespace Im.Models
         public DbSet<Relationship_string_string_Black_list_connected> Black_list_connected { get; set; }
         public DbSet<Relationship_with_admin_group> Friends_connected { get; set; }
         public DbSet<Relationship_with_memes> Wall_memes_connected { get; set; }
-        public DbSet<Relationship_with_images> Images_connected { get; set; }
+        public DbSet<Relationship_with_images> Images_mem_connected { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)

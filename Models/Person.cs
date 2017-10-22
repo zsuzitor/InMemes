@@ -16,7 +16,7 @@ namespace Im.Models
         public byte[] bytes { get; set; }
         public DateTime Birthday { get; set; }
         public string Albums { get; set; }
-        public bool Main { get; set; }
+        public bool? Main { get; set; }
 
         public Img()
         {
@@ -26,13 +26,13 @@ namespace Im.Models
             Albums = "";
             Main = false;
         }
-        public Img(byte[] a,bool c)
+        public Img(byte[] a,bool? main)
         {
             Id = 0;
             bytes = a;
             Birthday = DateTime.Now;
             Albums = "";
-            Main = c;
+            Main = main;
         }
 
     }
@@ -86,7 +86,7 @@ namespace Im.Models
         public int Id { get; set; }
         public string Description { get; set; }
 
-        public string Source_type { get; set; }
+        public string Source_type { get; set; }//Group_record  Personal_record
         public string Source_id { get; set; }
         public string Image_id { get; set; }
 
@@ -105,7 +105,7 @@ namespace Im.Models
 
             Birthday = DateTime.Now;
         }
-        public Memes(string Source, string Source_id)
+        public Memes( string Source_id)
         {
             Id = 0;
 
@@ -126,20 +126,21 @@ namespace Im.Models
     public class Message_obg
     {
         public int Id { get; set; }
-
+        public string Name{ get; set; }
 
         public byte[] Image { get; set; }
 
         public Message_obg()
         {
             Id = 0;
-
+            Name = "";
             Image = null;
 
         }
         public Message_obg(string Person_id)
         {
             Id = -1;
+            Name = "";
             Image = null;
         }
     }
@@ -177,6 +178,7 @@ namespace Im.Models
         public string Forwarded_message_id { get; set; }
         public string Stikers_id { get; set; }
         public DateTime Birthday { get; set; }
+        public bool New { get; set; }
         public Message()
         {
             Forwarded_message_id = null;
@@ -185,6 +187,7 @@ namespace Im.Models
             this.Person_id = null;
             Stikers_id = null;
             Birthday = DateTime.Now;
+            New = true;
         }
 
         public Message(string Message_text, string Person_id)
@@ -195,6 +198,7 @@ namespace Im.Models
             this.Person_id = Person_id;
             Birthday = DateTime.Now;
             Stikers_id = null;
+            New = true;
         }
 
     }
@@ -263,14 +267,14 @@ namespace Im.Models
         public class Message_record
     {
         public Message db;
-        public List<Memes> Images { get; set; }
+        public List<Memes_record> Images { get; set; }
         public Person_short Source_person { get; set; }
         public Stiker Stiker { get; set; }
 
         public Message_record()
         {
             db = null;
-            Images = new List<Memes>();
+            Images = new List<Memes_record>();
             Source_person =null;
             Stiker = null;
         }
@@ -278,7 +282,7 @@ namespace Im.Models
         public Message_record(Message a)
         {
             db = a;
-            Images = new List<Memes>();
+            Images = new List<Memes_record>();
             Source_person = null;
             Stiker = null;
         }
@@ -325,11 +329,11 @@ namespace Im.Models
         public List<Memes_record> Wall { get; set; }
         //фото //
 
-        public List<Memes> Images { get; set; }
+        public List<Memes_record> Images { get; set; }
 
         //авы
 
-        public List<Memes> Main_images { get; set; }
+        public List<Memes_record> Main_images { get; set; }
         //группы
 
         public List<Group_short> Groups { get; set; }
@@ -341,8 +345,8 @@ namespace Im.Models
             db = a;
             Followers = new List<Person_short>();
             Wall = new List<Memes_record>();
-            Images = new List<Memes>();
-            Main_images = new List<Memes>();
+            Images = new List<Memes_record>();
+            Main_images = new List<Memes_record>();
             Groups = new List<Group_short>();
             Admins = new List<Person_short>();
         }
@@ -367,9 +371,9 @@ namespace Im.Models
         //стена 
         public List<Memes_record> Wall { get; set; }
         //фото //
-        public List<Memes> Images { get; set; }
+        public List<Memes_record> Images { get; set; }
         //авы
-        public List<Memes> Main_images { get; set; }
+        public List<Memes_record> Main_images { get; set; }
         //группы
         public List<Group_short> Groups { get; set; }
         public List<Person_short> Black_list { get; set; }
@@ -387,8 +391,8 @@ namespace Im.Models
             Message = new List<Message_obg_record>();
             News = new List<Memes_record>();
             Wall = new List<Memes_record>();
-            Images = new List<Memes>();
-            Main_images = new List<Memes>();
+            Images = new List<Memes_record>();
+            Main_images = new List<Memes_record>();
             Groups = new List<Group_short>();
             Black_list = new List<Person_short>();
         }
@@ -419,8 +423,8 @@ namespace Im.Models
             Message = new List<Message_obg_record>();
             News = new List<Memes_record>();
             Wall = new List<Memes_record>();
-            Images = new List<Memes>();
-            Main_images = new List<Memes>();
+            Images = new List<Memes_record>();
+            Main_images = new List<Memes_record>();
             Groups = new List<Group_short>();
             Black_list = new List<Person_short>();
         }
@@ -431,13 +435,15 @@ namespace Im.Models
         public Memes db;
         public Person_short Person_source{ get; set; }
             public Group_short Group_source{ get; set; }
-        public List<Img> Images { get; set; }
+        public List<Memes_record> Images { get; set; }
+        public Img Image { get; set; }
         public Memes_record()
         {
             db = null;
             Images = null;
             Person_source = null;
             Group_source = null;
+            Image = null;
         }
         public Memes_record(Memes a)
         {
@@ -445,7 +451,7 @@ namespace Im.Models
             Images = null;
             Person_source = null;
             Group_source = null;
-
+            Image = null;
         }
 
     }
@@ -697,21 +703,24 @@ namespace Im.Models
         public int Id { get; set; }
         public string Something_one_id { get; set; }//"главное" если связь не между людьми то засовывать сюда
         public string Something_two_id { get; set; }
-        public bool Person { get; set; }
+        public string Who { get; set; }//Personal_record, Group_record,Message
         public bool News { get; set; }
+        public bool Image { get; set; }
         public Relationship_with_memes(bool person_or_group)
         {
             Something_one_id = "";
             Something_two_id = "";
             News = false;
-            Person = person_or_group;
+            Who = null;
+            Image = false;
         }
-        public Relationship_with_memes(string a, string b, bool c, bool person_or_group)
+        public Relationship_with_memes(string a, string b, bool news, string person_or_group)
         {
             Something_one_id = a;
             Something_two_id = b;
-            News = c;
-            Person = person_or_group;
+            News = news;
+            Who = person_or_group;
+            Image = false;
         }
     }
     public class Relationship_with_images
@@ -719,18 +728,21 @@ namespace Im.Models
         public int Id { get; set; }
         public string Something_one_id { get; set; }//"главное" если связь не между людьми то засовывать сюда
         public string Something_two_id { get; set; }
-        
+        //public string What_one { get; set; }//
+
         public Relationship_with_images()
         {
             Something_one_id = "";
             Something_two_id = "";
-            
+            //What_one = "";
+
+
         }
         public Relationship_with_images(string a, string b)
         {
             Something_one_id = a;
             Something_two_id = b;
-            
+            //What_one = "";
         }
     }
 }
