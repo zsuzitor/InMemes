@@ -26,7 +26,15 @@
 
 <div class="div_color_white memes_partial_one_mem_block">
     <div class="memes_partial_one_mem_block_left_name">
-        <p>@Html.ActionLink(Model.db.Source, Model.db.Source_type, "Home", new { id = Model.db.Source_id }, new { })</p>
+        @if (Model.db.Source_type == "Personal_record")
+        {
+            <p>@Html.ActionLink(Model.Person_source.Name, Model.db.Source_type, "Home", new { id = Model.db.Source_id }, new { })</p>
+        }
+        @if (Model.db.Source_type == "Group_record")
+        {
+            <p>@Html.ActionLink(Model.Group_source.Name, Model.db.Source_type, "Home", new { id = Model.db.Source_id }, new { })</p>
+        }
+        
         <p>@Model.db.Description</p>
         <p>@Model.db.Birthday</p>
     </div>
@@ -36,23 +44,26 @@
     
     </div></div>
     
-    @if (Model.db.Image != null)
+    @if (Model.Image != null)
     {
         <div class="Wall_memes_one_mem_img">
             @Html.Raw(string.Concat("<img class='' id='' ", " src=\"data:image/jpeg;base64,"
-                                                                     , Convert.ToBase64String(Model.db.Image), "\" />"))
+                                                                     , Convert.ToBase64String(Model.Image.bytes), "\" />"))
         </div>
     }
 
-
-    @if (Model.Images != null)
-    {
-        foreach (var i2 in Model.Images)
+    <div>
+        @if (Model.Images != null)
         {
-            Html.Raw(string.Concat("<img  class=''  id =''", " src=\"data:image/jpeg;base64,"
-, Convert.ToBase64String(Model.db.Image), "\" />"));
-        }
-    }
+            foreach (var i2 in Model.Images)
+            {
+                <div>
+                    @Html.Raw(string.Concat("<img class='' id='' ", " src=\"data:image/jpeg;base64,"
+                                                 , Convert.ToBase64String(Model.Image.bytes), "\" />"));
+                    </div>
+                    }
+                    }
+                </div>
     <hr />
     <div class="Memes_partial_under_all_block">
 

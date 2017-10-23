@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Im.Models.Img>
+﻿@model IEnumerable<Im.Models.Memes_record>
 <div>
     <h1 style="text-align: center;">Текущий альбом:  @ViewBag.Album_name</h1>
 
@@ -33,8 +33,8 @@
     {
         <div class="Album_photo_one_img_block_padding ">
 
-            <div class="Album_photo_one_img_block" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.bytes) );background-size: cover; ">
-               @Ajax.ActionLink(" ", "Record_photo_page", "Home", new { id_image = i.Id, album_name=i.Albums }, new AjaxOptions { UpdateTargetId = "Record_photo_page_one_photo_block_id" }, new { @class = "link_standart_for_div" })
+            <div class="Album_photo_one_img_block" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.Image.bytes) );background-size: cover; ">
+               @Ajax.ActionLink(" ", "Record_photo_page", "Home", new { id_image = i.db.Id, album_name=i.Image.Albums }, new AjaxOptions { UpdateTargetId = "Record_photo_page_one_photo_block_id" }, new { @class = "link_standart_for_div" })
 
             </div>
         </div>
