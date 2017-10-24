@@ -40,7 +40,11 @@
                             @if (i.Person.Count < 3)
                             {
                                 <p class="long_text_wrap">@i.Person[0].Name</p>
-                                <p class="long_text_wrap">@i.Person[1].Name</p>
+                                if (i.Person.Count > 1)
+                                {
+                                    <p class="long_text_wrap">@i.Person[1].Name</p>
+                                }
+
                             }
                         </div>
                     </div>
@@ -78,7 +82,14 @@
                         <div class="Messages_one_message_text">
                             <a  class="link_standart_for_div" href='@Url.Action("Messages_one_dialog", "Home",new { id = i.db.Id } )'>
                                 <div  class="Messages_one_message_text_text">
-                                    @i.Messages[0].db.Message_text
+                                    @if (i.Messages.Count > 0)
+                                    {
+                                        @i.Messages[0].db.Message_text
+                                    }
+                                    @if (i.Messages.Count < 1)
+                                    {
+                                        <p>Сообщений пока нет.</p>
+                                    }
                                 </div>
                             </a>
                             

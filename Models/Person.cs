@@ -440,7 +440,7 @@ namespace Im.Models
         public Memes_record()
         {
             db = null;
-            Images = null;
+            Images = new List<Memes_record>();
             Person_source = null;
             Group_source = null;
             Image = null;
@@ -448,7 +448,7 @@ namespace Im.Models
         public Memes_record(Memes a)
         {
             db = a;
-            Images = null;
+            Images = new List<Memes_record>();
             Person_source = null;
             Group_source = null;
             Image = null;
@@ -569,11 +569,12 @@ namespace Im.Models
     {
         public bool Ignored { get; set; }
         public bool Person { get; set; }
-        public Relationship_string_string_Followers_connected(bool person_or_group) : base()
+        public Relationship_string_string_Followers_connected() : base()
         {
             Ignored = false;
-            Person = person_or_group;
+            Person = true;
         }
+
             public Relationship_string_string_Followers_connected(string a, string b, bool person_or_group) : base(a, b)
         {
             Ignored = false;
@@ -595,9 +596,9 @@ namespace Im.Models
     public class Relationship_string_string_Groups_connected : Relationship_string_string
     {
         public bool Person { get; set; }
-        public Relationship_string_string_Groups_connected(bool person_or_group) : base()
+        public Relationship_string_string_Groups_connected() : base()
         {
-            Person = person_or_group;
+            Person = true;
         }
         public Relationship_string_string_Groups_connected(string a, string b, bool person_or_group) : base(a, b)
         {
@@ -654,9 +655,9 @@ namespace Im.Models
     public class Relationship_string_string_Black_list_connected : Relationship_string_string
     {
         public bool Person { get; set; }
-        public Relationship_string_string_Black_list_connected(bool person_or_group) : base()
+        public Relationship_string_string_Black_list_connected() : base()
         {
-            Person = person_or_group;
+            Person = true;
         }
         public Relationship_string_string_Black_list_connected(string a, string b, bool person_or_group) : base(a, b)
         {
@@ -684,17 +685,19 @@ namespace Im.Models
         public string Something_one_id { get; set; }//"главное" если связь не между людьми то засовывать сюда
         public string Something_two_id { get; set; }
         public bool Admin_group { get; set; }
+        public bool Person { get; set; }
         public Relationship_with_admin_group()
         {
             Something_one_id = "";
             Something_two_id = "";
             Admin_group = false;
         }
-        public Relationship_with_admin_group(string a, string b,bool c=false)
+        public Relationship_with_admin_group(string a, string b, bool person, bool admin=false)
         {
             Something_one_id = a;
             Something_two_id = b;
-            Admin_group = c;
+            Admin_group = admin;
+            Person = person;
         }
     }
     
@@ -706,7 +709,7 @@ namespace Im.Models
         public string Who { get; set; }//Personal_record, Group_record,Message
         public bool News { get; set; }
         public bool Image { get; set; }
-        public Relationship_with_memes(bool person_or_group)
+        public Relationship_with_memes()
         {
             Something_one_id = "";
             Something_two_id = "";
@@ -714,13 +717,13 @@ namespace Im.Models
             Who = null;
             Image = false;
         }
-        public Relationship_with_memes(string a, string b, bool news, string person_or_group)
+        public Relationship_with_memes(string a, string b, bool news, string person_or_group,bool image)
         {
             Something_one_id = a;
             Something_two_id = b;
             News = news;
             Who = person_or_group;
-            Image = false;
+            Image = image;
         }
     }
     public class Relationship_with_images
