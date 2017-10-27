@@ -19,29 +19,32 @@
 
             <div class="Record_photo_page_one_photo_block_inside">
                 <div class="Record_photo_page_prev_next_button">
-                    @Ajax.ActionLink("<", "Record_photo_page", "Home", new { id_image = ViewBag.Preview_img_id }, new AjaxOptions { UpdateTargetId = "Record_photo_page_one_photo_block_id" }, new { @class = "link_standart_for_button_prev_next_photo" })
+                    @Ajax.ActionLink("<", "Record_photo_page", "Home", new { from_id=ViewBag.from_id, from_type=ViewBag.from_type, album_name=Model.Image.Albums, id_image = ViewBag.Next_img_id, main_img= ViewBag.main_img }, new AjaxOptions { UpdateTargetId = "Record_photo_page_one_photo_block_id" }, new { @class = "link_standart_for_button_prev_next_photo" })
                 </div>
                 <div class="Record_photo_page_photo" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(Model.Image.bytes) );background-size: cover; ">
 
                 </div>
                 <div class="Record_photo_page_prev_next_button Record_photo_page_next_sub">
-@Ajax.ActionLink(">", "Record_photo_page", "Home", new { id_image = ViewBag.Next_img_id }, new AjaxOptions { UpdateTargetId = "Record_photo_page_one_photo_block_id" }, new { @class = "link_standart_for_button_prev_next_photo" })
+@Ajax.ActionLink(">", "Record_photo_page", "Home", new { from_id = ViewBag.from_id, from_type = ViewBag.from_type, album_name = Model.Image.Albums, id_image = ViewBag.Preview_img_id, main_img = ViewBag.main_img }, new AjaxOptions { UpdateTargetId = "Record_photo_page_one_photo_block_id" }, new { @class = "link_standart_for_button_prev_next_photo" })
 
                 </div>
                 <div class="Record_photo_page_right_info_block">
                     <div>
 
-                        
-                        @using (@Ajax.BeginForm(ajaxOpts))
+                        @if (ViewBag.Albums != null)
+                        {
+                        using (@Ajax.BeginForm(ajaxOpts))
                         {
 
                             @Html.Hidden("id", Model.db.Id)
                             @Html.Hidden("action_m", "change_album")
+                            
+                                @Html.DropDownList("obg", new SelectList(ViewBag.Albums), "Изменить альбом")
+                            
 
-                            @Html.DropDownList("obg", new SelectList(ViewBag.Albums), "Изменить альбом")
                             <input type="submit" class="submit" value="изменить" />
                         }
-
+                        }
                         @{ 
                             /*@using (Html.BeginForm("Action_image", "Home"))
                         {

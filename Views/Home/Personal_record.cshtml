@@ -48,7 +48,7 @@
             @if (Model.Main_images.Count > 0)
             {
                 <div class="Personal_record_main_img_div" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(Model.Main_images[0].Image.bytes) ) no-repeat;background-size: cover;">
-                    @Ajax.ActionLink(" ", "Record_photo_page", "Home", new { id_image = Model.Main_images[0].db.Id }, new AjaxOptions { UpdateTargetId = "Record_photo_page_one_photo_block_id" }, new { @class = "link_standart_for_div" })
+                    @Ajax.ActionLink(" ", "Record_photo_page", "Home", new { from_id=Model.db.Id, main_img=true, id_image = Model.Main_images[0].db.Id, from_type = "Personal_record" }, new AjaxOptions { UpdateTargetId = "Record_photo_page_one_photo_block_id" }, new { @class = "link_standart_for_div" })
 
 
                 </div>
@@ -364,7 +364,7 @@
  {
 
     <div class="Personal_record_not_main_img_small" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(Model.Images[i].Image.bytes) ) no-repeat;background-size: cover;">
-        @Ajax.ActionLink(" ", "Record_photo_page", "Home", new { id_image = Model.Images[i].db.Id }, new AjaxOptions { UpdateTargetId = "Record_photo_page_one_photo_block_id" }, new { @class = "link_standart_for_div" })
+        @Ajax.ActionLink(" ", "Record_photo_page", "Home", new { from_id = Model.db.Id, id_image = Model.Images[i].db.Id, from_type = "Personal_record" }, new AjaxOptions { UpdateTargetId = "Record_photo_page_one_photo_block_id" }, new { @class = "link_standart_for_div" })
     </div>
 
 

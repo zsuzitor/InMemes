@@ -128,16 +128,16 @@ namespace Im.Controllers
         }
 
         //TODO 
-        public ActionResult Record_photo_page( string id_image, string album_name,string from_id,string from_type)//string from,,string album_name
+        public ActionResult Record_photo_page( string id_image, string album_name,string from_id,string from_type,bool main_img=false)//string from,,string album_name
         {
             //что то типо параметров поиска хз пока что
             //TODO закидывать фото юзеру и проверять что бы его фото отдавать продумать мб вообще не нужно
             //смотреть че как и фото отображать
             //TODO надо соседние фото определить что бы листать можно было
             //TODO список альбомов польователя??? пока что так
-
-
-            
+            ViewBag.from_id = from_id;
+            ViewBag.from_type = from_type;
+            ViewBag.main_img = main_img;
             var check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             //var list_album = new List<Img>();
             Memes_record res = null;
@@ -176,10 +176,22 @@ namespace Im.Controllers
                         catch { }
                         }
                 }
-                
+                //album_name = string.IsNullOrEmpty(album_name) ?res.Image.Albums: album_name;
                 var mem_rel=db.Wall_memes_connected.Where(x1 => x1.Something_two_id == from_id && x1.Who == from_type&&x1.Image).ToList();
+
+
+                
+                try
+                {
+                    // если картинка первая или последняя мб можно проще\быстрее хз
+                    ViewBag.Next_img_id = mem_rel[0].Something_one_id;
+                    ViewBag.Preview_img_id = mem_rel[mem_rel.Count - 1].Something_one_id;
+                }
+                catch { }
+                    
                 
                 foreach (var i in mem_rel)
+                //for(int i=0;i> mem_rel.Count;++i)
                 {
                     if (prev_bool == null|| prev_bool==true)
                     {
@@ -191,8 +203,9 @@ namespace Im.Controllers
                     {
                         int int_id_img= Convert.ToInt32(mem.Image_id);
                         var img=db.Images.First(x1 => x1.Id == int_id_img);
-                        if (img.Albums == album_name)
-                        {
+                        if ( string.IsNullOrEmpty( album_name)?true: img.Albums == album_name)//img.Albums ==
+                                if((main_img==true&&img.Main==true)||main_img!=true)
+                            {
                                 if (mem.Id == Convert.ToInt32(id_image))
                                 {
                                     prev_bool = true;
@@ -206,6 +219,7 @@ namespace Im.Controllers
                                     if (prev_bool==true)
                                     {
                                         ViewBag.Next_img_id = mem.Id.ToString();
+                                            prev_bool = false;
                                     }
                                 }
                                 
@@ -230,6 +244,7 @@ namespace Im.Controllers
         public ActionResult Album_photo(string id_user, string album_name = "")
         {
             id_user = string.IsNullOrEmpty(id_user) ?  System.Web.HttpContext.Current.User.Identity.GetUserId() : id_user;
+            ViewBag.id_user = id_user;
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             var list_photo_all_id = db.Wall_memes_connected.Where(x1 => x1.Something_two_id == id_user&&x1.Image).ToList();
             var res = new List<Memes_record>();
@@ -255,7 +270,7 @@ namespace Im.Controllers
 
             }
 
-
+            res.Reverse();
             return PartialView(res);
         }
 
@@ -434,7 +449,7 @@ namespace Im.Controllers
 
                             try
                             {
-                                db.Liked_connected.RemoveRange(db.Liked_connected.Where(x1 => x1.Something_one_id == id));
+                                db.Liked_connected.RemoveRange(db.Liked_connected.Where(x1 => x1.Something_one_id == id&&x1.What=="Memes"));
                             }
                             catch { }
                             try
@@ -470,7 +485,7 @@ namespace Im.Controllers
 
                             try
                             {
-                                db.Liked_connected.RemoveRange(db.Liked_connected.Where(x1 => x1.Something_one_id == id));
+                                db.Liked_connected.RemoveRange(db.Liked_connected.Where(x1 => x1.Something_one_id == id && x1.What == "Memes"));
                             }
                             catch { }
                             try
@@ -529,7 +544,7 @@ namespace Im.Controllers
                                 catch { }
                                 try
                                 {
-                                  db.Liked_connected.RemoveRange(db.Liked_connected.Where(x1 => x1.Something_one_id == id) );//&& x1.Something_two_id == check_id)
+                                  db.Liked_connected.RemoveRange(db.Liked_connected.Where(x1 => x1.Something_one_id == id && x1.What == "Memes") );//&& x1.Something_two_id == check_id)
                                 }
                                 catch { }
                                 try
@@ -599,7 +614,7 @@ namespace Im.Controllers
                                 catch { }
                                 try
                                 {
-                                    db.Liked_connected.RemoveRange(db.Liked_connected.Where(x1 => x1.Something_one_id == id));
+                                    db.Liked_connected.RemoveRange(db.Liked_connected.Where(x1 => x1.Something_one_id == id && x1.What == "Memes"));
                                 }
                                 catch { }
 
@@ -728,6 +743,30 @@ namespace Im.Controllers
 
                     db.SaveChanges();
                     break;
+                case "comment":
+                    //удаление коммента
+                    //string what,string from_id,string from,string id)
+                    {
+                        int int_id_com = Convert.ToInt32(id);
+                        var comm = db.Comments.First(x1 => x1.Id == int_id_com);
+                        if (comm.Person_id == check_id)
+                        {
+                            db.Comments.Remove(comm);
+                            //Mem_comment_connected images memes
+                            var rel=db.Mem_comment_connected.RemoveRange(db.Mem_comment_connected.Where(x1=>x1.Something_one_id==id));
+                            foreach(var i in rel)
+                            {
+                                int int_id_mem = Convert.ToInt32(i.Something_two_id);
+                                var mem =db.Memes.Remove(db.Memes.First(x1=>x1.Id== int_id_mem));
+                                int int_id_img = Convert.ToInt32(mem.Image_id);
+                                db.Images.Remove(db.Images.First(x1 => x1.Id == int_id_img));
+                            }
+                        }
+                    }
+                    
+
+                    db.SaveChanges();
+                    break;
 
             }
             //TODO временно
@@ -763,6 +802,41 @@ namespace Im.Controllers
             return View();
         }
         //TODO 
+        public ActionResult Action_comment(string id, string action_m, string obg = "")
+        {
+            //TODO 
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+
+            switch (action_m)
+            {
+                case "edit":
+                    {
+                        int int_id_com = Convert.ToInt32(id);
+                        var comment=db.Comments.First(x1=>x1.Id== int_id_com);
+                        if (comment.Person_id == check_id)
+                        {
+                            comment.Comment_text = obg;
+                        }
+                        db.SaveChanges();
+                    }
+                    break;
+                case "like":
+                    {
+                        
+                        Like_something(id, "Comment");
+
+                    }
+                    break;
+                
+                   
+                
+                    
+            }
+
+            return RedirectToAction("Record_photo_page", "Home", new { id_image = id, album_name = "" });
+
+        }
+        //TODO 
         public ActionResult Action_image(string id, string action_m,string obg="")
         {
             //TODO 
@@ -781,7 +855,7 @@ namespace Im.Controllers
                     break;
                 case "like":
                     {
-                        Like_something(id);
+                        Like_something(id, "Memes");
 
                     }
                     break;
@@ -789,10 +863,8 @@ namespace Im.Controllers
                     {
                     }
                     break;
-                case "comment":
-                    {
-                    }
-                    break;
+               
+               
             }
 
             return RedirectToAction("Record_photo_page", "Home", new { id_image = id, album_name = ""  });
@@ -808,7 +880,7 @@ namespace Im.Controllers
             {
                 case "like":
                     {
-                        Like_something( id);
+                        Like_something( id, "Memes");
 
                     }
                     
@@ -832,8 +904,7 @@ namespace Im.Controllers
 
                     }
                     break;
-                case "comment":
-                    break;
+                
             }
             var mem = Memes(id);
 
@@ -1299,7 +1370,34 @@ namespace Im.Controllers
             }
             return PartialView("Wall_memes");
         }
+        //TODO 
+        [HttpPost]
+        public ActionResult Add_new_comment(HttpPostedFileBase[] uploadImage, string comment_text, string id_memes,string Stikers_id)
+        {
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            var photo_list = Get_photo_post(Get_photo_post(uploadImage), "");
+            var comment = new Comment(comment_text, check_id) { Memes_id = id_memes, Stikers_id = Stikers_id };
+            db.Comments.Add(comment);
+            db.SaveChanges();
+            if (photo_list != null)
+            {
+                foreach (var i in photo_list)
+                {
+                    
+                    db.Images.Add(i);
+                    db.SaveChanges();
+                    var mem = new Memes(check_id) { Source_type = "Personal_record", Image_id = i.Id.ToString() };
+                    db.Memes.Add(mem);
+                    db.SaveChanges();
+                    db.Mem_comment_connected.Add(new Relationship_mem_comment(comment.Id.ToString(), mem.Id.ToString()));
+                    //db.Images_mem_connected.Add(new Relationship_with_images(i.Id.ToString(), mem.Id.ToString()));
+                    db.SaveChanges();
+                }
 
+
+            }
+            return View();
+        }
         //TODO 
         [HttpPost]
         public ActionResult Add_new_message(HttpPostedFileBase[] uploadImage, string message_text, string Id_dialog)
@@ -1809,7 +1907,7 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
 
             ViewBag.like = false;
             ViewBag.repost = false;
-            var mass_liked = db.Liked_connected.Where(x1=>x1.Something_one_id== id).ToList();
+            var mass_liked = db.Liked_connected.Where(x1=>x1.Something_one_id== id && x1.What == "Memes").ToList();
             ViewBag.Count_like = mass_liked.Count;
             //список лайкнувших +репостнувших также доделать
             //ViewBag.Like_list = mass_liked.Take(5);
@@ -2453,11 +2551,27 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
             base.Dispose(disposing);
         }
 
-        void Like_something(string id)
+        void Like_something(string id,string What)
         {
+            //What== Memes Comment
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
-            var mass_liked = db.Liked_connected.Where(x1 => x1.Something_one_id == id).ToList();
+            try
+            {
+                var mass_liked = db.Liked_connected.Where(x1 => x1.Something_one_id == id && x1.What == What&&x1.Something_two_id==check_id).ToList();
+                db.Liked_connected.Remove(db.Liked_connected.First(x1 => x1.Something_one_id == id && x1.Something_two_id == check_id && x1.What == What));
 
+                ViewBag.like = false;
+                ViewBag.count_like -= 1;
+            }
+            catch {
+                db.Liked_connected.Add(new Relationship_string_string_Liked_connected(id, check_id) { What=What});
+                ViewBag.like = true;
+                ViewBag.count_like += 1;
+            }
+            
+
+            /*
+            var mass_liked = db.Liked_connected.Where(x1 => x1.Something_one_id == id && x1.What == What).ToList();
             bool liked = false;
 
             foreach (var i in mass_liked)
@@ -2485,7 +2599,7 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
 
                 ViewBag.like = false;
                 ViewBag.count_like -= 1;
-            }
+            }*/
             db.SaveChanges();
 
 

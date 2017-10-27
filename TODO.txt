@@ -33,11 +33,41 @@ before\after
 ---------------
 ДИАЛОГ ТОЛЬКО С ДВУМЯ
 сейчас
-соседние фото посомтреть работают ли
+в функцию скорее всего    if (photo_list != null)
+                {
+                    foreach (var i in photo_list)
+                    {
+                        i.Main = for_what == "main_img" ? true : false;
+                        db.Images.Add(i);
+                        db.SaveChanges();
+                        var mem = new Memes(check_id) { Source_type = "Personal_record", Image_id = i.Id.ToString() };
+                        db.Memes.Add(mem);
+                        db.SaveChanges();
+                        //TODO1 добавить в таблицу связи человек-- мем-картинки
+                        //добавление в нее связи сообщения и мемов
+                        db.Wall_memes_connected.Add(new Relationship_with_memes(mem.Id.ToString(),check_id,false, "Personal_record",true));
+                    }
+
+
+                }
+
+
+проверить Delete Action_comment Add_new_comment
+
+
+
+
+
+
+Add_new_group_ajax посмотреть мб вообще пустое
+ public DbSet<Relationship_with_images> Images_mem_connected { get; set; }   мб не нужно вообще
+в Record_photo_page когда смотришь аву если она в начале или в конце то будет отображаться фотки не с ав и если дальше листать то вообще хз что будет
+фотографии с авы кнопками прев\некст должны отображать только авы
++соседние фото посомтреть работают ли
 протестить открывая чужие фотки можно изменять альбом(есть поле для изменения)
 открывая альбомы пользователя другого не видно альбомы и фото
 покликать много раз фолоу там вроде див не правильно заменяется
-фото+-
+
 после добавления картинки ADD_NEW_IMAGE остается в роуте и если перезагрузить дублируется отправка картинки
 
 когда открываю сообщения делать чужие прочитанными

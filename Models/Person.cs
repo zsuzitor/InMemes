@@ -149,6 +149,7 @@ namespace Im.Models
         public int Id { get; set; }
         public string Comment_text { get; set; }
         public string Person_id { get; set; }
+        public string Memes_id { get; set; }
         public string Stikers_id { get; set; }
         public DateTime Birthday { get; set; }
         public Comment()
@@ -157,6 +158,7 @@ namespace Im.Models
             Id = 0;
             this.Comment_text = null;
             this.Person_id = null;
+            Memes_id = "";
             Birthday = DateTime.Now;
             Stikers_id = null;
         }
@@ -164,6 +166,7 @@ namespace Im.Models
         {
 
             Id = 0;
+            Memes_id = "";
             this.Comment_text = Comment_text;
             this.Person_id = Person_id;
             Birthday = DateTime.Now;
@@ -607,6 +610,7 @@ namespace Im.Models
     }
     public class Relationship_string_string_Liked_connected : Relationship_string_string
     {
+        public string What { get; set; }//Memes Comment
 
         public Relationship_string_string_Liked_connected() : base()
         {
@@ -731,12 +735,14 @@ namespace Im.Models
         public int Id { get; set; }
         public string Something_one_id { get; set; }//"главное" если связь не между людьми то засовывать сюда
         public string Something_two_id { get; set; }
+        
         //public string What_one { get; set; }//
 
         public Relationship_with_images()
         {
             Something_one_id = "";
             Something_two_id = "";
+            
             //What_one = "";
 
 
@@ -745,6 +751,33 @@ namespace Im.Models
         {
             Something_one_id = a;
             Something_two_id = b;
+            
+            //What_one = "";
+        }
+    }
+    public class Relationship_mem_comment
+    {
+        //mem==картинка и связь картинок с комментом
+        public int Id { get; set; }
+        public string Something_one_id { get; set; }//"главное" если связь не между людьми то засовывать сюда
+        public string Something_two_id { get; set; }
+
+        //public string What_one { get; set; }//
+
+        public Relationship_mem_comment()
+        {
+            Something_one_id = "";
+            Something_two_id = "";
+
+            //What_one = "";
+
+
+        }
+        public Relationship_mem_comment(string a, string b)
+        {
+            Something_one_id = a;
+            Something_two_id = b;
+
             //What_one = "";
         }
     }
