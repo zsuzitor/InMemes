@@ -610,7 +610,7 @@ namespace Im.Models
     }
     public class Relationship_string_string_Liked_connected : Relationship_string_string
     {
-        public string What { get; set; }//Memes Comment
+        public string What_one { get; set; }//Memes Comment
 
         public Relationship_string_string_Liked_connected() : base()
         {
@@ -666,6 +666,18 @@ namespace Im.Models
         public Relationship_string_string_Black_list_connected(string a, string b, bool person_or_group) : base(a, b)
         {
             Person = person_or_group;
+        }
+    }
+    public class Relationship_string_string_mes_mem_connected : Relationship_string_string
+    {
+        
+        public Relationship_string_string_mes_mem_connected() : base()
+        {
+            
+        }
+        public Relationship_string_string_mes_mem_connected(string a, string b) : base(a, b)
+        {
+            
         }
     }
     /*
@@ -762,23 +774,23 @@ namespace Im.Models
         public string Something_one_id { get; set; }//"главное" если связь не между людьми то засовывать сюда
         public string Something_two_id { get; set; }
 
-        //public string What_one { get; set; }//
+        public string What_one { get; set; }//Memes Comment
 
         public Relationship_mem_comment()
         {
             Something_one_id = "";
             Something_two_id = "";
 
-            //What_one = "";
+            What_one = "";
 
 
         }
-        public Relationship_mem_comment(string a, string b)
+        public Relationship_mem_comment(string a, string b,string what_one)
         {
             Something_one_id = a;
             Something_two_id = b;
 
-            //What_one = "";
+            What_one = what_one;
         }
     }
 }

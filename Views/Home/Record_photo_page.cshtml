@@ -3,12 +3,23 @@
     AjaxOptions ajaxOpts = new AjaxOptions
     {
         UpdateTargetId = "Record_photo_page_one_photo_block_id",
-        Url = Url.Action("Action_image"),
+        Url = Url.Action("Action_memes"),
         InsertionMode = InsertionMode.Replace
 
     };
 }
-
+@{
+    string Record_photo_page_small_like_name = "Record_photo_page_right_block_small";
+    string Record_photo_page_small_repost_name = "Record_photo_page_right_block_small";
+    if ((bool)ViewBag.like)
+    {
+        Record_photo_page_small_like_name = "Record_photo_page_right_block_small_true";
+    }
+    if ((bool)ViewBag.repost)
+    {
+        Record_photo_page_small_repost_name = "Record_photo_page_right_block_small_true";
+    }
+}
 
 
     @if (Model != null)
@@ -58,9 +69,30 @@
                         
                         
                     </div>
-                    <div><div class="Record_photo_page_action"></div>
-                    <div  class="Record_photo_page_action"></div>
-                    <div  class="Record_photo_page_action"></div></div>
+                    <div>
+                    <div class=@Record_photo_page_small_like_name>
+                        @Ajax.ActionLink("Лайков:" + ((int)ViewBag.count_like).ToString(), "Action_memes", "Home",
+new { id = Model.db.Id, action_m = "like" },
+new AjaxOptions { UpdateTargetId = string.Concat("Wall_memes_mem_block_id_", Model.db.Id) }, new { @class = "link_standart_for_div" })
+                        @{
+//ViewBag.like от этого класс
+// ViewBag.repost
+                        }
+                        </div>
+                    <div  class="Record_photo_page_right_block_small">
+
+
+                    </div>
+                        <div class=@Record_photo_page_small_repost_name>
+                            @Ajax.ActionLink("Репостов:" + ((int)ViewBag.count_repost).ToString(), "Action_memes", "Home",
+new { id = Model.db.Id, action_m = "repost" },
+new AjaxOptions { UpdateTargetId = string.Concat("Wall_memes_mem_block_id_", Model.db.Id) }, new { @class = "link_standart_for_div" })
+
+
+
+                        </div>
+                    
+                    </div>
                     <div></div>
                 </div>
             </div>

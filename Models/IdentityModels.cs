@@ -140,20 +140,21 @@ namespace Im.Models
         public DbSet<Comment> Comments { get; set; }
         //Relationship_string_string  Relationship_with_admin_group Relationship_with_memes Relationship_with_images
         //
-        public DbSet<Relationship_string_string_Followers_connected> Followers_connected { get; set; }
+        public DbSet<Relationship_string_string_Followers_connected> Followers_connected { get; set; }//связь с фоловерами не проверенными и заигноренными(группа\человек-человек)
        // public DbSet<Relationship_string_string_Followers_ignore_connected> Followers_ignore_connected { get; set; }
         public DbSet<Relationship_string_string_Family_connected> Family_connected { get; set; }
-        public DbSet<Relationship_string_string_Groups_connected> Groups_connected { get; set; }
-        public DbSet<Relationship_string_string_Liked_connected> Liked_connected { get; set; }
-        public DbSet<Relationship_string_string_Repost_connected> Repost_connected { get; set; }
-        public DbSet<Relationship_string_string_Messages_one_dialog_connected> Messages_one_dialog_connected { get; set; }
-        public DbSet<Relationship_string_string_Messages_dialog_person_connected> Messages_dialog_person_connected { get; set; }
-        public DbSet<Relationship_string_string_Black_list_connected> Black_list_connected { get; set; }
-        public DbSet<Relationship_with_admin_group> Friends_connected { get; set; }
-        public DbSet<Relationship_with_memes> Wall_memes_connected { get; set; }
-        public DbSet<Relationship_mem_comment> Mem_comment_connected { get; set; }
-        public DbSet<Relationship_with_images> Images_mem_connected { get; set; }
-
+        public DbSet<Relationship_string_string_Groups_connected> Groups_connected { get; set; }//связь группа-человек
+        public DbSet<Relationship_string_string_Liked_connected> Liked_connected { get; set; }//связь лайки(мем-человек)
+        public DbSet<Relationship_string_string_Repost_connected> Repost_connected { get; set; }//связь человек-репосты
+        public DbSet<Relationship_string_string_Messages_one_dialog_connected> Messages_one_dialog_connected { get; set; }//связь диалога с сообщениями
+        public DbSet<Relationship_string_string_Messages_dialog_person_connected> Messages_dialog_person_connected { get; set; }//связь диалога с человеком
+        public DbSet<Relationship_string_string_Black_list_connected> Black_list_connected { get; set; }//связь с людьми из черного листа
+        public DbSet<Relationship_with_admin_group> Friends_connected { get; set; }//связь друзей/одобренных подписчиков группы
+        public DbSet<Relationship_with_memes> Wall_memes_connected { get; set; }//связь мема и людей
+        public DbSet<Relationship_mem_comment> Mem_comment_connected { get; set; }//связь мема и комментов(one==mem)/связь коммента с картинками(мем)(one==comment)
+        public DbSet<Relationship_with_images> Images_mem_connected { get; set; }//связь картинок(которых несколько может быть ) с мемом
+        public DbSet<Relationship_string_string_mes_mem_connected> Message_mem_connected { get; set; }
+        
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {

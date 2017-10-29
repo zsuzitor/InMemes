@@ -148,7 +148,7 @@ namespace Im.Controllers
             {
                 res = Memes(id_image);
                 int int_id_image = Convert.ToInt32(id_image);
-                //TODO1  функцию которая мем_рекорд возвращает также с флагами доступа
+                
                                
                 bool? prev_bool = null;
                 {
@@ -240,7 +240,7 @@ namespace Im.Controllers
             //
             return PartialView(res);
         }
-        //TODO
+        
         public ActionResult Album_photo(string id_user, string album_name = "")
         {
             id_user = string.IsNullOrEmpty(id_user) ?  System.Web.HttpContext.Current.User.Identity.GetUserId() : id_user;
@@ -276,10 +276,10 @@ namespace Im.Controllers
 
 
 
-        //TODO 
+       
         public ActionResult Albums(string id,string from_type= "Personal_record")
         {
-            //TODO 
+            
             id=string.IsNullOrEmpty(id) ?  System.Web.HttpContext.Current.User.Identity.GetUserId() : id;
             //string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             ViewBag.id_user = id;
@@ -307,28 +307,28 @@ namespace Im.Controllers
             
             return View(res);
         }
-        //TODO 
+        
         public ActionResult News(string id)
         {
-            //TODO 
+            
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             var res = (Personal_record)Record(check_id, "News");
 
             return View(res);
         }
-        //TODO 
+        
         public ActionResult Messages(string id)
         {
-            //TODO 
+            
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             var pers = Record(check_id, "Messages");
 
             return View(((Personal_record)pers).Message);
         }
-        //TODO 
+        
         public ActionResult Messages_one_dialog(string id,string person_id)
         {
-            //TODO 
+             
  
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             ViewBag.My_id = check_id;
@@ -339,10 +339,10 @@ namespace Im.Controllers
             ViewBag.Id_dialog = res.db.Id.ToString();
             return View(res);
         }
-        //TODO 
+        
         public ActionResult Friends(string from, string id,string what)
         {
-            //TODO 
+            
             //what= Friends, Admins ,Followers
             if (string.IsNullOrEmpty(id))
             {
@@ -375,10 +375,10 @@ namespace Im.Controllers
 
             return View(res.Friends);
         }
-        //TODO 
+        
         public ActionResult Followers_group(string from, string id, string what)
         {
-            //TODO 
+             
             //what= Friends, Admins ,Followers
             if (string.IsNullOrEmpty(id))
             {
@@ -419,7 +419,7 @@ namespace Im.Controllers
 
             return View();
         }
-        //TODO 
+         
         public ActionResult Delete(string what,string from_id,string from,string id)
         {
             //TODO 
@@ -436,30 +436,7 @@ namespace Im.Controllers
                         {
                             int int_id = Convert.ToInt32(id);
                             var list = db.Wall_memes_connected.Where(x1 => x1.Something_one_id == id && x1.Something_two_id == check_id);
-                            db.Wall_memes_connected.RemoveRange(list);
-                            //foreach(var i in list)
-                            //{
-                            //int int_od_mem = Convert.ToInt32(i.Something_one_id);
-                            var mem = db.Memes.First(x1 => x1.Id == int_id);
-                            db.Images_mem_connected.RemoveRange(db.Images_mem_connected.Where(x1=>x1.Something_two_id==id));
-                            db.Memes.Remove(mem);
-                                int int_id_img= Convert.ToInt32(mem.Image_id);
-                                db.Images.Remove(db.Images.First(x1=>x1.Id== int_id_img));
-
-
-                            try
-                            {
-                                db.Liked_connected.RemoveRange(db.Liked_connected.Where(x1 => x1.Something_one_id == id&&x1.What=="Memes"));
-                            }
-                            catch { }
-                            try
-                            {
-                                db.Repost_connected.RemoveRange(db.Repost_connected.Where(x1 => x1.Something_one_id == id));
-                            }
-                            catch { }
-
-
-                            db.SaveChanges();
+                            Remove_memes(id, check_id);
                         }
                         catch
                         {
@@ -472,30 +449,10 @@ namespace Im.Controllers
                         {
                             var pers = db.Friends_connected.First(x1 => x1.Something_one_id == from_id && x1.Something_two_id == check_id && x1.Admin_group&&!x1.Person);
 
-                            db.Images_mem_connected.RemoveRange(db.Images_mem_connected.Where(x1 => x1.Something_two_id == id));
-
-                            int int_id = Convert.ToInt32(id);
-                            var list = db.Wall_memes_connected.Where(x1 => x1.Something_one_id == id );
-                            db.Wall_memes_connected.RemoveRange(list);
-
-                                var mem = db.Memes.First(x1 => x1.Id == int_id);
-                                db.Memes.Remove(mem);
-                                int int_id_img = Convert.ToInt32(mem.Image_id);
-                                db.Images.Remove(db.Images.First(x1 => x1.Id == int_id_img));
-
-                            try
-                            {
-                                db.Liked_connected.RemoveRange(db.Liked_connected.Where(x1 => x1.Something_one_id == id && x1.What == "Memes"));
-                            }
-                            catch { }
-                            try
-                            {
-                                db.Repost_connected.RemoveRange(db.Repost_connected.Where(x1 => x1.Something_one_id == id));
-                            }
-                            catch { }
+                            Remove_memes(id, from_id);
 
 
-                            db.SaveChanges();
+                            //db.SaveChanges();
                         }
                         catch
                         {
@@ -520,56 +477,14 @@ namespace Im.Controllers
                             var list = db.Wall_memes_connected.First(x1 => x1.Something_one_id == id && x1.Something_two_id == check_id);
                             db.Wall_memes_connected.Remove(list);
                             
-                            var tmp = db.Images_mem_connected.Where(x1 => x1.Something_one_id == id);
-                            db.Images_mem_connected.RemoveRange(tmp);
-                            foreach (var i in tmp)
-                            {
-                                int int_td_tmp = Convert.ToInt32(i.Something_two_id);
-                                var mem_tmp = db.Memes.First(x1 => x1.Id == int_td_tmp);
-                                int int_id_img = Convert.ToInt32(mem_tmp.Image_id);
-                                db.Images.Remove(db.Images.First(x1 => x1.Id == int_id_img));
-                                db.Memes.Remove(mem_tmp);
-                            }
+                            
                             try
                             {
                                 int int_id = Convert.ToInt32(id);
                                 var mem = db.Memes.First(x1 =>x1.Id== int_id && x1.Source_id == check_id);
                                 //db.Memes.Remove(mem);
                                 //мем человека который удаляет и мем нужно удалить
-                                try
-                                {
-                                    db.Repost_connected.Remove(db.Repost_connected.First(x1 => x1.Something_one_id == id));// && x1.Something_two_id == check_id
-
-                                }
-                                catch { }
-                                try
-                                {
-                                  db.Liked_connected.RemoveRange(db.Liked_connected.Where(x1 => x1.Something_one_id == id && x1.What == "Memes") );//&& x1.Something_two_id == check_id)
-                                }
-                                catch { }
-                                try
-                                {
-                                    if (mem.Image_id != null)
-                                    {
-                                        int int_id_img = Convert.ToInt32(mem.Image_id);
-                                        db.Images.Remove(db.Images.First(x1 => x1.Id == int_id_img));
-                                    }
-
-
-                                }
-                                catch { }
-                                try
-                                {
-                                    //сам мем
-                                    db.Memes.Remove(db.Memes.First(x1=>x1.Id== int_id && x1.Source_id==check_id));
-                                }
-                                
-                                catch { }
-                                try
-                                {
-                                    db.Wall_memes_connected.RemoveRange(db.Wall_memes_connected.Where(x1=>x1.Something_one_id==id));
-                                }
-                                catch { }
+                                Remove_memes(id,check_id);
                             }
                             catch {
                                 //мем НЕ человека который удаляет и мем НЕ нужно удалять
@@ -601,61 +516,7 @@ namespace Im.Controllers
                         {
                             var pers = db.Friends_connected.First(x1 => x1.Something_one_id == from_id && x1.Something_two_id == check_id && x1.Admin_group&&!x1.Person);
 
-                            try
-                            {
-                                int int_id = Convert.ToInt32(id);
-                                var mem = db.Memes.First(x1 => x1.Id == int_id && x1.Source_id == from_id);
-                                //мем человека(группы) который удаляет и мем нужно удалить
-
-                                try
-                                {
-                                    db.Repost_connected.RemoveRange(db.Repost_connected.Where(x1 => x1.Something_one_id == id));
-                                }
-                                catch { }
-                                try
-                                {
-                                    db.Liked_connected.RemoveRange(db.Liked_connected.Where(x1 => x1.Something_one_id == id && x1.What == "Memes"));
-                                }
-                                catch { }
-
-                                try
-                                {
-
-                                    var tmp = db.Images_mem_connected.Where(x1 => x1.Something_one_id == id);
-                                    db.Images_mem_connected.RemoveRange(tmp);
-                                    foreach (var i in tmp)
-                                    {
-                                        int int_td_tmp = Convert.ToInt32(i.Something_two_id);
-                                        var mem_tmp = db.Memes.First(x1 => x1.Id == int_td_tmp);
-                                        int int_id_img = Convert.ToInt32(mem_tmp.Image_id);
-                                        db.Images.Remove(db.Images.First(x1 => x1.Id == int_id_img));
-                                        db.Memes.Remove(mem_tmp);
-                                    }
-
-
-                                }
-                                catch { }
-                                try
-                                {
-                                    db.Wall_memes_connected.RemoveRange(db.Wall_memes_connected.Where(x1 => x1.Something_one_id == id));
-                                }
-                                catch { }
-                                try
-                                {
-                                    //сам мем
-                                    db.Memes.Remove(mem);
-                                }
-                                catch { }
-                            }
-                            catch {
-                                try
-                                {
-                                    db.Wall_memes_connected.RemoveRange(db.Wall_memes_connected.Where(x1 => x1.Something_one_id == id && x1.Something_two_id == from_id));
-                                }
-                                catch { }
-
-                            }
-                            db.SaveChanges();
+                            Remove_memes(id, from_id);
 
                         }
                         catch{
@@ -727,19 +588,24 @@ namespace Im.Controllers
                         db.Messages_one_dialog_connected.Remove(mess);
                         int int_id = Convert.ToInt32(mess.Something_two_id);
                         db.Messages.Remove(db.Messages.First(x1=>x1.Id== int_id));
+                        var memess=db.Message_mem_connected.RemoveRange(db.Message_mem_connected.Where(x1 => x1.Something_one_id == mess.Something_two_id));
+                        foreach(var i in memess)
+                        {
+                            Remove_memes(i.Something_two_id,check_id);
+                        }
                     }
                     catch { }
                     db.SaveChanges();
                     break;
                 case "person":
                     //удаление человека из бд
-                    db.Users.Remove(db.Users.First(x1 => x1.Id == check_id));
+                    //db.Users.Remove(db.Users.First(x1 => x1.Id == check_id));
 
                     db.SaveChanges();
                     break;
                 case "group":
                     //удаление группы
-                    db.Users.Remove(db.Users.First(x1 => x1.Id == check_id));
+                    //db.Users.Remove(db.Users.First(x1 => x1.Id == check_id));
 
                     db.SaveChanges();
                     break;
@@ -749,17 +615,22 @@ namespace Im.Controllers
                     {
                         int int_id_com = Convert.ToInt32(id);
                         var comm = db.Comments.First(x1 => x1.Id == int_id_com);
+                        db.Liked_connected.RemoveRange(db.Liked_connected.Where(x1=>x1.Something_one_id==id));
                         if (comm.Person_id == check_id)
                         {
                             db.Comments.Remove(comm);
                             //Mem_comment_connected images memes
-                            var rel=db.Mem_comment_connected.RemoveRange(db.Mem_comment_connected.Where(x1=>x1.Something_one_id==id));
+                            var rel=db.Mem_comment_connected.RemoveRange(db.Mem_comment_connected.Where(x1=>(x1.Something_one_id==id&&x1.What_one== "Comment") || (x1.Something_two_id == id&& x1.What_one == "Memes")));
                             foreach(var i in rel)
                             {
-                                int int_id_mem = Convert.ToInt32(i.Something_two_id);
-                                var mem =db.Memes.Remove(db.Memes.First(x1=>x1.Id== int_id_mem));
-                                int int_id_img = Convert.ToInt32(mem.Image_id);
-                                db.Images.Remove(db.Images.First(x1 => x1.Id == int_id_img));
+
+                                
+                                if(i.What_one== "Comment")
+                                {
+                                    //int int_id_mem = Convert.ToInt32(i.Something_two_id);
+                                    var mem = Remove_memes(i.Something_two_id,check_id);
+                                }
+                                
                             }
                         }
                     }
@@ -769,14 +640,14 @@ namespace Im.Controllers
                     break;
 
             }
-            //TODO временно
+           
             return View("Personal_record", Record(check_id, "Personal_record"));
             //return View();
         }
-        //TODO 
+        
         public ActionResult Edit_group_record(string id)
         {
-            //TODO 
+            
             //
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             var res = (Group_record)Group(id,"DB");
@@ -792,19 +663,19 @@ namespace Im.Controllers
              res = (Group_record)Group(id, "Group_record");
             return View("Group_record", res);
         }
-        //TODO 
+         
         public ActionResult Edit_personal_record()
         {
-            //TODO 
+             
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             ViewBag.list_menu = new string[] {"Основное","Контакты","Интересы","Образование","Карьера","Военная служба","Жизненная позиция" };
 
             return View();
         }
-        //TODO 
+         
         public ActionResult Action_comment(string id, string action_m, string obg = "")
         {
-            //TODO 
+            
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
 
             switch (action_m)
@@ -836,44 +707,11 @@ namespace Im.Controllers
             return RedirectToAction("Record_photo_page", "Home", new { id_image = id, album_name = "" });
 
         }
-        //TODO 
-        public ActionResult Action_image(string id, string action_m,string obg="")
+
+                         
+        public ActionResult Action_memes(string id,string action_m, string obg = "")
         {
-            //TODO 
-            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
-
-            switch (action_m)
-            {
-                case "change_album":
-                    {
-                        //TODO сейчас кто угодно может сменить альбом
-                        int int_id = Convert.ToInt32(id);
-                        var img=db.Images.First(x1 => x1.Id == int_id);
-                        img.Albums = obg;
-                        db.SaveChanges();
-                    }
-                    break;
-                case "like":
-                    {
-                        Like_something(id, "Memes");
-
-                    }
-                    break;
-                case "repost":
-                    {
-                    }
-                    break;
-               
-               
-            }
-
-            return RedirectToAction("Record_photo_page", "Home", new { id_image = id, album_name = ""  });
-
-        }
-                        //TODO 
-        public ActionResult Action_memes(string id,string action_m)
-        {
-            //TODO 
+            
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             
             switch (action_m)
@@ -904,7 +742,16 @@ namespace Im.Controllers
 
                     }
                     break;
-                
+                case "change_album":
+                    {
+                        //TODO сейчас кто угодно может сменить альбом
+                        int int_id = Convert.ToInt32(id);
+                        var img = db.Images.First(x1 => x1.Id == int_id);
+                        img.Albums = obg;
+                        db.SaveChanges();
+                    }
+                    break;
+
             }
             var mem = Memes(id);
 
@@ -1008,11 +855,11 @@ namespace Im.Controllers
 
         }
 
-        //TODO 
+         
 
         public ActionResult Add_new_group_ajax()
         {
-            //TODO 
+            
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
 
             return PartialView();
@@ -1036,10 +883,10 @@ namespace Im.Controllers
             return PartialView(res);
         }
 
-        //TODO
+        
         public ActionResult Follow_ajax(string from,string id ,bool click=false)
         {
-            //TODO добавить список для не подтвержденных друей со стороны отправляющего
+            
             //Group
             //Personal_record
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
@@ -1389,16 +1236,19 @@ namespace Im.Controllers
                     var mem = new Memes(check_id) { Source_type = "Personal_record", Image_id = i.Id.ToString() };
                     db.Memes.Add(mem);
                     db.SaveChanges();
-                    db.Mem_comment_connected.Add(new Relationship_mem_comment(comment.Id.ToString(), mem.Id.ToString()));
+                    db.Mem_comment_connected.Add(new Relationship_mem_comment(comment.Id.ToString(), mem.Id.ToString(), "Comment"));
                     //db.Images_mem_connected.Add(new Relationship_with_images(i.Id.ToString(), mem.Id.ToString()));
                     db.SaveChanges();
                 }
 
 
             }
+            db.Mem_comment_connected.Add(new Relationship_mem_comment(id_memes, comment.Id.ToString(), "Memes"));
+            db.SaveChanges();
+
             return View();
         }
-        //TODO 
+         
         [HttpPost]
         public ActionResult Add_new_message(HttpPostedFileBase[] uploadImage, string message_text, string Id_dialog)
         {
@@ -1412,26 +1262,30 @@ namespace Im.Controllers
                var photo_list = Get_photo_post(Get_photo_post(uploadImage),"");
 
                 var mes = new Message(message_text, check_id);
-                if (photo_list != null )
-                {
-                    foreach(var i in photo_list)
-                    {
-                        db.Images.Add(i);
-                        db.SaveChanges();
-                        var mem = new Memes(check_id) { Source_type = "Personal_record", Image_id=i.Id.ToString() };
-                        db.Memes.Add(mem);
-                        db.SaveChanges();
-                        //TODO1 добавить в таблицу связи сообщения-- мем-картинки
-                        //добавление в нее связи сообщения и мемов
-                    }
-
-
-                }
+                
                 db.Messages.Add(mes);
                 db.SaveChanges();
                 db.Messages_one_dialog_connected.Add(new Relationship_string_string_Messages_one_dialog_connected(dialog.Id.ToString(), mes.Id.ToString()));
                 //dialog.Messages_id += mes.Id + ",";
                 db.SaveChanges();
+
+                if (photo_list != null)
+                {
+                    foreach (var i in photo_list)
+                    {
+                        db.Images.Add(i);
+                        db.SaveChanges();
+                        var mem = new Memes(check_id) { Source_type = "Personal_record", Image_id = i.Id.ToString() };
+                        db.Memes.Add(mem);
+                        db.SaveChanges();
+                        db.Message_mem_connected.Add(new Relationship_string_string_mes_mem_connected(mes.Id.ToString(),mem.Id.ToString()));
+                        
+                        
+                    }
+
+
+                }
+
                 //не уверен что нужно обращаться
                 var res = Message_person_block(id: Id_dialog, person_id: null, bool_fullness: "Messages_one_dialog");
 
@@ -1444,13 +1298,11 @@ namespace Im.Controllers
 
         }
 
-        //TODO 
+         
         [HttpPost]
         public ActionResult Add_new_group(Group a)
         {
-            //Создание НОВОЙ группы
-            //TODO 
-            //TO-DO проверять есть ли такие названия и тд тд тд
+            
 
             if (a != null && !string.IsNullOrEmpty(a.Name))
             {
@@ -1512,8 +1364,7 @@ namespace Im.Controllers
                         var mem = new Memes(check_id) { Source_type = "Personal_record", Image_id = i.Id.ToString() };
                         db.Memes.Add(mem);
                         db.SaveChanges();
-                        //TODO1 добавить в таблицу связи человек-- мем-картинки
-                        //добавление в нее связи сообщения и мемов
+                        
                         db.Wall_memes_connected.Add(new Relationship_with_memes(mem.Id.ToString(),check_id,false, "Personal_record",true));
                     }
 
@@ -1521,7 +1372,7 @@ namespace Im.Controllers
                 }
                
                 
-                //TODO1
+                
                 ((Personal_record)res_page).db.Images_count += 1;
                 
                 db.SaveChanges();
@@ -1571,7 +1422,7 @@ namespace Im.Controllers
                             res_db.Source_type = "Personal_record";
                             db.Memes.Add(res_db);
                             db.SaveChanges();
-                            //TODO1 связь опять
+                            
 
                             foreach (var i in photo_list)
                                 {
@@ -1643,7 +1494,7 @@ namespace Im.Controllers
                         };
                         var photo_list = Get_photo_post(Get_photo_post(uploadImage),"");
                         
-                        //TODO1 картинки
+                        
                             foreach (var i in photo_list)
                             {
                             db.Images.Add(i);
@@ -1714,7 +1565,7 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                     var tmp = db.Messages_dialog_person_connected.Where(x1 => x1.Something_two_id == check_id).ToList();
                     if (person_id == check_id)
                     {
-                        //TODO1 диалог с самим собой
+                        
                         
                         for(int i = 0, stop=1; i < tmp.Count()&&stop==1; ++i)
                         {
@@ -1884,7 +1735,7 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
             else
             {
                 //мем=картинка
-                //TODO1
+                
                 int id_img_mem = Convert.ToInt32(id);
                 var id_img = Convert.ToInt32(db.Memes.First(x1 => x1.Id == id_img_mem && x1.Image_id != null).Image_id);
                 var img = db.Images.First(x1 => x1.Id == id_img);
@@ -1907,7 +1758,7 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
 
             ViewBag.like = false;
             ViewBag.repost = false;
-            var mass_liked = db.Liked_connected.Where(x1=>x1.Something_one_id== id && x1.What == "Memes").ToList();
+            var mass_liked = db.Liked_connected.Where(x1=>x1.Something_one_id== id && x1.What_one == "Memes").ToList();
             ViewBag.Count_like = mass_liked.Count;
             //список лайкнувших +репостнувших также доделать
             //ViewBag.Like_list = mass_liked.Take(5);
@@ -2128,7 +1979,7 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
             }
                 if (bool_fullness == "Group_short"){
                 var count_fl = db.Friends_connected.Where(x1 => x1.Something_one_id == id&&!x1.Person).Count();
-                //TODO мб тут не null я хз че туда надо
+                
                 res = new Group_short(not_res, count_fl,null);
                 
                 ViewBag.Count_followers = count_fl;
@@ -2158,13 +2009,13 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
 
 
             //TODO сравнивать id и если одинаковые то и меню слева отправлять иначе нет
-            //TODO заполнять все списки и с мемами и тд
+           
             Personal_record res = null;
             if (id != null)//убрать условие? проверять есть ли такой человек в базе
             {
                 var res_ap = db.Users.First(x1 => x1.Id == id);
                 res = new Personal_record(res_ap);
-                //TODO заполнять все поля правильно в зависимости от bool_fullness
+                
                 
                 try
                 {
@@ -2557,14 +2408,14 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             try
             {
-                var mass_liked = db.Liked_connected.Where(x1 => x1.Something_one_id == id && x1.What == What&&x1.Something_two_id==check_id).ToList();
-                db.Liked_connected.Remove(db.Liked_connected.First(x1 => x1.Something_one_id == id && x1.Something_two_id == check_id && x1.What == What));
+                var mass_liked = db.Liked_connected.Where(x1 => x1.Something_one_id == id && x1.What_one == What&&x1.Something_two_id==check_id).ToList();
+                db.Liked_connected.Remove(db.Liked_connected.First(x1 => x1.Something_one_id == id && x1.Something_two_id == check_id && x1.What_one == What));
 
                 ViewBag.like = false;
                 ViewBag.count_like -= 1;
             }
             catch {
-                db.Liked_connected.Add(new Relationship_string_string_Liked_connected(id, check_id) { What=What});
+                db.Liked_connected.Add(new Relationship_string_string_Liked_connected(id, check_id) { What_one = What});
                 ViewBag.like = true;
                 ViewBag.count_like += 1;
             }
@@ -2683,7 +2534,70 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                     break;
             }
         }
+        Memes Remove_memes(string id_mem,string pers_id)
+        {
 
+            
+
+
+            
+            int int_id = Convert.ToInt32(id_mem);
+            var mem = db.Memes.First(x1=>x1.Id== int_id);
+            if (string.IsNullOrEmpty(mem.Image_id))
+            {
+                //если мем картинка удаление картинки
+                int int_id_img = Convert.ToInt32(mem.Image_id);
+                db.Images.Remove(db.Images.First(x1 => x1.Id == int_id_img));
+            }
+            try
+            {
+                // удаление лайков мема
+                db.Liked_connected.RemoveRange(db.Liked_connected.Where(x1 => x1.Something_one_id == id_mem));
+
+            }
+            catch { }
+            try
+            {
+                // удаление репостов
+                db.Repost_connected.RemoveRange(db.Repost_connected.Where(x1 => x1.Something_one_id == id_mem));
+
+            }
+            catch { }
+            try
+            {
+                // удаление связи со стенами
+                db.Wall_memes_connected.RemoveRange(db.Wall_memes_connected.Where(x1 => x1.Something_one_id == id_mem));
+
+            }
+            catch { }
+            try
+            {
+                // удаление комментов
+                var comment_rel = db.Mem_comment_connected.RemoveRange(db.Mem_comment_connected.Where(x1 => x1.Something_one_id == id_mem && x1.What_one == "Memes"));
+
+                foreach (var i in comment_rel)
+                {
+                    int int_id_tmp = Convert.ToInt32(i.Something_two_id);
+                   var comment= db.Comments.Remove(db.Comments.First(x1=>x1.Id== int_id_tmp));
+                    var com=db.Mem_comment_connected.Remove(db.Mem_comment_connected.First(x1 => x1.Something_one_id == i.Something_two_id && x1.What_one == "Comment"));
+                    Remove_memes(com.Something_two_id, "");
+                }
+            }
+            catch { }
+            
+            
+            try
+            {
+                // удаление картинок
+                db.Images_mem_connected.RemoveRange(db.Images_mem_connected.Where(x1 => x1.Something_one_id == id_mem));
+
+            }
+            catch { }
+
+            db.SaveChanges();
+            return mem;
+
+        }
 
         }
 }

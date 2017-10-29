@@ -932,15 +932,26 @@ div.Record_photo_page_right_info_block {
     display: inline-block;
     vertical-align: top;
 }
-div.Record_photo_page_action{
-    display:inline-block;
-    vertical-align:top;
-    width:30%;
-    margin-left:5px;
-    background-color:black;
-    height:20px;
-}
 
+
+
+div.Record_photo_page_right_block_small {
+    display: inline-block;
+    vertical-align: top;
+    width: 30%;
+    margin-left: 5px;
+    background-color: black;
+    height: 20px;
+}
+div.Record_photo_page_right_block_small_true {
+    display: inline-block;
+    vertical-align: top;
+    width: 30%;
+    margin-left: 5px;
+    background-color: black;
+    height: 20px;
+    background-color: blueviolet;
+}
 /*Search_main*/
 div.Search_main_load_ajax_osn_left_block {
     display: inline-block;
