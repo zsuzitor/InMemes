@@ -44,7 +44,7 @@
                 //var g = document.body.scrollTop;
                
                 //alert(c.bottom);
-                var str = pageYOffset - b.offsetWidth;
+                var str = pageYOffset - b.offsetHeight-60;//- b.offsetHeight  offsetWidth
                 //alert(str);
                 b.style.top = parseInt(str) + 'px';
                 //b.top = str;
@@ -52,7 +52,7 @@
 
             }
             if (c.top > 50) {
-                var str= 60 + pageYOffset;
+                var str= pageYOffset;
                 b.style.top = str + 'px';
             }
             

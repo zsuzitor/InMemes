@@ -1,0 +1,100 @@
+﻿@model Im.Models.Comment_record
+
+@{
+
+    string Comments_partial_like_name = "One_comments_partial_block_small";
+    if (ViewBag.like!=null&&(bool)ViewBag.like)
+    {
+        Comments_partial_like_name = "One_comments_partial_block_small_true";
+    }
+    string One_comments_partial_1_comm_right = "One_comments_partial_1_comm_right_small";
+    if (ViewBag.size == "big1")
+    {
+        One_comments_partial_1_comm_right= "One_comments_partial_1_comm_right_big";
+    }
+
+}
+
+<div class="One_comments_partial_one_comment_block"id=@string.Concat("Wall_memes_mem_block_id_", Model.db.Id)>
+    @if (Model.Source_person.Image != null)
+    {
+        <div class="One_comments_partial_one_comm_img" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(Model.Source_person.Image) );background-size: cover; ">
+
+
+            <a class="link_standart_for_circle_30_div" href='@Url.Action("Personal_record", "Home",new { id = Model.Source_person.Person_id } )'></a>
+        </div>
+    }
+@if (Model.Source_person.Image == null)
+{
+    <div class="One_comments_partial_one_comm_img" style="background:url('/Content/images/H98hxNY4xTo.jpg');background-size: cover; ">
+
+
+        <a class="link_standart_for_circle_30_div" href='@Url.Action("Personal_record", "Home",new { id = Model.Source_person.Person_id } )'></a>
+    </div>
+
+    }
+   
+    <div class=@One_comments_partial_1_comm_right >
+        <div class="One_comments_partial_person_name">@Html.ActionLink(Model.Source_person.Name, "Personal_record", "Home", new { id = Model.Source_person.Person_id }, new { })</div>
+        <div class="One_comments_partial_options_mem_all">
+            <div class="One_comments_partial_options_mem">
+                @Html.ActionLink("X", "Delete", "Home", new { what = "comment", from = ViewBag.from, from_id = ViewBag.from_id, id = Model.db.Id, }, new { })
+            </div>
+            <div class="One_comments_partial_options_mem_open">
+
+            </div>
+        </div>
+        <div>@Model.db.Comment_text</div>
+
+        @for (int i1 = 0; i1 < Model.Images.Count; ++i1)
+        {
+            <div class="One_comments_partial_image_message" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String( Model.Images[i1].Image.bytes) ) no-repeat;background-size: cover;">
+                @Ajax.ActionLink(" ", "Record_photo_page", "Home", new { from_id = ViewBag.from_id, main_img = false, id_image = Model.Images[i1].db.Id, from_type = "Personal_record" }, new AjaxOptions { UpdateTargetId = "Record_photo_page_one_photo_block_id" }, new { @class = "link_standart_for_div" })
+
+
+            </div>
+        }
+
+
+
+        
+            @if (Model.Stiker != null)
+            {
+                <div class="One_comments_partial_stiker_message" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(Model.Stiker.bytes) ) no-repeat;background-size: cover;">
+
+                </div>
+            }
+
+            <div class=@Comments_partial_like_name >
+                @Ajax.ActionLink("Лайков:" + Model.db.Count_like, "Action_comment", "Home",
+new { id = Model.db.Id, action_m = "like",size= ViewBag.size },
+new AjaxOptions { UpdateTargetId = string.Concat("Wall_memes_mem_block_id_", Model.db.Id) }, new { @class = "link_standart_for_div" })
+                @{
+//ViewBag.like от этого класс
+// ViewBag.repost
+//
+                }
+
+            </div>
+        
+    </div>
+    
+
+   
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

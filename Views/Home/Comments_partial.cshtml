@@ -1,0 +1,13 @@
+﻿@model IEnumerable<string>
+
+
+
+
+<div>
+    @foreach (var i in Model)
+    {
+
+        @Html.Action("One_comments_partial", "Home",new { from= ViewBag.from, from_id= ViewBag.from_id, id_mem=i,size= ViewBag.size})
+    }
+
+</div>

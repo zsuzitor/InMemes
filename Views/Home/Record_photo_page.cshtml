@@ -11,11 +11,11 @@
 @{
     string Record_photo_page_small_like_name = "Record_photo_page_right_block_small";
     string Record_photo_page_small_repost_name = "Record_photo_page_right_block_small";
-    if ((bool)ViewBag.like)
+    if (ViewBag.like!=null&&(bool)ViewBag.like)
     {
         Record_photo_page_small_like_name = "Record_photo_page_right_block_small_true";
     }
-    if ((bool)ViewBag.repost)
+    if (ViewBag.repost!=null&&(bool)ViewBag.repost)
     {
         Record_photo_page_small_repost_name = "Record_photo_page_right_block_small_true";
     }
@@ -80,7 +80,7 @@ new AjaxOptions { UpdateTargetId = string.Concat("Wall_memes_mem_block_id_", Mod
                         }
                         </div>
                     <div  class="Record_photo_page_right_block_small">
-
+                        
 
                     </div>
                         <div class=@Record_photo_page_small_repost_name>
@@ -93,7 +93,24 @@ new AjaxOptions { UpdateTargetId = string.Concat("Wall_memes_mem_block_id_", Mod
                         </div>
                     
                     </div>
-                    <div></div>
+                    
+                        <div class="Record_photo_page_all_comments">
+                            
+                           @Html.Action("Comments_partial", "Home",new { from= ViewBag.from_type, from_id = ViewBag.from_id, id_mem=Model.db.Id })
+
+                        </div>
+
+                        <div class="div_color_white Record_photo_page_add_comment_block">
+                            @using (Html.BeginForm("Add_new_comment", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                            {
+                                @Html.Hidden("Stikers_id", "")
+                                @Html.Hidden("id_memes", Model.db.Id)
+                                @Html.Editor("comment_text", new { })
+                                <input type="file" name="uploadImage[0]" />
+                                <input type="submit" class="submit" value="Поделиться" />
+                            }
+                        </div>
+                    
                 </div>
             </div>
         </div>

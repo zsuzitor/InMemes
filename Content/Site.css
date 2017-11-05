@@ -76,6 +76,10 @@ ul {
 div.for_separation {
 }
 
+div.div_inline_block {
+    display: inline-block;
+    vertical-align: top;
+}
 
 div.div_color_white{
     background-color:white;
@@ -97,8 +101,19 @@ div.Memes_under_block_small_true {
     background-color: blueviolet;
     margin-left: 20px;
 }
-div.Memes_partial_under_all_block{
-    height:45px;
+div.memes_partial_person_name_block {
+    width:300px;
+    display:inline-block;
+    vertical-align:top;
+}div.memes_partial_img_person {
+    border-radius: 30px;
+    display: inline-block;
+    vertical-align: top;
+    width: 60px;
+    height: 60px;
+}
+}div.Memes_partial_under_all_block {
+    height: 45px;
 }
 /*div.memes_partial_options_mem {
     width: 30px;
@@ -140,10 +155,18 @@ background-color: black;
 div.memes_partial_one_mem_block_left_name {
     display: inline-block;
     vertical-align: top;
-    width: 80%;
+    width: 85%;
 }div.memes_partial_one_mem_block {
     position: relative;
 }
+div.memes_partial_all_comments {
+    overflow-y: scroll;
+    height: 250px;
+}
+div.memes_partial_add_comment_block {
+    
+}
+
 /*main_header*/
 div.main_header {
     position: absolute;
@@ -209,7 +232,7 @@ div.Left_menu_personal_up_block {
     width: 200px;
     position: absolute;
 }
-div .Layout_left_menu {
+div.Layout_left_menu {
     /*СЮДА*/
     /*
         width: 200px;
@@ -218,6 +241,7 @@ div .Layout_left_menu {
 
         top:100px;
         position: fixed;*/
+    position:relative;
 }
 div.Layout_left_menu_up {
     background-color: aqua;
@@ -859,17 +883,18 @@ div.Albums_load_img_up_block_input {
 
 
 /**/
-div#Record_photo_page_one_photo_block_id {
+div.Record_photo_page_add_comment_block {
+    position:absolute;
+    top:410px;
+}div#Record_photo_page_one_photo_block_id {
     height: 10px;
     width: 10px;
     /*margin-top:-100px;*/
     margin-top: -200px;
     margin-left: -100px;
-    
     position: relative;
     display: inline-block;
     vertical-align: top;
-   
 }
 div.Record_photo_page_one_photo_block_inside {
     /*margin-left: 450px;*/
@@ -928,19 +953,20 @@ div.Record_photo_page_prev_next_button {
     }
 div.Record_photo_page_right_info_block {
     width: 280px;
-    height: 400px;
+    height: 495px;
     display: inline-block;
     vertical-align: top;
 }
+div.Record_photo_page_all_comments {
+    overflow-y: scroll;
+    height:350px;
 
-
-
-div.Record_photo_page_right_block_small {
+}div.Record_photo_page_right_block_small {
     display: inline-block;
     vertical-align: top;
     width: 30%;
     margin-left: 5px;
-    background-color: black;
+    
     height: 20px;
 }
 div.Record_photo_page_right_block_small_true {
@@ -948,7 +974,7 @@ div.Record_photo_page_right_block_small_true {
     vertical-align: top;
     width: 30%;
     margin-left: 5px;
-    background-color: black;
+
     height: 20px;
     background-color: blueviolet;
 }
@@ -970,4 +996,64 @@ div.Search_main_load_ajax_osn_right_block {
     margin-left: 20px;
     position: fixed;
 }
+/*One_comments_partial*/
 
+div.One_comments_partial_options_mem_open {
+}
+div.One_comments_partial_options_mem:hover {
+    cursor: pointer;
+}
+div.One_comments_partial_options_mem_all {
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    vertical-align: top;
+    float: right;
+}
+div.One_comments_partial_one_comm_img {
+    border-radius: 30px;
+    display: inline-block;
+    vertical-align: top;
+    width: 60px;
+    height: 60px;
+}
+div.One_comments_partial_image_message {
+    width: 60px;
+    height: 60px;
+    display: inline-block;
+    vertical-align: top;
+}
+div.One_comments_partial_stiker_message {
+    width: 60px;
+    height: 60px;
+}
+div.One_comments_partial_person_name {
+    display: inline-block;
+    vertical-align: top;
+    width:90%;
+}
+div.One_comments_partial_1_comm_right_small {
+    display: inline-block;
+    vertical-align: top;
+    width: 185px;
+}
+div.One_comments_partial_1_comm_right_big {
+    display: inline-block;
+    vertical-align: top;
+    width: 330px;
+}
+div.One_comments_partial_one_comment_block{
+    margin-top:5px;
+}
+div.One_comments_partial_block_small {
+    min-width: 80px;
+    float: right;
+    height: 20px;
+}
+
+div.One_comments_partial_block_small_true {
+    min-width: 80px;
+    float: right;
+    height: 20px;
+    background-color: blueviolet;
+}

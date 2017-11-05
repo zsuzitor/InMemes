@@ -152,10 +152,12 @@ namespace Im.Models
         public string Memes_id { get; set; }
         public string Stikers_id { get; set; }
         public DateTime Birthday { get; set; }
+        public int Count_like { get; set; }
         public Comment()
         {
 
             Id = 0;
+            Count_like = 0;
             this.Comment_text = null;
             this.Person_id = null;
             Memes_id = "";
@@ -166,6 +168,7 @@ namespace Im.Models
         {
 
             Id = 0;
+            Count_like = 0;
             Memes_id = "";
             this.Comment_text = Comment_text;
             this.Person_id = Person_id;
@@ -248,13 +251,13 @@ namespace Im.Models
     public class Comment_record
     {
         public Comment db;
-        public List<Memes> Images { get; set; }
+        public List<Memes_record> Images { get; set; }
         public Person_short Source_person { get; set; }
         public Stiker Stiker { get; set; }
         public Comment_record()
         {
             db = null;
-            Images = new List<Memes>();
+            Images = new List<Memes_record>();
             Source_person = null;
             Stiker = null;
         }
@@ -262,7 +265,7 @@ namespace Im.Models
         public Comment_record(Comment a)
         {
             db = a;
-            Images = new List<Memes>();
+            Images = new List<Memes_record>();
             Source_person = null;
             Stiker = null;
         }
@@ -438,12 +441,15 @@ namespace Im.Models
         public Memes db;
         public Person_short Person_source{ get; set; }
             public Group_short Group_source{ get; set; }
+        public List<Comment_record> Comments { get; set; }
+        
         public List<Memes_record> Images { get; set; }
         public Img Image { get; set; }
         public Memes_record()
         {
             db = null;
             Images = new List<Memes_record>();
+            Comments = new List<Comment_record>();
             Person_source = null;
             Group_source = null;
             Image = null;
@@ -452,6 +458,7 @@ namespace Im.Models
         {
             db = a;
             Images = new List<Memes_record>();
+            Comments = new List<Comment_record>();
             Person_source = null;
             Group_source = null;
             Image = null;

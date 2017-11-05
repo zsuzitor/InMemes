@@ -673,7 +673,7 @@ namespace Im.Controllers
             return View();
         }
          
-        public ActionResult Action_comment(string id, string action_m, string obg = "")
+        public ActionResult Action_comment(string id, string action_m, string size, string obg = "")
         {
             
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
@@ -703,8 +703,8 @@ namespace Im.Controllers
                 
                     
             }
-
-            return RedirectToAction("Record_photo_page", "Home", new { id_image = id, album_name = "" });
+            
+            return RedirectToAction("One_comments_partial", "Home", new { from="", from_id="", id_mem = id, size = size });
 
         }
 
@@ -769,6 +769,56 @@ namespace Im.Controllers
             ViewBag.from_id = from_id;
             return PartialView(res);
         }
+        //[ChildActionOnly]
+        public ActionResult One_comments_partial(string from, string from_id, string id_mem,string size)
+        {
+            //Comment_record res = null;
+            ViewBag.size = size;
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            var list_ph = db.Mem_comment_connected.Where(x1 => x1.Something_one_id == id_mem && x1.What_one == "Comment").ToList();
+                int int_id = Convert.ToInt32(id_mem);
+                var com = new Comment_record(db.Comments.First(x1 => x1.Id == int_id)) { Images = new List<Memes_record>()
+        };
+                com.Source_person = (Person_short)Record(com.db.Person_id, "Person_short");
+                try
+                {
+                    int int_id_st = Convert.ToInt32(com.db.Stikers_id);
+                    com.Stiker = db.Stikers.First(x1 => x1.Id == int_id_st);
+                }
+                catch { }
+                foreach (var i2 in list_ph)
+                {
+                    com.Images.Add(Memes(i2.Something_two_id, "full"));
+                }
+            try
+            {
+                db.Liked_connected.First(x1=>x1.Something_one_id==id_mem&&x1.Something_two_id== check_id && x1.What_one == "Comment");
+                ViewBag.like = true;
+            }
+            catch {
+                ViewBag.like = false;
+            }
+            
+            
+            return PartialView(com);
+
+        }
+
+        [ChildActionOnly]
+        public ActionResult Comments_partial(string from, string from_id, string id_mem, string size)
+        {
+            //TODO проверять на лайк и тд
+            ViewBag.from = from;
+            ViewBag.from_id = from_id;
+            ViewBag.size = size;
+            //ViewBag.id_image = id_mem;
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            var list_com=db.Mem_comment_connected.Where(x1=>x1.Something_one_id==id_mem&&x1.What_one=="Memes").Select(x1=>x1.Something_two_id).ToList();
+            
+            return PartialView(list_com);
+        }
+
+
         [HttpPost]
         public ActionResult Change_left_menu(string edit_text)
         {
@@ -1246,7 +1296,7 @@ namespace Im.Controllers
             db.Mem_comment_connected.Add(new Relationship_mem_comment(id_memes, comment.Id.ToString(), "Memes"));
             db.SaveChanges();
 
-            return View();
+            return View("Personal_record",Record(check_id, "Personal_record"));
         }
          
         [HttpPost]
@@ -1707,6 +1757,7 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
         
         public Memes_record Memes(string id, string bool_fullness = "full")
         {
+            
             var not_res = db.Memes.First(x1 => x1.Id.ToString() == id);
 
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
@@ -2410,12 +2461,25 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
             {
                 var mass_liked = db.Liked_connected.Where(x1 => x1.Something_one_id == id && x1.What_one == What&&x1.Something_two_id==check_id).ToList();
                 db.Liked_connected.Remove(db.Liked_connected.First(x1 => x1.Something_one_id == id && x1.Something_two_id == check_id && x1.What_one == What));
-
+                if(What== "Comment")
+                {
+                    int int_id = Convert.ToInt32(id);
+                    var com = db.Comments.First(x1=>x1.Id== int_id);
+                    com.Count_like -= 1;
+                    db.SaveChanges();
+                }
                 ViewBag.like = false;
                 ViewBag.count_like -= 1;
             }
             catch {
                 db.Liked_connected.Add(new Relationship_string_string_Liked_connected(id, check_id) { What_one = What});
+                if (What == "Comment")
+                {
+                    int int_id = Convert.ToInt32(id);
+                    var com = db.Comments.First(x1 => x1.Id == int_id);
+                    com.Count_like += 1;
+                    db.SaveChanges();
+                }
                 ViewBag.like = true;
                 ViewBag.count_like += 1;
             }
