@@ -383,6 +383,7 @@ namespace Im.Models
         //группы
         public List<Group_short> Groups { get; set; }
         public List<Person_short> Black_list { get; set; }
+        public List<Memes_record> Albums { get; set; }
 
 
 
@@ -401,6 +402,7 @@ namespace Im.Models
             Main_images = new List<Memes_record>();
             Groups = new List<Group_short>();
             Black_list = new List<Person_short>();
+            Albums = new List<Memes_record>();
         }
         public Personal_record(ApplicationUser a)
         {
@@ -433,6 +435,7 @@ namespace Im.Models
             Main_images = new List<Memes_record>();
             Groups = new List<Group_short>();
             Black_list = new List<Person_short>();
+            Albums = new List<Memes_record>();
         }
 
     }

@@ -258,6 +258,24 @@ div.Layout_all_l_b {
 }
 
 /*Personal_record*/
+div.Personal_record_albums {
+    margin-top:30px;
+}div.Personal_record_one_album_name {
+    margin-top: -30px;
+    font-size: 16pt;
+    font-weight: 800;
+    color: white;
+}
+div.Personal_record_one_album_main_img_block {
+    width: 330px;
+    height: 210px;
+}
+div.Personal_record_one_album_block {
+    padding: 10px;
+    width: 330px;
+    height: 220px;
+
+}
 div.Personal_record_open_message {
     border:solid 1px black;
     margin-top:10px;
