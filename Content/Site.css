@@ -161,7 +161,7 @@ div.memes_partial_one_mem_block_left_name {
 }
 div.memes_partial_all_comments {
     overflow-y: scroll;
-    height: 250px;
+    max-height: 250px;
 }
 div.memes_partial_add_comment_block {
     

@@ -9,7 +9,7 @@
     <div class="Followers_group_left_all_block">
         <div class="Followers_group_left_top_block div_color_white">
 
-            <p>подписоты: @((int)ViewBag.Count_followers) </p>
+            <p>Всего: @((int)ViewBag.Count_followers) </p>
         </div>
         <div>
 
@@ -47,7 +47,12 @@
     </div>
 
     <div class="Followers_group_right_all_block div_color_white">
-
+        <div>
+            @Html.ActionLink("Подписчики:", "Followers_group", "Home", new { what = "Followers", from = "Group_record", id = ViewBag.id }, new { @class = "link_standart_for_div" })
+        </div>
+        <div>
+            @Html.ActionLink("Админы:", "Followers_group", "Home", new { what = "Admins", from = "Group_record", id = ViewBag.id }, new { @class = "link_standart_for_div" })
+        </div>
 
     </div>
 

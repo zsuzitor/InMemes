@@ -84,7 +84,7 @@
                 <div>
                     @using (Html.BeginForm("Add_new_image", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
                     {
-                        @Html.Hidden("from", "person")
+                        @Html.Hidden("from", "Personal_record")
                         @Html.Hidden("for_what", "main_img")
 
                         <input type="file" name="uploadImage[0]" />

@@ -44,7 +44,7 @@ namespace Im.Models
         public string Name { get; set; }
         public string Status { get; set; }
         public DateTime Birthday { get; set; }
-        public byte[] Image { get; set; }
+       //public byte[] Image { get; set; }
         public bool Open_group { get; set; }
         public bool Add_memes_private { get; set; }
         public int Wall_count { get; set; }
@@ -59,7 +59,7 @@ namespace Im.Models
             Wall_count = 0;
             Status = "";
             Birthday = DateTime.Now;
-
+            //Image = null;
 
             Open_group = true;
             Add_memes_private = true;
@@ -73,7 +73,7 @@ namespace Im.Models
             Wall_count = 0;
             Status = "";
             Birthday = DateTime.Now;
-
+            //Image = null;
             Open_group = true;
             Add_memes_private = true;
 
@@ -535,7 +535,7 @@ namespace Im.Models
             this.Status = a.Status;
             //this.Group_id = Group_id.ToList();
             this.Count_followers = Count_followers;
-            this.Image = a.Image;
+            //this.Image = a.Image;
             this.Name = a.Name;
 
 
@@ -605,7 +605,7 @@ namespace Im.Models
     }
     public class Relationship_string_string_Groups_connected : Relationship_string_string
     {
-        public bool Person { get; set; }
+        public bool Person { get; set; }//если false то связь группа-группа иначе группа-человек
         public Relationship_string_string_Groups_connected() : base()
         {
             Person = true;
@@ -708,7 +708,7 @@ namespace Im.Models
         public string Something_one_id { get; set; }//"главное" если связь не между людьми то засовывать сюда
         public string Something_two_id { get; set; }
         public bool Admin_group { get; set; }
-        public bool Person { get; set; }
+        public bool Person { get; set; }// true связь человек-человек
         public Relationship_with_admin_group()
         {
             Something_one_id = "";
@@ -730,7 +730,7 @@ namespace Im.Models
         public string Something_one_id { get; set; }//"главное" если связь не между людьми то засовывать сюда
         public string Something_two_id { get; set; }
         public string Who { get; set; }//Personal_record, Group_record,Message
-        public bool News { get; set; }
+        public bool? News { get; set; }//null- только картинкой false-на стене
         public bool Image { get; set; }
         public Relationship_with_memes()
         {
