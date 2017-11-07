@@ -505,7 +505,29 @@ ul.Wall_memes_main_ul li{
     padding-top:20px;
 }
 
-
+/*Edit_group_record*/
+div.Edit_group_record_info_load_ajax_link_st {
+    background-color: white;
+}
+div.Edit_group_record_info_load_ajax_osn_left_block {
+    display: inline-block;
+    vertical-align: top;
+    width: 400px;
+    min-height: 300px;
+    background-color: white;
+}
+div.Edit_group_record_info_load_ajax_osn_right_block {
+    display: inline-block;
+    vertical-align: top;
+    width: 200px;
+    height: 300px;
+    background-color: white;
+    margin-left: 20px;
+    position: fixed;
+}
+div.Edit_group_record_info_load_ajax_link_not_st {
+    background-color: blue;
+}
 
 /*Groups_personal*/
 
@@ -545,7 +567,27 @@ div.Groups_personal_one_group_info {
 }
 
 /*Group_record*/
-div.Group_record_one_admin_block_info {
+div.Group_record_albums {
+    
+}
+div.Group_record_one_album_block {
+    padding: 10px;
+    width: 280px;
+    height: 220px;
+}
+div.Group_record_one_album_main_img_block {
+    width: 280px;
+    height: 210px;
+}
+div.Group_record_one_album_name {
+    margin-top: -30px;
+    font-size: 16pt;
+    font-weight: 800;
+    color: white;
+}
+div.Group_record_albums_top_space {
+    padding-top:20px;
+}div.Group_record_one_admin_block_info {
     display: inline-block;
     vertical-align: top;
     width: 235px;

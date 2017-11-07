@@ -286,6 +286,7 @@
     <Content Include="Views\Home\Search_main.cshtml" />
     <Content Include="Views\Home\Comments_partial.cshtml" />
     <Content Include="Views\Home\One_comments_partial.cshtml" />
+    <Content Include="Views\Home\Edit_group_record_info_load_ajax.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

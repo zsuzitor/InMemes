@@ -228,7 +228,44 @@
 
             </div>
 
+        @if (Model.Albums.Count > 0)
+        {
+            <div class="Group_record_albums_top_space">
+                <div class="div_color_white Group_record_albums">
+                    <div>
+                        @Html.ActionLink("Альбомы", "Albums", "Home", new { id = Model.db.Id, from_type = "Group_record" }, new { })
+                    </div>
+                    @foreach (var i in Model.Albums)
+                {
 
+                        <div class="Group_record_one_album_block">
+                            <div class="Group_record_one_album_main_img_block" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.Image.bytes) );background-size: cover; ">
+                                @Html.ActionLink(" ", "Albums", "Home", new { id = Model.db.Id, album_name = i.Image.Albums, from_type = "Personal_record" }, new { @class = "link_standart_for_div" })
+
+                            </div>
+                            @if (@i.Image.Albums == "")
+                    {
+                                <div class="Group_record_one_album_name">
+                                    @Html.ActionLink("Все Альбомы", "Albums", "Home", new { id = Model.db.Id, album_name = i.Image.Albums, from_type = "Personal_record" }, new { @class = "link_standart_for_div" })
+
+                                </div>
+
+                            }
+                            @if (@i.Image.Albums != "")
+                    {
+                                <div class="Group_record_one_album_name">
+                                    @Html.ActionLink(@i.Image.Albums, "Albums", "Home", new { id = Model.db.Id, album_name = i.Image.Albums, from_type = "Personal_record" }, new { @class = "link_standart_for_div" })
+
+                                </div>
+
+                            }
+
+                        </div>
+
+                    }
+                </div>
+            </div>
+        }
 
 
 

@@ -463,7 +463,7 @@ namespace Im.Controllers
                     {
                         try
                         {
-                            var list = db.Wall_memes_connected.First(x1 => x1.Something_one_id == id && x1.Something_two_id == check_id);
+                            var list = db.Wall_memes_connected.First(x1 => x1.Who == "Personal_record" && x1.Something_one_id == id && x1.Something_two_id == check_id);
                             if (list.Image)
                             {
                                 list.News = null;
@@ -494,7 +494,7 @@ namespace Im.Controllers
                                     catch { }
                                     try
                                     {
-                                        db.Wall_memes_connected.RemoveRange(db.Wall_memes_connected.Where(x1 => x1.Something_one_id == id && x1.Something_two_id == check_id));
+                                        db.Wall_memes_connected.RemoveRange(db.Wall_memes_connected.Where(x1 =>x1.Who== "Personal_record" && x1.Something_one_id == id && x1.Something_two_id == check_id));
                                     }
                                     catch { }
                                 }
@@ -514,9 +514,16 @@ namespace Im.Controllers
                         try
                         {
                             var pers = db.Friends_connected.First(x1 => x1.Something_one_id == from_id && x1.Something_two_id == check_id && x1.Admin_group&&!x1.Person);
-
-                            Remove_memes(id, from_id);
-
+                            var list = db.Wall_memes_connected.First(x1 => x1.Who == "Group_record" && x1.Something_one_id == id && x1.Something_two_id == from_id);
+                            if (list.Image)
+                            {
+                                list.News = null;
+                                db.SaveChanges();
+                            }
+                            else
+                            {
+                                Remove_memes(id, from_id);
+                            }
                         }
                         catch{
                             return View("Personal_record", Record(check_id, "Personal_record"));
@@ -646,8 +653,9 @@ namespace Im.Controllers
         
         public ActionResult Edit_group_record(string id)
         {
-            
+
             //
+            ViewBag.id = id;
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             var res = (Group_record)Group(id,"DB");
             var admins = db.Friends_connected.Where(x1 => x1.Something_one_id == id && x1.Admin_group&&!x1.Person).ToList();
@@ -748,6 +756,36 @@ namespace Im.Controllers
                         var img = db.Images.First(x1 => x1.Id == int_id);
                         img.Albums = obg;
                         db.SaveChanges();
+                        
+                            //TODO если группа или человек исправить + очень грязно мб переписать albums в бд(засунуть в связь с мемами)
+                            var al = db.Albums.Where(x1=>x1.Source_id==check_id);
+                        var con = db.Wall_memes_connected.Where(x1 => x1.Something_two_id == check_id && x1.Image).Select(x1=>x1.Something_one_id);
+                        var ph = new List<Img>();
+                        foreach (var i in con)
+                        {
+                            int int_id1 = Convert.ToInt32(i);
+                            var mem1 = db.Memes.First(x1 => x1.Id == int_id1);
+
+                            //var mem1= db.Memes.First(x1 => x1.Image_id == id&&x1.Source_id==check_id);
+                            int int_id2 = Convert.ToInt32(mem1.Image_id);
+                            var g = db.Images.First(x1 => x1.Id == int_id2);
+                            ph.Add(g);
+
+                        }
+                        foreach (var i in al)
+                            {
+                            
+                            try
+                            {
+                                var test = ph.First(x1 => x1.Albums == i.Name);
+                            }
+                            catch {
+                                //var al = db.Albums.Where(x1 => x1.Source_id == check_id);
+                                db.Albums.Remove(db.Albums.First(x1=>x1.Source_id==check_id&&x1.Name==i.Name));
+                            }
+
+                        }
+                            
                     }
                     break;
 
@@ -1152,8 +1190,21 @@ namespace Im.Controllers
 
                 return PartialView();
         }
-        
-        public ActionResult Edit_personal_record_info_load_ajax(string obg)
+        public ActionResult Edit_group_record_info_load_ajax(string id,string obg)
+        {
+            ViewBag.click = obg;
+            ViewBag.group_id = id;
+            if (string.IsNullOrEmpty(obg))
+                ViewBag.click = "Основное";
+
+            ViewBag.list_menu = new string[] { "Основное", "Списки", "Приватность" };
+            
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            var pers = Group(id, "DB");//TODO загрузка в зависимости от требований
+
+            return PartialView((Group_record)pers);
+        }
+            public ActionResult Edit_personal_record_info_load_ajax(string obg)
         {
             ViewBag.click = obg;
             if (string.IsNullOrEmpty(obg))
@@ -1238,7 +1289,7 @@ namespace Im.Controllers
     }
 
             ViewBag.click = click;
-            ViewBag.save_chenges = true;
+            ViewBag.save_changes = true;
             if (string.IsNullOrEmpty(click))
                 ViewBag.click = "Основное";
 
@@ -1248,7 +1299,46 @@ namespace Im.Controllers
 
             return PartialView("Edit_personal_record_info_load_ajax", pers.db);
         }
+        public ActionResult Change_group_rec(Group_record a, string click,string id)
+        {
+            string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            //var pers = db_users.Users.First(x1=>x1.Id==check_id);
+            //TODO проверять валидацией все
+            var pers = (Group_record)Group(id, "Group_record");
 
+            switch (click)
+            {
+                case "Основное":
+                    {
+                        
+
+                        break;
+                    }
+                case "Списки":
+                    {
+                        
+
+                        break;
+                    }
+                case "Приватность":
+                    {
+
+
+                        break;
+                    }
+            }
+
+            ViewBag.click = click;
+            ViewBag.save_changes = true;
+            if (string.IsNullOrEmpty(click))
+                ViewBag.click = "Основное";
+
+            ViewBag.list_menu = new string[] { "Основное", "Списки", "Приватность" };
+
+
+
+            return PartialView("Edit_personal_record_info_load_ajax", pers.db);
+        }
 
 
 
@@ -1392,6 +1482,7 @@ namespace Im.Controllers
         [HttpPost]
         public ActionResult Add_new_image(HttpPostedFileBase[] uploadImage, string for_what,string from,string Album_name="",string id="")
         {
+            Album_name = Album_name == "Все Альбомы" ?"":Album_name;
             IPage_view res_page = null;
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
             var photo_list = Get_photo_post(Get_photo_post(uploadImage), Album_name);
@@ -1461,7 +1552,7 @@ namespace Im.Controllers
                             db.Memes.Add(mem);
                             db.SaveChanges();
 
-                            db.Wall_memes_connected.Add(new Relationship_with_memes(mem.Id.ToString(), id, false, "Group_record", true));
+                            db.Wall_memes_connected.Add(new Relationship_with_memes(mem.Id.ToString(), id, null, "Group_record", true));
                         }
 
 
@@ -1946,8 +2037,18 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                 {
 
                 }
-
                 try
+                {
+                    //альбомы
+                    //альбомы на странице
+                    ((Group_record)res).Albums = Albums_function(id, count: 2, from_type: "Group_record");
+                }
+                catch
+            {
+
+            }
+
+            try
                 {
                     //заполнение картинок
                     //var ggg = db.Wall_memes_connected.ToList();
@@ -2700,7 +2801,7 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
             
             int int_id = Convert.ToInt32(id_mem);
             var mem = db.Memes.First(x1=>x1.Id== int_id);
-            if (string.IsNullOrEmpty(mem.Image_id))
+            if (!string.IsNullOrEmpty(mem.Image_id))
             {
                 //если мем картинка удаление картинки
                 int int_id_img = Convert.ToInt32(mem.Image_id);

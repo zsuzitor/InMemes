@@ -112,87 +112,41 @@
             </div>
         </div>
 
-    <div class="div_color_white Personal_record_friend_all_block">
-        @Html.ActionLink("Друзья", "Friends", "Home", new { what = "Friends", from = "Personal_record", id = Model.db.Id }, new { })
-        <div>
+    @if (Model.Friends.Count > 0)
+    {
+        <div class="div_color_white Personal_record_friend_all_block">
+            @Html.ActionLink("Друзья", "Friends", "Home", new { what = "Friends", from = "Personal_record", id = Model.db.Id }, new { })
+            <div>
 
-            @foreach (var i in Model.Friends)
-            {
-                <div class="Personal_record_one_friend_block">
-
-                    @if (i.Image != null)
-                    {
-                        <div class="Personal_record_one_friend_img" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.Image) );background-size: cover; ">
-                            <a class="link_standart_for_circle_50_div" href='@Url.Action("Personal_record", "Home",new { id = i.Person_id } )'></a>
-                        </div>
-                    }
-                    @if (i.Image == null)
-                    {
-                        //background-size: cover;background - size: 60px 60px;
-
-                        <div class="Personal_record_one_friend_img" style="background: url('/Content/images/H98hxNY4xTo.jpg');background-size: cover;">
-                            <a class="link_standart_for_circle_50_div" href='@Url.Action("Personal_record", "Home",new {id = i.Person_id } )'></a>
-                        </div>
-                    }
-
-                    <p>@Html.ActionLink(i.Name, "Personal_record", "Home", new { id = i.Person_id }, new { }) </p>
-                </div>
-            }
-                    @{
-                        /*<div class="Personal_record_one_line_friend">
-                        @for (int i = 0; i < 3; ++i)
+                @foreach (var i in Model.Friends)
                 {
-                            <div class="Personal_record_one_friend_block">
+                    <div class="Personal_record_one_friend_block">
 
-                                @if (Model.Friends[i].Image != null)
-                                {
-                                    <div class="Personal_record_one_friend_img" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(Model.Friends[i].Image) );background-size: cover; ">
-                                        <a class="link_standart_for_circle_50_div" href='@Url.Action("Personal_record", "Home",new { id = Model.Friends[i].Person_id } )'></a>
-                                    </div>
-                                }
-                                @if (Model.Friends[i].Image == null)
-                                {
-                                    //background-size: cover;background - size: 60px 60px;
-
-                                    <div class="Personal_record_one_friend_img" style="background: url('/Content/images/H98hxNY4xTo.jpg');background-size: cover;">
-                                        <a class="link_standart_for_circle_50_div" href='@Url.Action("Personal_record", "Home",new {id = Model.Friends[i].Person_id } )'></a>
-                                    </div>
-                                }
-
-
-
-                                <p>@Html.ActionLink(Model.Friends[i].Name, "Personal_record", "Home", new { id = @Model.Friends[i].Person_id }, new { }) </p>
-                            </div>
-                                    }
-                    </div>
-                    <div class="Personal_record_one_line_friend">
-                        @for (int i = 3; i < Model.Friends.Count; ++i)//(int)(Model.Friends.Count / 2 + 0.5)
-                {
-                            <div class="Personal_record_one_friend_block">
-                                @if (Model.Friends[i].Image != null)
-                                {
-                                    <div class="Personal_record_one_friend_img" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(Model.Friends[i].Image) );background-size: cover; ">
-                                        <a class="link_standart_for_circle_50_div" href='@Url.Action("Personal_record", "Home",new { id = Model.Friends[i].Person_id } )'></a>
-                                    </div>
-                                }
-                                @if (Model.Friends[i].Image == null)
-                                {
-                                    //background-size: cover;background - size: 60px 60px;
-
-                                    <div class="Personal_record_one_friend_img" style="background: url('/Content/images/H98hxNY4xTo.jpg');background-size: cover;">
-                                        <a class="link_standart_for_circle_50_div" href='@Url.Action("Personal_record", "Home",new {id = Model.Friends[i].Person_id } )'></a>
-                                    </div>
-                                }
-                                <p>@Html.ActionLink(Model.Friends[i].Name, "Personal_record", "Home", new { id = @Model.Friends[i].Person_id }, new { }) </p>
+                        @if (i.Image != null)
+                    {
+                            <div class="Personal_record_one_friend_img" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.Image) );background-size: cover; ">
+                                <a class="link_standart_for_circle_50_div" href='@Url.Action("Personal_record", "Home",new { id = i.Person_id } )'></a>
                             </div>
                         }
-                    </div>*/
-                    }
-                    
-                </div>
+                        @if (i.Image == null)
+                        {
+                            //background-size: cover;background - size: 60px 60px;
 
+                            <div class="Personal_record_one_friend_img" style="background: url('/Content/images/H98hxNY4xTo.jpg');background-size: cover;">
+                                <a class="link_standart_for_circle_50_div" href='@Url.Action("Personal_record", "Home",new {id = i.Person_id } )'></a>
+                            </div>
+                        }
 
-    </div>
+                        <p>@Html.ActionLink(i.Name, "Personal_record", "Home", new { id = i.Person_id }, new { }) </p>
+                    </div>
+                }
+
+            </div>
+
+        </div>
+    }
+    @if (Model.Groups.Count > 0)
+    {
     <div class="div_color_white Personal_record_groups_block_all">
 
         @Html.ActionLink("Группы", "Groups_personal", "Home", new { from = "Personal_record", id = Model.db.Id }, new { })
@@ -208,18 +162,15 @@
                         <div class="Personal_record_group_img_block" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.Image) );background-size: cover; ">
 
 
-                            <a class="link_standart_for_circle_30_div" href='@Url.Action("Group_record", "Home",new { id = i.Id } )'></a>
+                            <a class="link_standart_for_circle_30_div" href='@Url.Action("Group_record", "Home", new { id = i.Id })'></a>
                         </div>
-
-
-
                     }
                     @if (i.Image == null)
                     {
                         //background-size: cover;background - size: 60px 60px;
 
                         <div class="Personal_record_group_img_block" style="background: url('/Content/images/H98hxNY4xTo.jpg');background-size: cover;">
-                            <a class="link_standart_for_circle_30_div" href='@Url.Action("Group_record", "Home",new { id = i.Id } )'></a>
+                            <a class="link_standart_for_circle_30_div" href='@Url.Action("Group_record", "Home", new { id = i.Id })'></a>
                         </div>
                     }
 
@@ -234,7 +185,9 @@
             }
         </div>
     </div>
-
+    }
+@if (Model.Albums.Count > 0)
+{
         <div class="div_color_white Personal_record_albums">
             <div>
                 @Html.ActionLink("Альбомы", "Albums", "Home", new { id = Model.db.Id, from_type = "Personal_record" }, new { })
@@ -244,11 +197,11 @@
 
                 <div class="Personal_record_one_album_block">
                     <div class="Personal_record_one_album_main_img_block" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.Image.bytes) );background-size: cover; ">
-                        @Html.ActionLink(" ", "Albums", "Home", new { id=Model.db.Id, album_name= i.Image.Albums, from_type = "Personal_record" }, new { @class = "link_standart_for_div" })
+                        @Html.ActionLink(" ", "Albums", "Home", new { id = Model.db.Id, album_name = i.Image.Albums, from_type = "Personal_record" }, new { @class = "link_standart_for_div" })
 
                     </div>
                     @if (@i.Image.Albums == "")
-                {
+                    {
                         <div class="Personal_record_one_album_name">
                             @Html.ActionLink("Все Альбомы", "Albums", "Home", new { id = Model.db.Id, album_name = i.Image.Albums, from_type = "Personal_record" }, new { @class = "link_standart_for_div" })
 
@@ -256,7 +209,7 @@
 
                     }
                     @if (@i.Image.Albums != "")
-                {
+                    {
                         <div class="Personal_record_one_album_name">
                             @Html.ActionLink(@i.Image.Albums, "Albums", "Home", new { id = Model.db.Id, album_name = i.Image.Albums, from_type = "Personal_record" }, new { @class = "link_standart_for_div" })
 
@@ -268,6 +221,7 @@
 
             }
         </div>
+}
         <div class="div_color_white">Видео</div>
         <div class="div_color_white">Аудио</div>
     

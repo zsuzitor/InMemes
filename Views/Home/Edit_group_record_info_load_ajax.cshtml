@@ -1,0 +1,126 @@
+﻿@model Im.Models.Group_record
+
+
+@{ string class_li_div = "Edit_group_record_info_load_ajax_link_st";}
+@{
+    AjaxOptions ajaxOpts = new AjaxOptions
+    {
+        UpdateTargetId = "Edit_group_record_info_load_ajax_main_div_id",
+        Url = Url.Action("Change_group_rec")
+
+
+    };
+
+}
+
+
+
+<div class="Edit_group_record_info_load_ajax_osn_left_block">
+    @if (ViewBag.save_changes != null)
+    {
+        <h1>Изменения сохранены</h1>
+    }
+
+    @switch ((string)ViewBag.click)
+    {
+        case "Основное":
+            {
+                <div>
+                    <div>
+                        @using (Html.BeginForm("Add_new_image", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.Hidden("from", "Group_record")
+                            @Html.Hidden("for_what", "main_img")
+                            @Html.Hidden("id", Model.db.Id)
+
+                            <input type="file" name="uploadImage[0]" />
+                            <input type="submit" class="submit" value="Поделиться" />
+                        }
+                    </div>
+@using (Ajax.BeginForm(ajaxOpts))
+{
+    @Html.Hidden("click", (string)ViewBag.click)
+    @Html.Hidden("id", (string)ViewBag.group_id)
+
+    <div class="Edit_personal_record_info_load_ajax_div_str_1">
+        @Html.Label("Название:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
+    @Html.EditorFor(x1 => x1.db.Name)
+</div>
+                    <div class="Edit_personal_record_info_load_ajax_div_str_1">
+                        @Html.Label("Статус:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
+                        @Html.EditorFor(x1 => x1.db.Status)
+                    </div>
+                    <div class="Edit_personal_record_info_load_ajax_div_str_1">
+                        @Html.Label("Открытая группа:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
+                        @Html.EditorFor(x1 => x1.db.Open_group)
+                    </div>
+                    <div class="Edit_personal_record_info_load_ajax_div_str_1">
+                        @Html.Label("Открытая группа:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
+                        @Html.EditorFor(x1 => x1.db.Add_memes_private)
+                    </div>
+
+
+
+<hr />
+
+
+
+<input type = "submit" value = "Сохранить" />
+}
+                </div>
+
+                break;
+            }
+        case "Списки":
+            {
+                <div>
+
+                </div>
+
+                break;
+            }
+        case "Приватность":
+            {
+                <div>
+
+                </div>
+
+                break;
+            }
+
+    }
+</div>
+
+
+<div class="Edit_group_record_info_load_ajax_osn_right_block">
+
+    <ul>
+
+        @foreach (string i in ViewBag.list_menu)
+            {
+            <li>
+                @if ((string)ViewBag.click == i)
+                {
+                    class_li_div = "Edit_group_record_info_load_ajax_link_not_st";
+                }
+                @if ((string)ViewBag.click != i)
+                {
+                    class_li_div = "Edit_group_record_info_load_ajax_link_st";
+                }
+                <div class=@class_li_div>
+
+
+
+                    @Ajax.ActionLink(i, "Edit_group_record_info_load_ajax", "Home", new { obg = i },
+new AjaxOptions { UpdateTargetId = "Edit_group_record_info_load_ajax_main_div_id" }, new { @class = "link_standart_for_div" })
+                </div>
+            </li>
+        }
+
+
+
+    </ul>
+
+
+
+</div>

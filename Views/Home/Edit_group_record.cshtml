@@ -4,10 +4,8 @@
     ViewBag.Title = "Edit_group_record";
 }
 
-<div>
-    @Model.db.Groups_id
-    @Model.db.Image
-    @Model.db.Name
-    @Model.db.Status
+<div id="Edit_group_record_info_load_ajax_main_div_id">
+    @Html.Action("Edit_group_record_info_load_ajax", "Home", new {id=ViewBag.id })
+
 </div>
 

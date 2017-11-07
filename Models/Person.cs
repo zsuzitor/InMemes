@@ -327,7 +327,7 @@ namespace Im.Models
         public Group db;
 
         // заявки 
-
+        public List<Memes_record> Albums { get; set; }
         public List<Person_short> Followers { get; set; }
         public List<Person_short> Friends { get; set; }
         //стена 
@@ -355,6 +355,7 @@ namespace Im.Models
             Main_images = new List<Memes_record>();
             Groups = new List<Group_short>();
             Admins = new List<Person_short>();
+            Albums = new List<Memes_record>();
         }
 
     }
@@ -743,7 +744,7 @@ namespace Im.Models
             Who = null;
             Image = false;
         }
-        public Relationship_with_memes(string a, string b, bool news, string person_or_group,bool image)
+        public Relationship_with_memes(string a, string b, bool? news, string person_or_group,bool image)
         {
             Something_one_id = a;
             Something_two_id = b;

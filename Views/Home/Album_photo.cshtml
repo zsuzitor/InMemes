@@ -8,7 +8,7 @@
         <div class="div_color_white">
             @using (Html.BeginForm("Add_new_image", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
-                @Html.Hidden("from", "person")
+                @Html.Hidden("from", "Personal_record")
                 @Html.Hidden("for_what", "not_main_img")
                 @Html.Hidden("Album_name", (string)ViewBag.Album_name)
                 <div class="Albums_load_img_up_block">

@@ -69,6 +69,9 @@
                         
                         
                     </div>
+                    <div class="">
+                        @Html.ActionLink("Удалить", "Delete", "Home", new { what = "photo", from = ViewBag.from_type, from_id = ViewBag.from_id, id = Model.db.Id, }, new { })
+                    </div>
                     <div>
                     <div class=@Record_photo_page_small_like_name>
                         @Ajax.ActionLink("Лайков:" + ((int)ViewBag.count_like).ToString(), "Action_memes", "Home",
