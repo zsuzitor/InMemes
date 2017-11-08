@@ -112,7 +112,7 @@ div.memes_partial_person_name_block {
     width: 60px;
     height: 60px;
 }
-}div.Memes_partial_under_all_block {
+div.Memes_partial_under_all_block {
     height: 45px;
 }
 /*div.memes_partial_options_mem {
@@ -383,7 +383,7 @@ div.Personal_record_body_right_block_info_main {
 }
 div.Personal_record_photo_block{
     margin-top:30px;
-    height:120px;
+    
 }
 div.Personal_record_wall {
     margin-top: 30px;
@@ -634,9 +634,10 @@ div.Group_record_groups_block {
     height: 90px;
     border-radius: 50px;
 }
-div.Group_record_one_line_friend {
+/*div.Group_record_one_line_friend {
     margin-top: 10px;
-}
+}*/
+
 div.Group_record_one_friend_block {
     width: 95px;
     height: 120px;
@@ -651,8 +652,13 @@ div.Group_record_not_main_img_small {
     display: inline-block;
     vertical-align: top;
 }
-div.Group_record_photo_block {
-    margin-top:30px;
+div.Group_record_main_img{
+    width:300px;
+    height:400px;
+   
+
+}div.Group_record_photo_block {
+    margin-top: 30px;
 }div.Group_record_left_all_block {
     width: 450px;
     display: inline-block;
@@ -826,7 +832,13 @@ div.Messages_one_message_text {
 div.Messages_one_message_text_text{
     
 }
+div.Messages_one_message_text_text_new_m{
+    background-color:darkgray;
+}
 /*Messages_one_dialog*/
+div.Messages_one_dialog_one_message_text_text_new_m {
+    background-color: darkgray;
+}
 div.Messages_one_dialog_one_person_short_block {
     width: 30px;
     height: 30px;

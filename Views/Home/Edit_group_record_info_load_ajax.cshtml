@@ -1,4 +1,4 @@
-﻿@model Im.Models.Group_record
+﻿@model Im.Models.Group
 
 
 @{ string class_li_div = "Edit_group_record_info_load_ajax_link_st";}
@@ -31,7 +31,7 @@
                         {
                             @Html.Hidden("from", "Group_record")
                             @Html.Hidden("for_what", "main_img")
-                            @Html.Hidden("id", Model.db.Id)
+                            @Html.Hidden("id", Model.Id)
 
                             <input type="file" name="uploadImage[0]" />
                             <input type="submit" class="submit" value="Поделиться" />
@@ -41,22 +41,22 @@
 {
     @Html.Hidden("click", (string)ViewBag.click)
     @Html.Hidden("id", (string)ViewBag.group_id)
-
+    
     <div class="Edit_personal_record_info_load_ajax_div_str_1">
         @Html.Label("Название:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
-    @Html.EditorFor(x1 => x1.db.Name)
+    @Html.EditorFor(x1 => x1.Name)
 </div>
                     <div class="Edit_personal_record_info_load_ajax_div_str_1">
                         @Html.Label("Статус:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
-                        @Html.EditorFor(x1 => x1.db.Status)
+                        @Html.EditorFor(x1 => x1.Status)
                     </div>
                     <div class="Edit_personal_record_info_load_ajax_div_str_1">
                         @Html.Label("Открытая группа:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
-                        @Html.EditorFor(x1 => x1.db.Open_group)
+                        @Html.EditorFor(x1 => x1.Open_group)
                     </div>
                     <div class="Edit_personal_record_info_load_ajax_div_str_1">
-                        @Html.Label("Открытая группа:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
-                        @Html.EditorFor(x1 => x1.db.Add_memes_private)
+                        @Html.Label("Открытое добавление мемов:", new { @class = "Edit_personal_record_info_load_ajax_label_left" })
+                        @Html.EditorFor(x1 => x1.Add_memes_private)
                     </div>
 
 

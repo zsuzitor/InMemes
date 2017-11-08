@@ -81,9 +81,17 @@
                                 
                         <div class="Messages_one_message_text">
                             <a  class="link_standart_for_div" href='@Url.Action("Messages_one_dialog", "Home",new { id = i.db.Id } )'>
-                                <div  class="Messages_one_message_text_text">
+                                @{ 
+                                    string class_new_message="Messages_one_message_text_text";
+                                    if(i.Messages.Count > 0&& i.Messages[0].db.New)
+                                    {
+                                        class_new_message = "Messages_one_message_text_text_new_m";
+                                    }
+                                }
+                                <div  class=@class_new_message>
                                     @if (i.Messages.Count > 0)
                                     {
+                                        
                                         @i.Messages[0].db.Message_text
                                     }
                                     @if (i.Messages.Count < 1)

@@ -46,7 +46,7 @@
                     @for (int i = 0; i < Model.Images.Count; ++i)
             {
                         <div class="Group_record_not_main_img_small" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(Model.Images[i].Image.bytes) ) no-repeat;background-size: cover;">
-                            @Ajax.ActionLink(" ", "Record_photo_page", "Home", new { id_image = Model.Images[i].db.Id }, new AjaxOptions { UpdateTargetId = "Record_photo_page_one_photo_block_id" }, new { @class = "link_standart_for_div" })
+                           @Ajax.ActionLink(" ", "Record_photo_page", "Home", new { id_image = Model.Images[i].db.Id, from_id = Model.db.Id, from_type = "Group_record", main_img = false }, new AjaxOptions { UpdateTargetId = "Record_photo_page_one_photo_block_id" }, new { @class = "link_standart_for_div" })
                         </div>
 
 
@@ -104,14 +104,14 @@
         </div>
     <div class="Group_record_right_all_block Layout_all_block_left">
         
-        <div>
+        <div class="div_color_white">
             @if (Model.Main_images.Count > 0)
             {
                 
                     //класс поменять сейчас просто что бы отображалось
                 
-                <div class="Group_record_not_main_img_small" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(Model.Main_images[0].Image.bytes) ) no-repeat;background-size: cover;">
-                    @Ajax.ActionLink(" ", "Record_photo_page", "Home", new { id_image = Model.Main_images[0].db.Id }, new AjaxOptions { UpdateTargetId = "Record_photo_page_one_photo_block_id" }, new { @class = "link_standart_for_div" })
+                <div class="Group_record_main_img" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(Model.Main_images[0].Image.bytes) ) no-repeat;background-size: cover;">
+                    @Ajax.ActionLink(" ", "Record_photo_page", "Home", new { id_image = Model.Main_images[0].db.Id, from_id=Model.db.Id, from_type= "Group_record", main_img=true }, new AjaxOptions { UpdateTargetId = "Record_photo_page_one_photo_block_id" }, new { @class = "link_standart_for_div" })
                 </div>
 
             }
@@ -140,58 +140,33 @@
                 </div>
                 <div>
 
+                    @foreach (var i in Model.Followers)
+                    {
+                        <div class="Group_record_one_friend_block">
 
-                    <div class="Group_record_one_line_friend">
-                        @for (int i = 0; i <3&&i< Model.Followers.Count; ++i)
-                        {
-                            <div class="Group_record_one_friend_block">
-
-                                @if (Model.Followers[i].Image != null)
-                                {
-                                    <div class="Group_record_one_friend_img" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(Model.Followers[i].Image) );background-size: cover; ">
-                                        <a class="link_standart_for_circle_50_div" href='@Url.Action("Personal_record", "Home",new { id = Model.Followers[i].Person_id } )'></a>
-                                    </div>
-                                }
-                                @if (Model.Followers[i].Image == null)
-                                {
-                                    //background-size: cover;background - size: 60px 60px;
-
-                                    <div class="Group_record_one_friend_img" style="background: url('/Content/images/H98hxNY4xTo.jpg');background-size: cover;">
-                                        <a class="link_standart_for_circle_50_div" href='@Url.Action("Personal_record", "Home",new {id = Model.Followers[i].Person_id } )'></a>
-                                    </div>
-                                }
-                                
-
-                                <div>
-                                    <p>@Html.ActionLink(Model.Followers[i].Name, "Personal_record", "Home", new { id = @Model.Followers[i].Person_id }, new { @class = "link_standart_for_div" }) </p>
+                            @if (i.Image != null)
+                            {
+                                <div class="Group_record_one_friend_img" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.Image) );background-size: cover; ">
+                                    <a class="link_standart_for_circle_50_div" href='@Url.Action("Personal_record", "Home",new { id = i.Person_id } )'></a>
                                 </div>
-                            </div>
-                                    }
-                    </div>
-                    <div class="Group_record_one_line_friend">
-                        @for (int i = 3; i < Model.Followers.Count; ++i)//(int)((Model.Followers.Count / 2 + 0.5))
-                        {
-                            <div class="Group_record_one_friend_block">
-                                @if (Model.Followers[i].Image != null)
-                                {
-                                    <div class="Group_record_one_friend_img" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(Model.Followers[i].Image) );background-size: cover; ">
-                                        <a class="link_standart_for_circle_50_div" href='@Url.Action("Personal_record", "Home",new { id = Model.Followers[i].Person_id } )'></a>
-                                    </div>
-                                }
-                                @if (Model.Followers[i].Image == null)
-                                {
-                                    //background-size: cover;background - size: 60px 60px;
+                            }
+                            @if (i.Image == null)
+                            {
+                                //background-size: cover;background - size: 60px 60px;
 
-                                    <div class="Group_record_one_friend_img" style="background: url('/Content/images/H98hxNY4xTo.jpg');background-size: cover;">
-                                        <a class="link_standart_for_circle_50_div" href='@Url.Action("Personal_record", "Home",new {id = Model.Followers[i].Person_id } )'></a>
-                                    </div>
-                                }
-                                <div>
-                                    <p>@Html.ActionLink(Model.Followers[i].Name, "Personal_record", "Home", new { id = @Model.Followers[i].Person_id }, new { @class = "link_standart_for_div" }) </p>
+                                <div class="Group_record_one_friend_img" style="background: url('/Content/images/H98hxNY4xTo.jpg');background-size: cover;">
+                                    <a class="link_standart_for_circle_50_div" href='@Url.Action("Personal_record", "Home",new {id = i.Person_id } )'></a>
                                 </div>
+                            }
+
+
+                            <div>
+                                <p>@Html.ActionLink(i.Name, "Personal_record", "Home", new { id = i.Person_id }, new { @class = "link_standart_for_div" }) </p>
                             </div>
-                        }
-                    </div>
+                        </div>
+                    }
+
+
                 </div>
 
 
@@ -240,13 +215,13 @@
 
                         <div class="Group_record_one_album_block">
                             <div class="Group_record_one_album_main_img_block" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.Image.bytes) );background-size: cover; ">
-                                @Html.ActionLink(" ", "Albums", "Home", new { id = Model.db.Id, album_name = i.Image.Albums, from_type = "Personal_record" }, new { @class = "link_standart_for_div" })
+                                @Html.ActionLink(" ", "Albums", "Home", new { id = Model.db.Id, album_name = i.Image.Albums, from_type = "Group_record" }, new { @class = "link_standart_for_div" })
 
                             </div>
                             @if (@i.Image.Albums == "")
                     {
                                 <div class="Group_record_one_album_name">
-                                    @Html.ActionLink("Все Альбомы", "Albums", "Home", new { id = Model.db.Id, album_name = i.Image.Albums, from_type = "Personal_record" }, new { @class = "link_standart_for_div" })
+                                    @Html.ActionLink("Все Альбомы", "Albums", "Home", new { id = Model.db.Id, album_name = i.Image.Albums, from_type = "Group_record" }, new { @class = "link_standart_for_div" })
 
                                 </div>
 
@@ -254,7 +229,7 @@
                             @if (@i.Image.Albums != "")
                     {
                                 <div class="Group_record_one_album_name">
-                                    @Html.ActionLink(@i.Image.Albums, "Albums", "Home", new { id = Model.db.Id, album_name = i.Image.Albums, from_type = "Personal_record" }, new { @class = "link_standart_for_div" })
+                                    @Html.ActionLink(@i.Image.Albums, "Albums", "Home", new { id = Model.db.Id, album_name = i.Image.Albums, from_type = "Group_record" }, new { @class = "link_standart_for_div" })
 
                                 </div>
 

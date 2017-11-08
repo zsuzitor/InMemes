@@ -11,15 +11,17 @@
                 @Html.Hidden("from", "Personal_record")
                 @Html.Hidden("for_what", "not_main_img")
                 @Html.Hidden("Album_name", (string)ViewBag.Album_name)
-                <div class="Albums_load_img_up_block">
+                @Html.Hidden("id", (string)ViewBag.id_user)
+                        
+                        <div class="Albums_load_img_up_block">
                     <p>картинка</p>
 
-                    <input type="file" name="uploadImage[0]" />
+                    <input type = "file" name="uploadImage[0]" />
                 </div>
 
-                    
+
                     <div class="Albums_load_img_up_block_input">
-                        <p>Готово?</p><input type="submit" class="submit" value="Добавить" />
+                        <p>Готово?</p><input type = "submit" class="submit" value="Добавить" />
                     </div>
 
             }

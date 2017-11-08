@@ -357,8 +357,19 @@ namespace Im.Models
             Admins = new List<Person_short>();
             Albums = new List<Memes_record>();
         }
+        public Group_record()
+        {
+            db = new Group();
+            Followers = new List<Person_short>();
+            Wall = new List<Memes_record>();
+            Images = new List<Memes_record>();
+            Main_images = new List<Memes_record>();
+            Groups = new List<Group_short>();
+            Admins = new List<Person_short>();
+            Albums = new List<Memes_record>();
+        }
 
-    }
+        }
 
     public class Personal_record : IPage_view
     {
