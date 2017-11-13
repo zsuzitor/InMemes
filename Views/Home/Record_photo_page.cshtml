@@ -48,6 +48,7 @@
                         {
 
                             @Html.Hidden("id", Model.db.Id)
+                                @Html.Hidden("from", "Record_photo_page")
                             @Html.Hidden("action_m", "change_album")
                             
                                 @Html.DropDownList("obg", new SelectList(ViewBag.Albums), "Изменить альбом")
@@ -75,7 +76,7 @@
                     <div>
                     <div class=@Record_photo_page_small_like_name>
                         @Ajax.ActionLink("Лайков:" + ((int)ViewBag.count_like).ToString(), "Action_memes", "Home",
-new { id = Model.db.Id, action_m = "like" },
+new { id = Model.db.Id, action_m = "like",from= "Record_photo_page" },
 new AjaxOptions { UpdateTargetId = string.Concat("Wall_memes_mem_block_id_", Model.db.Id) }, new { @class = "link_standart_for_div" })
                         @{
 //ViewBag.like от этого класс
@@ -88,7 +89,7 @@ new AjaxOptions { UpdateTargetId = string.Concat("Wall_memes_mem_block_id_", Mod
                     </div>
                         <div class=@Record_photo_page_small_repost_name>
                             @Ajax.ActionLink("Репостов:" + ((int)ViewBag.count_repost).ToString(), "Action_memes", "Home",
-new { id = Model.db.Id, action_m = "repost" },
+new { id = Model.db.Id, action_m = "repost",  from = "Record_photo_page" },
 new AjaxOptions { UpdateTargetId = string.Concat("Wall_memes_mem_block_id_", Model.db.Id) }, new { @class = "link_standart_for_div" })
 
 

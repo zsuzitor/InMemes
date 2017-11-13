@@ -430,8 +430,10 @@ namespace Im.Controllers
                         }
                         catch
                         {
-                            return View("Personal_record", Record(check_id, "Personal_record"));
+                            
+                           // return View("Personal_record", Record(check_id, "Personal_record"));
                         }
+                        return RedirectToAction("Personal_record", "Home", new { id = check_id });
                     }
                     else if (from == "Group_record")
                     {
@@ -446,8 +448,10 @@ namespace Im.Controllers
                         }
                         catch
                         {
-                            return View("Personal_record", Record(check_id, "Personal_record"));
+                            
+                            //return View("Personal_record", Record(check_id, "Personal_record"));
                         }
+                        return RedirectToAction("Group_record", "Home", new { id = from_id });
 
 
                     }
@@ -507,8 +511,10 @@ namespace Im.Controllers
                         }
                         catch
                         {
-                            return View("Personal_record", Record(check_id, "Personal_record"));
+                            
+                            //return View("Personal_record", Record(check_id, "Personal_record"));
                         }
+                        return RedirectToAction("Personal_record", "Home", new { id = check_id });
                     }
                     else if (from == "Group_record")
                     {
@@ -527,8 +533,10 @@ namespace Im.Controllers
                             }
                         }
                         catch{
-                            return View("Personal_record", Record(check_id, "Personal_record"));
+                            
+                            //return View("Personal_record", Record(check_id, "Personal_record"));
                         }
+                        return RedirectToAction("Group_record", "Home", new { id = from_id });
                     }
                     else if (from == "News")
                     {
@@ -647,8 +655,8 @@ namespace Im.Controllers
                     break;
 
             }
-           
-            return View("Personal_record", Record(check_id, "Personal_record"));
+            return RedirectToAction("Personal_record", "Home", new { id = check_id });
+            //return View("Personal_record", Record(check_id, "Personal_record"));
             //return View();
         }
         
@@ -715,9 +723,9 @@ namespace Im.Controllers
             return RedirectToAction("One_comments_partial", "Home", new { from="", from_id="", id_mem = id, size = size });
 
         }
+        
 
-                         
-        public ActionResult Action_memes(string id,string action_m, string obg = "")
+            public ActionResult Action_memes(string id,string action_m,string from, string obg = "")
         {
             
             string check_id = System.Web.HttpContext.Current.User.Identity.GetUserId();
@@ -792,7 +800,10 @@ namespace Im.Controllers
 
             }
             var mem = Memes(id);
-
+            //string id_image, string album_name,string from_id,string from_type,bool main_img=false
+            if (from== "Record_photo_page")
+                return RedirectToAction("Record_photo_page", "Home", new {  });
+            //return RedirectToAction("Memes_partial","Home",new { id_mem=id });
             return PartialView("Memes_partial", mem);
         }
 
@@ -1407,8 +1418,8 @@ namespace Im.Controllers
             }
             db.Mem_comment_connected.Add(new Relationship_mem_comment(id_memes, comment.Id.ToString(), "Memes"));
             db.SaveChanges();
-
-            return View("Personal_record",Record(check_id, "Personal_record"));
+            return RedirectToAction("Personal_record", "Home", new { id = check_id });
+            //return View("Personal_record",Record(check_id, "Personal_record"));
         }
          
         [HttpPost]
@@ -1540,8 +1551,9 @@ namespace Im.Controllers
                 
                 db.SaveChanges();
 
-                res_page = Record(check_id, "Personal_record");
-                return View("Personal_record", res_page);
+                //res_page = Record(check_id, "Personal_record");
+                return RedirectToAction("Personal_record", "Home", new { id=((Personal_record)res_page).db.Id });
+                //return View("Personal_record", res_page);
             }
             if (from == "Group_record")
             {
@@ -1577,14 +1589,14 @@ namespace Im.Controllers
                     }
                 
                     db.SaveChanges();
-                    res_page = Group(id, "Group_record");
-
-                    return View("Group_record", res_page);
+                    //res_page = Group(id, "Group_record");
+                    return RedirectToAction("Group_record", "Home", new { id = id });
+                    //return View("Group_record", res_page);
                 }
 
             }
             //не нужно просто что бы было
-            
+            //return RedirectToAction("Personal_record", "Home", new { ((Personal_record)res_page).db.Id });
             res_page = Record(check_id, "Personal_record");
             return View("Personal_record", res_page);
         }
@@ -1676,6 +1688,7 @@ namespace Im.Controllers
                             res_page = Record(id, "Personal_record"); ;
                             //res.db = res_db;
                         }
+                        return RedirectToAction("Personal_record", "Home", new { id = id });
                     }
 
                     break;
@@ -1690,9 +1703,11 @@ namespace Im.Controllers
                             Description = Description_mem
                         };
                         var photo_list = Get_photo_post(Get_photo_post(uploadImage),"");
-                        
-                        
-                            foreach (var i in photo_list)
+                        res_db.Source_type = "Group_record";
+                        db.Memes.Add(res_db);
+                        db.SaveChanges();
+
+                        foreach (var i in photo_list)
                             {
                             db.Images.Add(i);
                             db.SaveChanges();
@@ -1703,9 +1718,7 @@ namespace Im.Controllers
                             db.SaveChanges();   
                             }
                         
-                        res_db.Source_type = "Group_record";
-                        db.Memes.Add(res_db);
-                        db.SaveChanges();
+                        
                         
 
                         db.Wall_memes_connected.Add(new Relationship_with_memes(res_db.Id.ToString(), pers.db.Id.ToString(), false, "Group_record", false));
@@ -1731,11 +1744,11 @@ namespace Im.Controllers
 
                         res_page = (IPage_view)pers;
                         //res.db = res_db;
-
-                        return View("Group_record",(Group_record)Group(id));
+                        return RedirectToAction("Group_record", "Home", new { id = id });
+                        //return View("Group_record",(Group_record)Group(id));
 
                         //сейчас
-                        return View("Group_record", res_page);
+                        //return View("Group_record", res_page);
                     }
                     break;
             }
@@ -1871,6 +1884,15 @@ public Message_obg_record Message_person_block(string id,string person_id,int st
                     {
                         int tmp = Convert.ToInt32(i.Something_two_id);
                         var a = db.Messages.First(x1 => x1.Id == tmp);
+                        if (a.New)
+                        {
+                            if (a.Person_id != check_id)
+                            {
+                                a.New = false;
+                                db.SaveChanges();
+                            }
+
+                        }
                         Message_record rec = new Message_record(a)
                         {
                             Source_person = (Person_short)Record(a.Person_id, "Person_short")

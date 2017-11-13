@@ -38,7 +38,7 @@
          //<a class="link_standart_for_div" href='@Url.Action("Album_photo", "Home",new { album_name=i.Albums,id_user=ViewBag.id_user } )'></a>
             <div class="Albums_one_album_block">
                 <div class="Albums_one_album_main_img_block" style="background:url( data:image/jpeg;base64,@Convert.ToBase64String(i.Image.bytes) );background-size: cover; ">
-                    @Ajax.ActionLink(" ", "Album_photo", "Home",new { album_name=i.Image.Albums, id_user = ViewBag.id_user }, new AjaxOptions { UpdateTargetId = "Albums_photo_one_album_block" }, new { @class = "link_standart_for_div" })
+                    @Ajax.ActionLink(" ", "Album_photo", "Home",new { from=ViewBag.from, album_name=i.Image.Albums, id_user = ViewBag.id_user }, new AjaxOptions { UpdateTargetId = "Albums_photo_one_album_block" }, new { @class = "link_standart_for_div" })
                     
                 </div>
                 @if (@i.Image.Albums == "")
